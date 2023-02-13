@@ -1,0 +1,9 @@
+@tailwind components;
+@layer components {
+  .link {
+    @apply mx-4 px-5 py-2 text-primary text-base font-primary font-bold uppercase hover:text-active hover:duration-500;
+  }
+  .active {
+    @apply text-active;
+  }
+}
