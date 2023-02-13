@@ -37,6 +37,7 @@ function Header() {
               </NavLink>
             ))}
           </ul>
+          <div></div>
           <ShoppingCartOutlined className="hover:text-active hover:duration-500 hover:cursor-pointer text-xl" />
           <UserOutlined
             onClick={() => setIsModalOpen(true)}
