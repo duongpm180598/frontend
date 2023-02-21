@@ -3,7 +3,7 @@ import "./header.css";
 
 import { NavLink } from "react-router-dom";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import Login from "../components/login/Login";
+// import Login from "../components/login/Login";
 function Header() {
   const components = [
     { name: "home", link: "/" },
@@ -43,7 +43,7 @@ function Header() {
             onClick={() => setIsModalOpen(true)}
             className="mx-4 text-xl"
           />
-          <Login isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+          {/* <Login isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} /> */}
         </div>
       </div>
     </header>
