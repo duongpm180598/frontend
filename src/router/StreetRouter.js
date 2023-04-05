@@ -7,7 +7,6 @@ import Login from "../pages/login/Login";
 import AuthProtected from "./AuthProtected";
 import Register from "../pages/register/Register";
 function StreetRouter() {
-  // const navigate =
   return (
     <>
       <Routes>

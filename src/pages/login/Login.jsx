@@ -22,7 +22,7 @@ function LoginComponent() {
   const onSubmit = (data) => {
     authActions()
       .login(data)
-      .then((result) => {
+      .then(() => {
         navigate("/");
       })
       .catch((e) => {
