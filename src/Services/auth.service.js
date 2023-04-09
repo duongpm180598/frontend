@@ -23,7 +23,7 @@ export const isAdmin = () => {
     const { role } = jwt_decode(token);
     return role;
   }
-  return "";
+  return null;
 };
 
 // Login Method

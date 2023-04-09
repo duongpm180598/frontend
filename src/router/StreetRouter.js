@@ -6,6 +6,7 @@ import Page404 from "./../pages/page404/Page404";
 import Login from "../pages/login/Login";
 import AuthProtected from "./AuthProtected";
 import Register from "../pages/register/Register";
+import ManageComponent from "../pages/manage/manage";
 function StreetRouter() {
   return (
     <>
@@ -29,6 +30,8 @@ function StreetRouter() {
         />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/manager" element={<ManageComponent />}></Route>
+
         <Route path="/register" element={<Register />}></Route>
       </Routes>
     </>
