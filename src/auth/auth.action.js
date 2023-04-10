@@ -1,4 +1,4 @@
-import { Login, Register } from "../Services/auth.service";
+import { Login, Register, Logout } from "../Services/auth.service";
 
 export function authActions() {
   const baseUrl = `${process.env.REACT_APP_API_URL}`;
@@ -13,7 +13,6 @@ export function authActions() {
     return Login(baseUrl + "/auth/login", { email, password })
       .then((res) => {
         localStorage.setItem("token", JSON.stringify(res.access_token));
-        // localStorage.setItem("user", JSON.stringify(res.));
         return res;
       })
       .catch((e) => {
@@ -21,7 +20,16 @@ export function authActions() {
       });
   }
 
-  function logout() {}
+  function logout() {
+    return Logout(baseUrl + "/auth/logout")
+      .then((res) => {
+        console.log("res ::", res);
+        localStorage.removeItem("token");
+      })
+      .catch((e) => {
+        return Promise.reject(e);
+      });
+  }
 
   function register(user) {
     return Register(baseUrl + "/users/register", user)

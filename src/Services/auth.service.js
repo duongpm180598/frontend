@@ -1,5 +1,6 @@
 import { APIClient } from "../helper/api_helper";
-
+// import jwt_decode from "jsonwebtoken";
+import jwt_decode from "jwt-decode";
 const api = new APIClient();
 
 // Gets the logged in user data from local session
@@ -14,10 +15,20 @@ export const isUserAuthenticated = () => {
   return getLoggedInUser() !== null;
 };
 
+// check role user
+
+export const isAdmin = () => {
+  const token = localStorage.getItem("token") || "";
+  if (token) {
+    const { role } = jwt_decode(token);
+    return role;
+  }
+  return null;
+};
+
 // Login Method
 export const Login = (url, data) => api.create(url, data);
 export const Register = (url, data) => api.create(url, data);
-export const Logout = () => {
-  localStorage.removeItem("user");
-  localStorage.removeItem("token");
+export const Logout = (url) => {
+  return api.deleteWithToken(url);
 };

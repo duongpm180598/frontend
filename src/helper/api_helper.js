@@ -21,7 +21,7 @@ const setAuthorization = () => {
   const tokenStr = localStorage.getItem("token");
   const token = tokenStr ? JSON.parse(tokenStr) : null;
   if (token) {
-    axios.defaults.headers.common["Authorization"] = token;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 };
 
@@ -63,7 +63,7 @@ class APIClient {
 
   deleteWithToken = (url, id) => {
     setAuthorization();
-    return axios.delete(`${url}/${id}`);
+    return id ? axios.delete(`${url}/${id}`) : axios.delete(url);
   };
 
   get = (url, params) => {
