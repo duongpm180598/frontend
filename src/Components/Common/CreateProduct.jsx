@@ -5,42 +5,42 @@ import { useDropzone } from 'react-dropzone';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchingCategoryAndAttribute } from '../../redux/middleware';
 function CreateProduct() {
+  // data
+  const category = useSelector(getCategory);
+  const variantAttribute = useSelector(getVariantAttribute);
+  // initial value
+  const variant_attributes = variantAttribute?.map((e) => {
+    return { attribute_id: e.id, value: '' };
+  });
+
   // state
 
-  const [image, setImage] = useState(null);
-  const [invisibaleFormAdd, setInvisibaleFormAdd] = useState(false);
-  const [productVariants, setProductVariants] = useState({
+  const [productVariant, setProductVariant] = useState({
     inventory: '',
     price: '',
     weight: '',
-    variant_attributes: [{ attribute_id: '', value: '' }],
+    variant_attributes: variant_attributes,
   });
-
-  // const [variantAttr, setVariantAttr] = useState({ attribute_id: '', value: '' });
+  const [productVariantList, setProductVariantList] = useState([]);
+  console.log('productVariant::', productVariant);
+  // console.log('productVariantList::', productVariantList);
 
   const [product, setProduct] = useState({
     name: '',
     category_id: '',
     base_cost: '',
     thumbnail: '',
-    product_variants: [],
+    // product_variants: [],
   });
-
   // tool
   const dispatch = useDispatch();
-
-  // data
-  const category = useSelector(getCategory);
-  const variantAttribute = useSelector(getVariantAttribute);
 
   // call API
   useEffect(() => {
     dispatch(fetchingCategoryAndAttribute());
   }, []);
 
-  console.log('product:: ', product);
-  console.log('productVariants:: ', productVariants);
-
+  // console.log('product:: ', product);
   // function handle
 
   const onDrop = (acceptedFiles) => {
@@ -60,28 +60,50 @@ function CreateProduct() {
   };
 
   const handleChangeVariantAttribute = (e, attr_id) => {
-    const currVariantAttr = productVariants.variant_attributes?.find((x) => x.attribute_id == attr_id);
+    const currVariantAttr = productVariant.variant_attributes?.find((x) => x.attribute_id == attr_id);
     if (currVariantAttr) {
       currVariantAttr.value = e.target.value;
-      const newVariantAttr = productVariants.variant_attributes.filter((x) => x.attribute_id != attr_id);
+      const newVariantAttr = productVariant.variant_attributes.filter((x) => x.attribute_id != attr_id);
       newVariantAttr.push(currVariantAttr);
-      setProductVariants({
-        ...productVariants,
+      setProductVariant({
+        ...productVariant,
         variant_attributes: newVariantAttr,
       });
     } else {
-      setProductVariants({
-        ...productVariants,
-        variant_attributes: [{ attribute_id: attr_id, value: e.target.value }],
+      setProductVariant({
+        ...productVariant,
+        variant_attributes: [...productVariant.variant_attributes, { attribute_id: attr_id, value: e.target.value }],
       });
     }
   };
 
+  const getCurrentValue = (id) => {
+    const currVariant = productVariant.variant_attributes?.find((e) => e.attribute_id == id);
+    return currVariant?.value;
+  };
+
+  const handleSubmit = () => {
+    // console.log('Product :: ', product);
+    // console.log('product_variants', productVariant);
+    const data = { ...product, product_variants: productVariantList };
+    console.log('data :: ', data);
+  };
+
+  const handleAddVariant = () => {
+    setProductVariantList([...productVariantList, productVariant]);
+    setProductVariant({ inventory: '', price: '', weight: '', variant_attributes: variant_attributes });
+  };
   const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
 
   return (
     <div className="h-[100vh] bg-[#333]/60 flex justify-start p-5">
-      <form className="">
+      <form
+        className=""
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <div className="flex justify-between items-center mb-5">
           <label className="capitalize font-Popins font-semibold tracking-wider" htmlFor="">
             Name
@@ -160,8 +182,9 @@ function CreateProduct() {
                 <span key={index}>{x.name}</span>
               ))}
             </div>
-            {product.product_variants?.map((x, index) => (
-              <div className="flex justify-between">
+
+            {productVariantList?.map((x, index) => (
+              <div key={index} className="flex justify-between">
                 <span>{x.inventory}</span>
                 <span>{x.price}</span>
                 <span>{x.weight}</span>
@@ -170,38 +193,49 @@ function CreateProduct() {
                 ))}
               </div>
             ))}
-            inventory: '', price: '', weight: '',
-            {/* variant_attributes: [{ attribute_id: '', value: '' }], */}
+
             <div className="flex justify-between">
               <input
-                onChange={(e) => setProductVariants({ ...productVariants, [e.target.name]: e.target.value })}
+                className="w-20"
+                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value })}
                 type="text"
                 name="inventory"
-                value={productVariants.inventory}
+                value={productVariant.inventory}
               />
               <input
-                onChange={(e) => setProductVariants({ ...productVariants, [e.target.name]: e.target.value })}
+                className="w-20 ml-2"
+                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value })}
                 type="text"
                 name="price"
-                value={productVariants.price}
+                value={productVariant.price}
               />
               <input
-                onChange={(e) => setProductVariants({ ...productVariants, [e.target.name]: e.target.value })}
+                className="w-20 ml-2"
+                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value })}
                 type="text"
                 name="weight"
-                value={productVariants.weight}
+                value={productVariant.weight}
               />
-              {/* {variantAttribute?.map((x) => (
+              {variantAttribute?.map((x) => (
                 <input
+                  className="w-20 ml-2"
                   key={x.id}
                   onChange={(e) => handleChangeVariantAttribute(e, x.id)}
-                  value={productVariants.variant_attributes?.find((e) => e.attribute_id == x.id)?.value || ''}
+                  value={getCurrentValue(x.id)}
                 />
-              ))} */}
+              ))}
             </div>
-            <button>Add Variants</button>
+            <div className="mt-4">
+              <span className="border p-2 cursor-pointer" onClick={handleAddVariant}>
+                Add Variants
+              </span>
+            </div>
           </div>
         </div>
+
+        <button type="submit" className="mt-8 p-2 border cursor-pointer">
+          Save
+        </button>
       </form>
     </div>
   );
