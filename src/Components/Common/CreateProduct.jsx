@@ -4,6 +4,10 @@ import { getCategory, getVariantAttribute } from '../../redux/selector';
 import { useDropzone } from 'react-dropzone';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchingCategoryAndAttribute } from '../../redux/middleware';
+import { APIClient } from '../../helper/api_helper';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 function CreateProduct() {
   // data
   const category = useSelector(getCategory);
@@ -14,23 +18,19 @@ function CreateProduct() {
   });
 
   // state
-
   const [productVariant, setProductVariant] = useState({
-    inventory: '',
-    price: '',
-    weight: '',
+    inventory: 0,
+    price: 0,
+    weight: 0,
     variant_attributes: variant_attributes,
   });
   const [productVariantList, setProductVariantList] = useState([]);
-  console.log('productVariant::', productVariant);
-  // console.log('productVariantList::', productVariantList);
-
+  const [description, setDescription] = useState('');
   const [product, setProduct] = useState({
     name: '',
     category_id: '',
-    base_cost: '',
+    base_cost: 0,
     thumbnail: '',
-    // product_variants: [],
   });
   // tool
   const dispatch = useDispatch();
@@ -39,9 +39,6 @@ function CreateProduct() {
   useEffect(() => {
     dispatch(fetchingCategoryAndAttribute());
   }, []);
-
-  // console.log('product:: ', product);
-  // function handle
 
   const onDrop = (acceptedFiles) => {
     const reader = new FileReader();
@@ -55,10 +52,11 @@ function CreateProduct() {
     setProduct({ ...product, thumbnail: null });
   };
 
-  const handleChangeUpdateProduct = (e) => {
-    setProduct({ ...product, [e.target.name]: e.target.value });
+  const handleChangeCategory = (e) => {
+    const currentCategory = category.find((x) => x.name == e.target.value);
+    console.log('curr:', currentCategory);
+    setProduct({ ...product, category_id: currentCategory.id });
   };
-
   const handleChangeVariantAttribute = (e, attr_id) => {
     const currVariantAttr = productVariant.variant_attributes?.find((x) => x.attribute_id == attr_id);
     if (currVariantAttr) {
@@ -83,10 +81,12 @@ function CreateProduct() {
   };
 
   const handleSubmit = () => {
-    // console.log('Product :: ', product);
-    // console.log('product_variants', productVariant);
-    const data = { ...product, product_variants: productVariantList };
+    const data = { ...product, description, product_variants: productVariantList };
     console.log('data :: ', data);
+    new APIClient()
+      .createWithToken(`${process.env.REACT_APP_API_URL}/products`, data)
+      .then((res) => alert('Create Cuccess'))
+      .catch((e) => console.log(e));
   };
 
   const handleAddVariant = () => {
@@ -96,7 +96,7 @@ function CreateProduct() {
   const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
 
   return (
-    <div className="h-[100vh] bg-[#333]/60 flex justify-start p-5">
+    <div className="min-h-[100vh] bg-[#333]/60 flex justify-start p-5">
       <form
         className=""
         onSubmit={(e) => {
@@ -109,7 +109,9 @@ function CreateProduct() {
             Name
           </label>
           <input
-            onChange={(e) => handleChangeUpdateProduct(e)}
+            onChange={(e) => {
+              setProduct({ ...product, [e.target.name]: e.target.value });
+            }}
             name="name"
             className="p-2 border border-solid focus:border-none"
             style={{}}
@@ -125,7 +127,7 @@ function CreateProduct() {
           <select
             className="px-9 py-2 border border-solid"
             defaultValue={category ? category[0] : ''}
-            onChange={(e) => handleChangeUpdateProduct(e)}
+            onChange={(e) => handleChangeCategory(e)}
             name="category_id"
           >
             {category?.map((x) => (
@@ -137,19 +139,15 @@ function CreateProduct() {
         <div className="flex justify-between items-center mb-5">
           <label className="capitalize font-Popins font-semibold tracking-wider">Basecode</label>
           <input
-            onChange={(e) => handleChangeUpdateProduct(e)}
+            onChange={(e) => {
+              setProduct({ ...product, [e.target.name]: e.target.value * 1 });
+            }}
             className="p-2 border border-solid focus:border-none"
             name="base_cost"
             type="text"
             placeholder="Input your basecode"
           />
         </div>
-
-        {/* ---------------- API Has not discription */}
-        {/* <div className="flex justify-between items-center mb-5">
-          <label htmlFor="">Description</label>
-          <textarea name="" id="" cols="30" rows="4"></textarea>
-        </div> */}
 
         {/*image */}
         {product.thumbnail ? (
@@ -168,6 +166,10 @@ function CreateProduct() {
             </p>
           </div>
         )}
+
+        {/* description */}
+
+        <ReactQuill className="w-[100%] mb-5" theme="snow" value={description} onChange={setDescription} />
 
         {/* variant */}
 
@@ -197,21 +199,21 @@ function CreateProduct() {
             <div className="flex justify-between">
               <input
                 className="w-20"
-                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value })}
+                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value * 1 })}
                 type="text"
                 name="inventory"
                 value={productVariant.inventory}
               />
               <input
                 className="w-20 ml-2"
-                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value })}
+                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: 1 * e.target.value })}
                 type="text"
                 name="price"
                 value={productVariant.price}
               />
               <input
                 className="w-20 ml-2"
-                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value })}
+                onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: 1 * e.target.value })}
                 type="text"
                 name="weight"
                 value={productVariant.weight}

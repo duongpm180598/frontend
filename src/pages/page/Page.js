@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from 'react';
 
 function Page() {
-  return <div className="h-[600px] text-center text-xl">Page</div>;
+  return <div className="h-[600px] text-center text-xl"></div>;
 }
 
 export default Page;
