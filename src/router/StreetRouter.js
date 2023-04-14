@@ -7,6 +7,7 @@ import Login from '../pages/login/Login';
 import AuthProtected from './AuthProtected';
 import Register from '../pages/register/Register';
 import ManageComponent from '../pages/manage/manage';
+import DetailProduct from '../Components/Common/DetailProduct';
 function StreetRouter() {
   return (
     <>
@@ -28,6 +29,8 @@ function StreetRouter() {
             </AuthProtected>
           }
         />
+
+        <Route path="/ProductDetail" element={<DetailProduct />} />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/manager" element={<ManageComponent />}></Route>
