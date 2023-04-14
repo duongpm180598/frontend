@@ -13,7 +13,11 @@ const DetailProduct = () => {
   const {
     state: { id },
   } = useLocation();
+
   const [product, setProduct] = useState();
+  const [variant, setVariant] = useState({ size: '', color: '', number: '', price: '' });
+  const [sizes, setSizes] = useState([]);
+
   const policies = [
     { name: 'International delivery', icon: GlobeAmericasIcon, description: 'Get your order in 2 years' },
     { name: 'Loyalty rewards', icon: CurrencyDollarIcon, description: "Don't look at other tees" },
@@ -25,27 +29,130 @@ const DetailProduct = () => {
     'Machine wash cold with similar colors',
   ];
 
+  // const [colors, setColors] = useState();
   const colors = [
     { name: 'Black', bgColor: 'bg-gray-900', selectedColor: 'ring-gray-900' },
     { name: 'Heather Grey', bgColor: 'bg-gray-400', selectedColor: 'ring-gray-400' },
   ];
-  const sizes = [
-    { name: 'XXS', inStock: true },
-    { name: 'XS', inStock: true },
-    { name: 'S', inStock: true },
-    { name: 'M', inStock: true },
-    { name: 'L', inStock: true },
-    { name: 'XL', inStock: false },
-  ];
+
+  // const res = {
+  //   id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
+  //   name: 'AirSense Áo Blazer (Siêu Nhẹ)',
+  //   slug: 'airsense-ao-blazer-sieu-nhe',
+  //   base_cost: 250000,
+  //   thumbnail: 'https://res.cloudinary.com/xanhz/image/upload/v1680775975/group9-es/zvauznwpeft46rf7wxqq.png',
+  //   description: 'Áo khoác siêu nhẹ, co giãn và nhanh khô của chúng tôi. Kiểu dáng áo trên xu hướng.',
+  //   category_id: '56b249ba-b069-40c9-89ad-eba1b4f3efdf',
+  //   created_at: '2023-04-06T10:13:00.868Z',
+  //   updated_at: '2023-04-06T10:13:00.868Z',
+  //   product_images: [],
+  //   product_variants: [
+  //     {
+  //       id: 'a4765280-bb97-4a58-8fea-7bd86bbbb484',
+  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
+  //       weight: 20,
+  //       inventory: 4,
+  //       price: 250000,
+  //       created_at: '2023-04-06T10:13:00.868Z',
+  //       updated_at: '2023-04-06T10:13:00.868Z',
+  //       variant_attributes: [
+  //         {
+  //           name: 'Size',
+  //           value: 'L',
+  //         },
+  //         {
+  //           name: 'Màu',
+  //           value: 'Xanh Navy',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: 'cff1d1f3-18c4-441a-a1b6-b030a6a19dfd',
+  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
+  //       weight: 20,
+  //       inventory: 4,
+  //       price: 250000,
+  //       created_at: '2023-04-06T10:13:00.868Z',
+  //       updated_at: '2023-04-06T10:13:00.868Z',
+  //       variant_attributes: [
+  //         {
+  //           name: 'Size',
+  //           value: 'M',
+  //         },
+  //         {
+  //           name: 'Màu',
+  //           value: 'Xanh Navy',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: 'cff1d1f3-18c4-441a-a1b6-b030a6a19dfd',
+  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
+  //       weight: 20,
+  //       inventory: 4,
+  //       price: 250000,
+  //       created_at: '2023-04-06T10:13:00.868Z',
+  //       updated_at: '2023-04-06T10:13:00.868Z',
+  //       variant_attributes: [
+  //         {
+  //           name: 'Size',
+  //           value: 'M',
+  //         },
+  //         {
+  //           name: 'Màu',
+  //           value: 'Den',
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       id: 'cff1d1f3-18c4-441a-a1b6-b030a6a19dfd',
+  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
+  //       weight: 20,
+  //       inventory: 4,
+  //       price: 250000,
+  //       created_at: '2023-04-06T10:13:00.868Z',
+  //       updated_at: '2023-04-06T10:13:00.868Z',
+  //       variant_attributes: [
+  //         {
+  //           name: 'Size',
+  //           value: 'ML',
+  //         },
+  //         {
+  //           name: 'Màu',
+  //           value: 'Den',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
+
+  const getColor = (size) => {
+    const colorStore = [];
+    product.product_variants.forEach((x) => {
+      const [size1, color] = x.variant_attributes;
+      if (size1.value == size) {
+        colorStore.push(color.value);
+      }
+    });
+    return colorStore;
+  };
+
   useEffect(() => {
     const stringQuery = `${process.env.REACT_APP_API_URL}/products/${id}`;
     new APIClient()
       .getWithToken(stringQuery)
       .then((res) => {
-        console.log('res:: ', res);
+        const sizeStore = [];
+        res.product_variants.forEach((x) => {
+          x.variant_attributes.forEach((y) => {
+            if (y.name === 'Size' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
+          });
+        });
+        console.log('res ::', res);
+        setSizes(sizeStore);
         setProduct(res);
       })
       .catch((e) => console.log('e ::', e));
@@ -55,27 +162,6 @@ const DetailProduct = () => {
     <>
       <div className="bg-white">
         <div className="pb-16 pt-6 sm:pb-24">
-          {/* <nav aria-label="Breadcrumb" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <ol role="list" className="flex items-center space-x-4">
-              {product.breadcrumbs.map((breadcrumb) => (
-                <li key={breadcrumb.id}>
-                  <div className="flex items-center">
-                    <a href={breadcrumb.href} className="mr-4 text-sm font-medium text-gray-900">
-                      {breadcrumb.name}
-                    </a>
-                    <svg viewBox="0 0 6 20" aria-hidden="true" className="h-5 w-auto text-gray-300">
-                      <path d="M4.878 4.34H3.551L.27 16.532h1.327l3.281-12.19z" fill="currentColor" />
-                    </svg>
-                  </div>
-                </li>
-              ))}
-              <li className="text-sm">
-                <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
-                  {product.name}
-                </a>
-              </li>
-            </ol>
-          </nav> */}
           <div className="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
               <div className="lg:col-span-5 lg:col-start-8">
@@ -83,36 +169,6 @@ const DetailProduct = () => {
                   <h1 className="text-xl font-medium text-gray-900">{product.name}</h1>
                   <p className="text-xl font-medium text-gray-900">{product.price}</p>
                 </div>
-                {/* Reviews */}
-                {/* <div className="mt-4">
-                  <h2 className="sr-only">Reviews</h2>
-                  <div className="flex items-center">
-                    <p className="text-sm text-gray-700">
-                      {product.rating}
-                      <span className="sr-only"> out of 5 stars</span>
-                    </p>
-                    <div className="ml-1 flex items-center">
-                      {[0, 1, 2, 3, 4].map((rating) => (
-                        <StarIcon
-                          key={rating}
-                          className={classNames(
-                            product.rating > rating ? 'text-yellow-400' : 'text-gray-200',
-                            'h-5 w-5 flex-shrink-0'
-                          )}
-                          aria-hidden="true"
-                        />
-                      ))}
-                    </div>
-                    <div aria-hidden="true" className="ml-4 text-sm text-gray-300">
-                      ·
-                    </div>
-                    <div className="ml-4 flex">
-                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                        See all {product.reviewCount} reviews
-                      </a>
-                    </div>
-                  </div>
-                </div> */}
               </div>
 
               {/* Image gallery */}
@@ -136,45 +192,8 @@ const DetailProduct = () => {
 
               <div className="mt-8 lg:col-span-5">
                 <form>
-                  {/* Color picker */}
-                  <div>
-                    <h2 className="text-sm font-medium text-gray-900">Color</h2>
-
-                    <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
-                      <RadioGroup.Label className="sr-only"> Choose a color </RadioGroup.Label>
-                      <div className="flex items-center space-x-3">
-                        {colors.map((color) => (
-                          <RadioGroup.Option
-                            key={color.name}
-                            value={color}
-                            className={({ active, checked }) =>
-                              classNames(
-                                color.selectedColor,
-                                active && checked ? 'ring ring-offset-1' : '',
-                                !active && checked ? 'ring-2' : '',
-                                'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
-                              )
-                            }
-                          >
-                            <RadioGroup.Label as="span" className="sr-only">
-                              {' '}
-                              {color.name}{' '}
-                            </RadioGroup.Label>
-                            <span
-                              aria-hidden="true"
-                              className={classNames(
-                                color.bgColor,
-                                'h-8 w-8 rounded-full border border-black border-opacity-10'
-                              )}
-                            />
-                          </RadioGroup.Option>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </div>
-
                   {/* Size picker */}
-                  <div className="mt-8">
+                  <div className="mt-8 mb-8">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-medium text-gray-900">Size</h2>
                     </div>
@@ -182,28 +201,70 @@ const DetailProduct = () => {
                     <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
                       <RadioGroup.Label className="sr-only"> Choose a size </RadioGroup.Label>
                       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                        {sizes.map((size) => (
+                        {sizes.map((size, index) => (
                           <RadioGroup.Option
-                            key={size.name}
+                            key={index}
                             value={size}
+                            onClick={() => {
+                              setVariant({ ...variant, size });
+                            }}
                             className={({ active, checked }) =>
                               classNames(
-                                size.inStock ? 'cursor-pointer focus:outline-none' : 'cursor-not-allowed opacity-25',
+                                'cursor-pointer focus:outline-none',
                                 active ? 'ring-2 ring-indigo-500 ring-offset-2' : '',
                                 checked
                                   ? 'border-transparent bg-indigo-600 text-white hover:bg-indigo-700'
                                   : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
-                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1'
+                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 text-black'
                               )
                             }
-                            disabled={!size.inStock}
+                            disabled={false}
                           >
-                            <RadioGroup.Label as="span">{size.name}</RadioGroup.Label>
+                            <RadioGroup.Label as="span">{size}</RadioGroup.Label>
                           </RadioGroup.Option>
                         ))}
                       </div>
                     </RadioGroup>
                   </div>
+
+                  {/* Color picker */}
+                  {variant.size ? (
+                    <div>
+                      <h2 className="text-sm font-medium text-gray-900">Color</h2>
+
+                      <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
+                        <RadioGroup.Label className="sr-only"> Choose a color </RadioGroup.Label>
+                        <div className="flex items-center space-x-3">
+                          {getColor(variant.size).map((x, index) => (
+                            <RadioGroup.Option
+                              key={index}
+                              value={x}
+                              className={({ active, checked }) =>
+                                classNames(
+                                  'ring-gray-900',
+                                  active && checked ? 'ring ring-offset-1' : '',
+                                  !active && checked ? 'ring-2' : '',
+                                  'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
+                                )
+                              }
+                            >
+                              <RadioGroup.Label as="span" className="sr-only">
+                                {' '}
+                                {1}{' '}
+                              </RadioGroup.Label>
+                              <span
+                                aria-hidden="true"
+                                className={classNames(
+                                  'bg-gray-900',
+                                  'h-8 w-8 rounded-full border border-black border-opacity-10'
+                                )}
+                              />
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  ) : null}
 
                   <button
                     type="submit"
@@ -216,7 +277,6 @@ const DetailProduct = () => {
                 {/* Product details */}
                 <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Description</h2>
-
                   <div
                     className="prose prose-sm mt-4 text-gray-500"
                     dangerouslySetInnerHTML={{ __html: product.description }}
