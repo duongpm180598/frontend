@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 // content type
 
-axios.defaults.headers.post["Content-Type"] = "application/json";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.defaults.withCredentials = true;
 
@@ -18,15 +18,15 @@ axios.interceptors.response.use(
 );
 
 const setAuthorization = () => {
-  const tokenStr = localStorage.getItem("token");
+  const tokenStr = localStorage.getItem('token');
   const token = tokenStr ? JSON.parse(tokenStr) : null;
   if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 };
 
 const removeAuthorization = () => {
-  delete axios.defaults.headers.common["Authorization"];
+  delete axios.defaults.headers.common['Authorization'];
 };
 
 class APIClient {
@@ -37,12 +37,11 @@ class APIClient {
     let paramKeys = [];
     if (params) {
       Object.keys(params).map((key) => {
-        paramKeys.push(key + "=" + params[key]);
+        paramKeys.push(key + '=' + params[key]);
         return paramKeys;
       });
 
-      const queryString =
-        paramKeys && paramKeys.length ? paramKeys.join("&") : "";
+      const queryString = paramKeys && paramKeys.length ? paramKeys.join('&') : '';
       response = axios.get(`${url}?${queryString}`, params);
     } else {
       response = axios.get(`${url}`, params);
@@ -58,7 +57,7 @@ class APIClient {
 
   updateWithToken = (url, data) => {
     setAuthorization();
-    return axios.put(url + "/" + data.id, data);
+    return axios.put(url + '/' + data.id, data);
   };
 
   deleteWithToken = (url, id) => {
@@ -74,12 +73,11 @@ class APIClient {
 
     if (params) {
       Object.keys(params).map((key) => {
-        paramKeys.push(key + "=" + params[key]);
+        paramKeys.push(key + '=' + params[key]);
         return paramKeys;
       });
 
-      const queryString =
-        paramKeys && paramKeys.length ? paramKeys.join("&") : "";
+      const queryString = paramKeys && paramKeys.length ? paramKeys.join('&') : '';
       response = axios.get(`${url}?${queryString}`, params);
     } else {
       response = axios.get(`${url}`, params);
