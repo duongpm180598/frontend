@@ -8,6 +8,7 @@ import AuthProtected from './AuthProtected';
 import Register from '../pages/register/Register';
 import ManageComponent from '../pages/manage/manage';
 import DetailProduct from '../Components/Common/DetailProduct';
+import Cart from '../pages/cart/cart';
 function StreetRouter() {
   return (
     <>
@@ -26,6 +27,14 @@ function StreetRouter() {
           element={
             <AuthProtected>
               <Page></Page>
+            </AuthProtected>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <AuthProtected>
+              <Cart></Cart>
             </AuthProtected>
           }
         />

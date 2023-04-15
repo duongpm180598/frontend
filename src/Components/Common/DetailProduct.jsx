@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { APIClient } from '../../helper/api_helper';
-import { StarIcon } from '@heroicons/react/20/solid';
 import { RadioGroup } from '@headlessui/react';
 import { CurrencyDollarIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline';
+import { formatMoney } from '../../utils';
+import { useDispatch } from 'react-redux';
+import { addToCart, removeQuantityWhenError } from '../../redux/cart.slice';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -17,6 +19,7 @@ const DetailProduct = () => {
   const [product, setProduct] = useState();
   const [variant, setVariant] = useState({ size: '', color: '', number: '', price: '' });
   const [sizes, setSizes] = useState([]);
+  const dispatch = useDispatch();
 
   const policies = [
     { name: 'International delivery', icon: GlobeAmericasIcon, description: 'Get your order in 2 years' },
@@ -28,96 +31,6 @@ const DetailProduct = () => {
     'Pre-washed and pre-shrunk',
     'Machine wash cold with similar colors',
   ];
-  // const res = {
-  //   id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
-  //   name: 'AirSense Áo Blazer (Siêu Nhẹ)',
-  //   slug: 'airsense-ao-blazer-sieu-nhe',
-  //   base_cost: 250000,
-  //   thumbnail: 'https://res.cloudinary.com/xanhz/image/upload/v1680775975/group9-es/zvauznwpeft46rf7wxqq.png',
-  //   description: 'Áo khoác siêu nhẹ, co giãn và nhanh khô của chúng tôi. Kiểu dáng áo trên xu hướng.',
-  //   category_id: '56b249ba-b069-40c9-89ad-eba1b4f3efdf',
-  //   created_at: '2023-04-06T10:13:00.868Z',
-  //   updated_at: '2023-04-06T10:13:00.868Z',
-  //   product_images: [],
-  //   product_variants: [
-  //     {
-  //       id: 'a4765280-bb97-4a58-8fea-7bd86bbbb484',
-  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
-  //       weight: 20,
-  //       inventory: 4,
-  //       price: 250000,
-  //       created_at: '2023-04-06T10:13:00.868Z',
-  //       updated_at: '2023-04-06T10:13:00.868Z',
-  //       variant_attributes: [
-  //         {
-  //           name: 'Size',
-  //           value: 'L',
-  //         },
-  //         {
-  //           name: 'Màu',
-  //           value: 'Xanh Navy',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       id: 'cff1d1f3-18c4-441a-a1b6-b030a6a19dfd',
-  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
-  //       weight: 20,
-  //       inventory: 4,
-  //       price: 250000,
-  //       created_at: '2023-04-06T10:13:00.868Z',
-  //       updated_at: '2023-04-06T10:13:00.868Z',
-  //       variant_attributes: [
-  //         {
-  //           name: 'Size',
-  //           value: 'M',
-  //         },
-  //         {
-  //           name: 'Màu',
-  //           value: 'Xanh Navy',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       id: 'cff1d1f3-18c4-441a-a1b6-b030a6a19dfd',
-  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
-  //       weight: 20,
-  //       inventory: 4,
-  //       price: 250000,
-  //       created_at: '2023-04-06T10:13:00.868Z',
-  //       updated_at: '2023-04-06T10:13:00.868Z',
-  //       variant_attributes: [
-  //         {
-  //           name: 'Size',
-  //           value: 'M',
-  //         },
-  //         {
-  //           name: 'Màu',
-  //           value: 'Den',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       id: 'cff1d1f3-18c4-441a-a1b6-b030a6a19dfd',
-  //       product_id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
-  //       weight: 20,
-  //       inventory: 4,
-  //       price: 250000,
-  //       created_at: '2023-04-06T10:13:00.868Z',
-  //       updated_at: '2023-04-06T10:13:00.868Z',
-  //       variant_attributes: [
-  //         {
-  //           name: 'Size',
-  //           value: 'ML',
-  //         },
-  //         {
-  //           name: 'Màu',
-  //           value: 'Den',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // };
 
   const getColor = (size) => {
     const colorStore = [];
@@ -140,21 +53,22 @@ const DetailProduct = () => {
         price = x.price;
       }
     });
+    if (price) price = formatMoney(price);
 
     return [id_variant, price];
   };
 
   const handleAddToCart = () => {
     const id_variant = getVariant(variant.size, variant.color)[0];
-    // console.log('id_variant ::', id_variant);
     const data = { variant_id: id_variant, quantity: 1 };
+    dispatch(addToCart());
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
-      .then((res) => {
-        console.log('res ::', res);
-        // dispath to store cart
-      })
-      .catch((e) => console.log('e ::', e));
+      .then((res) => {})
+      .catch((e) => {
+        console.log('e ::', e);
+        dispatch(removeQuantityWhenError());
+      });
   };
 
   useEffect(() => {
@@ -213,6 +127,7 @@ const DetailProduct = () => {
                     e.preventDefault();
                     handleAddToCart();
                   }}
+                  className=""
                 >
                   {/* Size picker */}
                   <div className="mt-8 mb-8">
@@ -228,7 +143,7 @@ const DetailProduct = () => {
                             key={index}
                             value={size}
                             onClick={() => {
-                              setVariant({ ...variant, size });
+                              setVariant({ ...variant, size, color: '' });
                             }}
                             className={({ active, checked }) =>
                               classNames(
