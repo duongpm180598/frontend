@@ -28,13 +28,6 @@ const DetailProduct = () => {
     'Pre-washed and pre-shrunk',
     'Machine wash cold with similar colors',
   ];
-
-  // const [colors, setColors] = useState();
-  const colors = [
-    { name: 'Black', bgColor: 'bg-gray-900', selectedColor: 'ring-gray-900' },
-    { name: 'Heather Grey', bgColor: 'bg-gray-400', selectedColor: 'ring-gray-400' },
-  ];
-
   // const res = {
   //   id: '45ad91f4-06a8-4775-8e5a-1a45e28042c4',
   //   name: 'AirSense Áo Blazer (Siêu Nhẹ)',
@@ -126,9 +119,6 @@ const DetailProduct = () => {
   //   ],
   // };
 
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [selectedSize, setSelectedSize] = useState(sizes[2]);
-
   const getColor = (size) => {
     const colorStore = [];
     product.product_variants.forEach((x) => {
@@ -138,6 +128,33 @@ const DetailProduct = () => {
       }
     });
     return colorStore;
+  };
+
+  const getVariant = (size, color) => {
+    let id_variant = '',
+      price = '';
+    product.product_variants.forEach((x) => {
+      const [size1, color1] = x.variant_attributes;
+      if (size1.value == size && color1.value === color) {
+        id_variant = x.id;
+        price = x.price;
+      }
+    });
+
+    return [id_variant, price];
+  };
+
+  const handleAddToCart = () => {
+    const id_variant = getVariant(variant.size, variant.color)[0];
+    // console.log('id_variant ::', id_variant);
+    const data = { variant_id: id_variant, quantity: 1 };
+    new APIClient()
+      .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
+      .then((res) => {
+        console.log('res ::', res);
+        // dispath to store cart
+      })
+      .catch((e) => console.log('e ::', e));
   };
 
   useEffect(() => {
@@ -151,12 +168,12 @@ const DetailProduct = () => {
             if (y.name === 'Size' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
           });
         });
-        console.log('res ::', res);
         setSizes(sizeStore);
         setProduct(res);
       })
       .catch((e) => console.log('e ::', e));
   }, []);
+
   if (!product) return <h1>Loading...</h1>;
   return (
     <>
@@ -191,14 +208,19 @@ const DetailProduct = () => {
               </div>
 
               <div className="mt-8 lg:col-span-5">
-                <form>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleAddToCart();
+                  }}
+                >
                   {/* Size picker */}
                   <div className="mt-8 mb-8">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-medium text-gray-900">Size</h2>
                     </div>
 
-                    <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
+                    <RadioGroup className="mt-2">
                       <RadioGroup.Label className="sr-only"> Choose a size </RadioGroup.Label>
                       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                         {sizes.map((size, index) => (
@@ -232,13 +254,16 @@ const DetailProduct = () => {
                     <div>
                       <h2 className="text-sm font-medium text-gray-900">Color</h2>
 
-                      <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
+                      <RadioGroup className="mt-2">
                         <RadioGroup.Label className="sr-only"> Choose a color </RadioGroup.Label>
                         <div className="flex items-center space-x-3">
                           {getColor(variant.size).map((x, index) => (
                             <RadioGroup.Option
                               key={index}
                               value={x}
+                              onClick={() => {
+                                setVariant({ ...variant, color: x });
+                              }}
                               className={({ active, checked }) =>
                                 classNames(
                                   'ring-gray-900',
@@ -263,6 +288,16 @@ const DetailProduct = () => {
                           ))}
                         </div>
                       </RadioGroup>
+                    </div>
+                  ) : null}
+
+                  {/* Price Variant */}
+                  {variant.size && variant.color ? (
+                    <div className="mt-5">
+                      <span className="text-sm font-medium text-gray-900">Price :</span>
+                      <span className="text-sm font-medium text-[#333] ml-5 opacity-70">
+                        {getVariant(variant.size, variant.color)[1]}
+                      </span>
                     </div>
                   ) : null}
 
