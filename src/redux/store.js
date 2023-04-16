@@ -3,11 +3,13 @@ import { configureStore } from '@reduxjs/toolkit';
 import categorySlice from './category.slice';
 import variantAttributeSlice from './variantAttribute.slice';
 import productsSlice from './products.slice';
+import cartSlice from './cart.slice';
 const store = configureStore({
   reducer: {
     category: categorySlice,
     variantAttribute: variantAttributeSlice,
     product: productsSlice,
+    cart: cartSlice,
   },
 });
 

@@ -13,7 +13,7 @@ axios.interceptors.response.use(
   },
   function (error) {
     const { message } = error.response.data;
-    return Promise.reject(message);
+    return message ? Promise.reject(message) : Promise.reject(error);
   }
 );
 
@@ -57,7 +57,7 @@ class APIClient {
 
   updateWithToken = (url, data) => {
     setAuthorization();
-    return axios.put(url + '/' + data.id, data);
+    return axios.put(url, data);
   };
 
   deleteWithToken = (url, id) => {

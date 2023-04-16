@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../redux/selector';
-import { fetchingProducts } from '../../redux/middleware';
+import { fetchingData } from '../../redux/middleware';
 import ProductComponent from '../../Components/Common/ProductComponent';
 function Home() {
   const dispatch = useDispatch();
   const products = useSelector(getProducts);
 
-  // console.log('products ::', products);
   useEffect(() => {
-    dispatch(fetchingProducts());
+    dispatch(fetchingData());
   }, []);
   return (
     <div className="bg-white">

@@ -1,29 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { authActions } from '../auth/auth.action';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { isAdmin } from '../Services/auth.service';
+import { useSelector } from 'react-redux';
+import { getTotalQuantity } from '../redux/selector';
 
 const navigation =
   isAdmin() == 'ADMIN'
     ? [
         { name: 'Home', link: '/' },
         { name: 'Features', link: '/feature' },
-        { name: 'Marketplace', link: '/marketplace' },
-        { name: 'Company', link: '/company' },
+        { name: 'Cart', link: '/cart' },
+        { name: 'Checkout', link: '/checkout' },
         { name: 'Manager', link: '/manager' },
       ]
     : [
         { name: 'Home', link: '/' },
         { name: 'Features', link: '/feature' },
-        { name: 'Marketplace', link: '/marketplace' },
-        { name: 'Company', link: '/company' },
+        { name: 'cart', link: '/cart' },
+        { name: 'Checkout', link: '/checkout' },
       ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const [totalQuantity, setTotalQuantity] = useState();
+  const quantity = useSelector(getTotalQuantity);
+
+  useEffect(() => {
+    setTotalQuantity(quantity);
+  }, [quantity]);
 
   const handleLogout = () => {
     authActions()
@@ -58,11 +66,24 @@ export default function Header() {
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <NavLink key={item.name} to={item.link} className="text-sm font-semibold leading-6 text-gray-900">
-              {item.name}
-            </NavLink>
-          ))}
+          {navigation.map((item) => {
+            return item.name == 'Cart' ? (
+              <NavLink
+                key={item.name}
+                to={item.link}
+                className="relative text-sm font-semibold leading-6 text-gray-900"
+              >
+                {item.name}
+                <div className=" flex justify-center items-center absolute w-8 h-8 top-[-18px] right-[-30px] p-1.5 rounded-[50%] bg-active text-white">
+                  {totalQuantity}
+                </div>
+              </NavLink>
+            ) : (
+              <NavLink key={item.name} to={item.link} className="text-sm font-semibold leading-6 text-gray-900">
+                {item.name}
+              </NavLink>
+            );
+          })}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">

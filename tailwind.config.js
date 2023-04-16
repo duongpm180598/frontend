@@ -1,38 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        primary: "#131313",
-        active: "#F7444E",
-        footer: "f8f8f8",
+        primary: '#131313',
+        active: '#F7444E',
+        footer: 'f8f8f8',
       },
       fontFamily: {
-        primary: ["Montserrat", "sans-serif"],
-        Popins: ["Poppins", "Arial"],
+        primary: ['Montserrat', 'sans-serif'],
+        Popins: ['Poppins', 'Arial'],
       },
       screens: {
-        sm: "375px",
+        sm: '375px',
         // => @media (min-width: 640px) { ... }
 
-        md: "768px",
+        md: '768px',
         // => @media (min-width: 768px) { ... }
 
-        lg: "1024px",
+        lg: '1024px',
         // => @media (min-width: 1024px) { ... }
 
-        xl: "1280px",
+        xl: '1280px',
         // => @media (min-width: 1280px) { ... }
 
-        "2xl": "1536px",
+        '2xl': '1536px',
         // => @media (min-width: 1536px) { ... }
       },
       backgroundSize: {
-        "200%": "200%",
+        '200%': '200%',
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
