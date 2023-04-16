@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import { getTotalQuantity } from '../utils';
 const initialState = {
-  cart: [{ id: '', name: '', thumbnail: '', quantity: '', unit_price: '', size: '', color: '' }],
+  cart: [{ id: '', name: '', thumbnail: '', weight: '', quantity: '', unit_price: '', size: '', color: '' }],
   totalQuantity: 0,
 };
 
@@ -11,7 +11,7 @@ export const cartSlice = createSlice({
   reducers: {
     fetchCart: (state, action) => {
       state.cart = action.payload;
-      state.totalQuantity = state.cart.length;
+      state.totalQuantity = getTotalQuantity(state.cart);
     },
     addToCart: (state) => {
       state.totalQuantity += 1;
@@ -19,11 +19,27 @@ export const cartSlice = createSlice({
     removeQuantityWhenError: (state) => {
       state.totalQuantity -= 1;
     },
-    upQuantity: (state, action) => {},
-    downQuantity: (state, action) => {},
+
+    upQuantity: (state, action) => {
+      state.totalQuantity += 1;
+      const index = state.cart.findIndex((x) => x.id == action.payload.id);
+      state.cart[index].quantity += 1;
+    },
+
+    downQuantity: (state, action) => {
+      state.totalQuantity -= 1;
+      const index = state.cart.findIndex((x) => x.id == action.payload.id);
+      state.cart[index].quantity -= 1;
+    },
+    removeProduct: (state, action) => {
+      const newCart = state.cart.filter((x) => x.id != action.payload.id);
+      state.cart = newCart;
+      state.totalQuantity = getTotalQuantity(state.cart);
+    },
   },
 });
 
-export const { fetchCart, addToCart, upQuantity, downQuantity, removeQuantityWhenError } = cartSlice.actions;
+export const { fetchCart, addToCart, upQuantity, downQuantity, removeQuantityWhenError, removeProduct } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

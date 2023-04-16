@@ -9,3 +9,16 @@ export const getTotalPrice = (cart) => {
     return res;
   }, 0);
 };
+
+export const getTotalQuantity = (cart) => {
+  return cart.reduce((res, curr) => (res += curr.quantity), 0);
+};
+
+export const getTotalWeight = (cart) => {
+  // return cart.reduce((res, curr) => (res += curr.weight), 0);
+  return 100;
+};
+
+export function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}

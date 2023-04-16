@@ -36,6 +36,7 @@ const fetchingCart =
       return {
         id: x.id,
         name: x.name,
+        weight: x.weight,
         quantity: x.quantity,
         thumbnail: x.thumbnail,
         unit_price: x.unit_price,
@@ -52,10 +53,6 @@ const fetchingData = () => async (dispatch) => {
   const promiseProduct = new APIClient().getWithToken(url_products);
   const promiseCart = new APIClient().getWithToken(url_cart);
   const response = await Promise.all([promiseProduct, promiseCart]);
-
-  console.log('promise[0] ::', response[0]);
-  console.log('promise[0] ::', response[1]);
-
   // format Data
 
   const formatResponse = response[1].map((x) => {

@@ -3,14 +3,49 @@ import { XMarkIcon } from '@heroicons/react/20/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchingCart } from '../../redux/middleware';
 import { getCart } from '../../redux/selector';
-import { getTotalPrice, formatMoney } from '../../utils/';
+import { getTotalPrice, formatMoney, classNames } from '../../utils/';
+import { downQuantity, removeProduct, upQuantity } from '../../redux/cart.slice';
+import { APIClient } from '../../helper/api_helper';
+import { useNavigate } from 'react-router-dom';
 export default function Cart() {
+  const navigate = useNavigate();
   const dispath = useDispatch();
+  // cart in redux
   const currCart = useSelector(getCart);
 
-  const handAddProduct = () => {};
+  const handleUpQuantity = (product) => {
+    dispath(upQuantity(product));
+    new APIClient()
+      .updateWithToken(`${process.env.REACT_APP_API_URL}/cart-items/${product.id}`, {
+        quantity: product.quantity + 1,
+      })
+      .then((res) => console.log('res ::', res))
+      .catch((e) => {
+        alert(e);
+        dispath(downQuantity(product));
+      });
+  };
 
-  const handleRemoveProduct = () => {};
+  const handleDownQuantity = (product) => {
+    dispath(downQuantity(product));
+    new APIClient()
+      .updateWithToken(`${process.env.REACT_APP_API_URL}/cart-items/${product.id}`, {
+        quantity: product.quantity - 1,
+      })
+      .then((res) => console.log(res))
+      .catch((e) => {
+        dispath(upQuantity(product));
+      });
+  };
+
+  const handleRemoveItem = (product) => {
+    dispath(removeProduct(product));
+    new APIClient().deleteWithToken(`${process.env.REACT_APP_API_URL}/cart-items/${product.id}`);
+  };
+
+  const handleCheckOut = () => {
+    navigate('/checkout');
+  };
 
   useEffect(() => {
     dispath(fetchingCart());
@@ -20,7 +55,10 @@ export default function Cart() {
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
-        <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
+        >
           <section aria-labelledby="cart-heading" className="lg:col-span-7">
             <h2 id="cart-heading" className="sr-only">
               Items in your shopping cart
@@ -54,22 +92,31 @@ export default function Cart() {
 
                       <div className="mt-4 sm:mt-0 sm:pr-9">
                         <div>
-                          <span
-                            onClick={handAddProduct}
+                          <button
+                            onClick={() => handleUpQuantity(x)}
                             className="p-1.5 rounded-md border border-gray-300 cursor-pointer"
                           >
                             +
-                          </span>
+                          </button>
                           <span className="mx-3">{x.quantity}</span>
-                          <span
-                            onClick={handleRemoveProduct}
-                            className="p-1.5 rounded-md border border-gray-300 cursor-pointer"
+                          <button
+                            disabled={x.quantity == 1}
+                            onClick={() => handleDownQuantity(x)}
+                            className={classNames(
+                              x.quantity == 1
+                                ? 'p-1.5 rounded-md border border-gray-300 opacity-50 cursor-not-allowed'
+                                : 'p-1.5 rounded-md border border-gray-300 cursor-pointer'
+                            )}
                           >
                             -
-                          </span>
+                          </button>
                         </div>
                         <div className="absolute right-0 top-0">
-                          <button type="button" className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
+                          <button
+                            onClick={() => handleRemoveItem(x)}
+                            type="button"
+                            className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
+                          >
                             <span className="sr-only">Remove</span>
                             <XMarkIcon className="h-5 w-5" aria-hidden="true" />
                           </button>
@@ -100,6 +147,7 @@ export default function Cart() {
 
             <div className="mt-6">
               <button
+                onClick={handleCheckOut}
                 type="submit"
                 className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
               >

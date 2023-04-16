@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { authActions } from '../auth/auth.action';
@@ -12,22 +12,27 @@ const navigation =
     ? [
         { name: 'Home', link: '/' },
         { name: 'Features', link: '/feature' },
-        { name: 'Marketplace', link: '/marketplace' },
         { name: 'Cart', link: '/cart' },
+        { name: 'Checkout', link: '/checkout' },
         { name: 'Manager', link: '/manager' },
       ]
     : [
         { name: 'Home', link: '/' },
         { name: 'Features', link: '/feature' },
-        { name: 'Marketplace', link: '/marketplace' },
         { name: 'cart', link: '/cart' },
-        { name: 'Company', link: '/company' },
+        { name: 'Checkout', link: '/checkout' },
       ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const totalQuantity = useSelector(getTotalQuantity);
+  const [totalQuantity, setTotalQuantity] = useState();
+  const quantity = useSelector(getTotalQuantity);
+
+  useEffect(() => {
+    setTotalQuantity(quantity);
+  }, [quantity]);
+
   const handleLogout = () => {
     authActions()
       .logout()
