@@ -1,5 +1,5 @@
 export const formatMoney = (price) => {
-  return price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+  return price ? price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : 0;
 };
 
 export const getTotalPrice = (cart) => {

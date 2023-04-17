@@ -35,7 +35,7 @@ const fetchingCart =
     const formatResponse = response.map((x) => {
       const [size, color] = x.attributes;
       return {
-        id: x.id,
+        id: x.variant_id,
         name: x.name,
         weight: x.weight,
         quantity: x.quantity,
@@ -59,7 +59,7 @@ const fetchingData = () => async (dispatch) => {
   const formatResponse = response[1].map((x) => {
     const [size, color] = x.attributes;
     return {
-      id: x.id,
+      id: x.variant_id,
       name: x.name,
       quantity: x.quantity,
       thumbnail: x.thumbnail,

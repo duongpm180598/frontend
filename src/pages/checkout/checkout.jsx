@@ -8,69 +8,115 @@ import { getCart, getDistricts, getProvinces, getWards } from '../../redux/selec
 import { APIClient } from '../../helper/api_helper';
 import { fetchDistricts, fetchWards } from '../../redux/GHN.slice';
 
-const paymentMethods = [
-  { id: 'CASH', title: 'Thanh Toán Khi Nhận Hàng' },
-  { id: 'VNPAY', title: 'VNPAY' },
-];
-
 export default function Checkout() {
   const dispatch = useDispatch();
-  const [shipping, setShipping] = useState(0);
-  const [address, setAddress] = useState({
+  const provinces = useSelector(getProvinces);
+  const districts = useSelector(getDistricts);
+  const wards = useSelector(getWards);
+  const cart = useSelector(getCart);
+  const [shippingInfomation, setShippingInfomation] = useState({
+    name: '',
+    phone: '',
+    fee: '',
     provinceId: '',
     province: '',
     districtId: '',
     district: '',
     ward: '',
+    line: '',
   });
+
+  const [payment, setPayment] = useState({ gateway: 'CASH', amount: 0 });
 
   useEffect(() => {
     dispatch(fetchingDataGHN());
   }, []);
 
   useEffect(() => {
-    if (address.provinceId) {
+    if (shippingInfomation.provinceId) {
       new APIClient()
-        .getWithToken(`${process.env.REACT_APP_API_URL}/ghn/districts?province_id=${address.provinceId}`)
+        .getWithToken(`${process.env.REACT_APP_API_URL}/ghn/districts?province_id=${shippingInfomation.provinceId}`)
         .then((res) => {
           dispatch(fetchDistricts(res));
         })
         .catch((e) => console.log('e:: ', e));
     }
-    if (address.districtId) {
+    if (shippingInfomation.districtId) {
       new APIClient()
-        .getWithToken(`${process.env.REACT_APP_API_URL}/ghn/wards?district_id=${address.districtId}`)
+        .getWithToken(`${process.env.REACT_APP_API_URL}/ghn/wards?district_id=${shippingInfomation.districtId}`)
         .then((res) => {
           dispatch(fetchWards(res));
         })
         .catch((e) => console.log('e ::', e));
     }
-    if (address.provinceId && address.districtId && address.ward) {
+    if (shippingInfomation.provinceId && shippingInfomation.districtId && shippingInfomation.ward) {
       new APIClient()
         .createWithToken(`${process.env.REACT_APP_API_URL}/ghn/shipping-fee`, {
-          to_district: address.district,
-          to_ward: address.ward,
+          to_district: shippingInfomation.district,
+          to_ward: shippingInfomation.ward,
           weight: getTotalWeight(cart),
         })
-        .then((res) => setShipping(res.total))
+        .then((res) => {
+          setShippingInfomation({ ...shippingInfomation, fee: res.total });
+        })
         .catch((e) => console.log('e ::', e));
     }
     return;
-  }, [address.provinceId, address.district, address.ward]);
+  }, [shippingInfomation.provinceId, shippingInfomation.district, shippingInfomation.ward]);
 
-  const provinces = useSelector(getProvinces);
-  const districts = useSelector(getDistricts);
-  const wards = useSelector(getWards);
-  const cart = useSelector(getCart);
+  const handleCreateOrder = () => {
+    const order_items = cart.map((x) => {
+      return {
+        variant_id: x.id,
+        quantity: x.quantity,
+        unit_price: x.unit_price,
+      };
+    });
 
-  console.log(address);
+    const data = {
+      order_items,
+      payment: {
+        gateway: payment.gateway,
+        amount: getTotalPrice(cart),
+      },
+      shipping_information: {
+        carrier: 'GHN',
+        customer_name: shippingInfomation.name,
+        customer_phone: shippingInfomation.phone,
+        fee: shippingInfomation.fee,
+        province: shippingInfomation.province,
+        district: shippingInfomation.district,
+        ward: shippingInfomation.ward,
+        line: shippingInfomation.line,
+      },
+    };
 
+    // console.log('data ::', JSON.stringify(data));
+
+    if (payment.gateway === 'CASH') {
+      new APIClient()
+        .createWithToken(`${process.env.REACT_APP_API_URL}/orders`, data)
+        .then((res) => {
+          console.log('res :: ', res);
+          alert('Order thanh cong');
+        })
+        .catch((e) => console.log('err : ', e));
+    } else {
+      //
+    }
+  };
   return (
     <div className="bg-gray-50">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Checkout</h2>
 
-        <form onSubmit={(e) => e.preventDefault()} className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleCreateOrder();
+          }}
+          className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16"
+        >
           <div>
             <div className="border-gray-200 ">
               <h2 className="text-lg font-medium text-gray-900">Thông Tin Giao Hàng</h2>
@@ -85,7 +131,10 @@ export default function Checkout() {
                     <input
                       type="text"
                       id="first-name"
-                      name="first-name"
+                      name="name"
+                      onChange={(e) => {
+                        setShippingInfomation({ ...shippingInfomation, [e.target.name]: e.target.value });
+                      }}
                       autoComplete="given-name"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
@@ -101,6 +150,9 @@ export default function Checkout() {
                       type="text"
                       name="phone"
                       id="phone"
+                      onChange={(e) => {
+                        setShippingInfomation({ ...shippingInfomation, [e.target.name]: e.target.value });
+                      }}
                       autoComplete="tel"
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
@@ -117,10 +169,11 @@ export default function Checkout() {
                       id="country"
                       name="provinceId"
                       autoComplete="country-name"
-                      value={address.provinceId}
+                      value={shippingInfomation.provinceId}
                       onChange={(e) => {
                         const provinceNameCurr = getProvinceById(provinces, e.target.value);
-                        setAddress({
+                        setShippingInfomation({
+                          ...shippingInfomation,
                           [e.target.name]: e.target.value,
                           districtId: '',
                           ward: '',
@@ -151,11 +204,11 @@ export default function Checkout() {
                     <select
                       id="country"
                       name="districtId"
-                      value={address.districtId}
+                      value={shippingInfomation.districtId}
                       onChange={(e) => {
                         const districtNameCurr = getDistrictById(districts, e.target.value);
-                        setAddress({
-                          ...address,
+                        setShippingInfomation({
+                          ...shippingInfomation,
                           [e.target.name]: e.target.value,
                           district: districtNameCurr,
                           ward: '',
@@ -186,9 +239,9 @@ export default function Checkout() {
                       id="country"
                       name="ward"
                       autoComplete="country-name"
-                      value={address.ward}
+                      value={shippingInfomation.ward}
                       onChange={(e) => {
-                        setAddress({ ...address, [e.target.name]: e.target.value });
+                        setShippingInfomation({ ...shippingInfomation, [e.target.name]: e.target.value });
                       }}
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
@@ -202,6 +255,24 @@ export default function Checkout() {
                         </option>
                       ))}
                     </select>
+                  </div>
+                </div>
+
+                {/* Line */}
+                <div>
+                  <label htmlFor="region" className="block text-sm font-medium text-gray-700">
+                    Số Nhà
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      type="text"
+                      name="line"
+                      id="line"
+                      onChange={(e) => {
+                        setShippingInfomation({ ...shippingInfomation, [e.target.name]: e.target.value });
+                      }}
+                      className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
                   </div>
                 </div>
               </div>
@@ -250,30 +321,31 @@ export default function Checkout() {
               <fieldset className="mt-4">
                 <legend className="sr-only">Loại Thanh Toán</legend>
                 <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                  {paymentMethods.map((paymentMethod, paymentMethodIdx) => (
-                    <div key={paymentMethod.id} className="flex items-center">
-                      {paymentMethodIdx === 0 ? (
-                        <input
-                          id={paymentMethod.id}
-                          name="payment-type"
-                          type="radio"
-                          defaultChecked
-                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                      ) : (
-                        <input
-                          id={paymentMethod.id}
-                          name="payment-type"
-                          type="radio"
-                          className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                        />
-                      )}
+                  <div className="flex items-center">
+                    <input
+                      name="payment-type"
+                      type="radio"
+                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      value="CASH"
+                      onChange={(e) => {
+                        setPayment({ ...payment, [e.target.name]: e.target.value });
+                      }}
+                    />
+                    <label className="ml-3 block text-sm font-medium text-gray-700 mr-5">
+                      Thanh Toán Khi Nhận Hàng
+                    </label>
 
-                      <label htmlFor={paymentMethod.id} className="ml-3 block text-sm font-medium text-gray-700">
-                        {paymentMethod.title}
-                      </label>
-                    </div>
-                  ))}
+                    <input
+                      name="payment-type"
+                      type="radio"
+                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      value="VNPAY"
+                      onChange={(e) => {
+                        setPayment({ ...payment, [e.target.name]: e.target.value });
+                      }}
+                    />
+                    <label className="ml-3 block text-sm font-medium text-gray-700">VNPAY</label>
+                  </div>
                 </div>
               </fieldset>
             </div>
@@ -324,12 +396,14 @@ export default function Checkout() {
                 </div>
                 <div className="flex items-center justify-between">
                   <dt className="text-sm">Shipping</dt>
-                  <dd className="text-sm font-medium text-gray-900">{formatMoney(shipping)}</dd>
+                  <dd className="text-sm font-medium text-gray-900">{formatMoney(shippingInfomation.fee)}</dd>
                 </div>
 
                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                   <dt className="text-base font-medium">Tổng</dt>
-                  <dd className="text-base font-medium text-gray-900">{formatMoney(getTotalPrice(cart) + shipping)}</dd>
+                  <dd className="text-base font-medium text-gray-900">
+                    {formatMoney(getTotalPrice(cart) + shippingInfomation.fee)}
+                  </dd>
                 </div>
               </dl>
 
