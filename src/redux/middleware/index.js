@@ -1,4 +1,5 @@
 import { APIClient } from '../../helper/api_helper';
+import { fetchProvinces } from '../GHN.slice';
 import { fetchCart } from '../cart.slice';
 import { fetchCategory } from '../category.slice';
 import { fetchProducts } from '../products.slice';
@@ -74,4 +75,10 @@ const fetchingData = () => async (dispatch) => {
   // const response = await Promise.all([promiseCategory, promiseAtribute]);
 };
 
-export { fetchingCategoryAndAttribute, fetchingProducts, fetchingCart, fetchingData };
+const fetchingDataGHN = () => async (dispatch) => {
+  const url_province = `${process.env.REACT_APP_API_URL}/ghn/provinces`;
+  const response = await new APIClient().getWithToken(url_province);
+  dispatch(fetchProvinces(response));
+};
+
+export { fetchingCategoryAndAttribute, fetchingProducts, fetchingCart, fetchingData, fetchingDataGHN };
