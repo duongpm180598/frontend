@@ -12,7 +12,6 @@ export default function Cart() {
   const dispath = useDispatch();
   // cart in redux
   const currCart = useSelector(getCart);
-
   const handleUpQuantity = (product) => {
     dispath(upQuantity(product));
     new APIClient()

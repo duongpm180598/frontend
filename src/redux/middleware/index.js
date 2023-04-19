@@ -35,7 +35,8 @@ const fetchingCart =
     const formatResponse = response.map((x) => {
       const [size, color] = x.attributes;
       return {
-        id: x.variant_id,
+        id: x.id,
+        variant_id: x.variant_id,
         name: x.name,
         weight: x.weight,
         quantity: x.quantity,
@@ -56,11 +57,13 @@ const fetchingData = () => async (dispatch) => {
   const response = await Promise.all([promiseProduct, promiseCart]);
   // format Data
 
-  const formatResponse = response[1].map((x) => {
+  const formatResponse = response[1].items.map((x) => {
     const [size, color] = x.attributes;
     return {
-      id: x.variant_id,
+      id: x.id,
+      variant_id: x.variant_id,
       name: x.name,
+      weight: x.weight,
       quantity: x.quantity,
       thumbnail: x.thumbnail,
       unit_price: x.unit_price,
@@ -69,8 +72,13 @@ const fetchingData = () => async (dispatch) => {
     };
   });
 
-  dispatch(fetchProducts(response[0]));
-  dispatch(fetchCart(formatResponse));
+  const data = {
+    total: response[1].total,
+    products: formatResponse,
+  };
+
+  dispatch(fetchProducts(response[0].products));
+  dispatch(fetchCart(data));
 
   // const response = await Promise.all([promiseCategory, promiseAtribute]);
 };

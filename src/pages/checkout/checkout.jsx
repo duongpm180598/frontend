@@ -7,13 +7,17 @@ import { fetchingDataGHN } from '../../redux/middleware';
 import { getCart, getDistricts, getProvinces, getWards } from '../../redux/selector';
 import { APIClient } from '../../helper/api_helper';
 import { fetchDistricts, fetchWards } from '../../redux/GHN.slice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Checkout() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const provinces = useSelector(getProvinces);
   const districts = useSelector(getDistricts);
   const wards = useSelector(getWards);
   const cart = useSelector(getCart);
+
+  // console.log('cart :: ', cart);
   const [shippingInfomation, setShippingInfomation] = useState({
     name: '',
     phone: '',
@@ -67,7 +71,7 @@ export default function Checkout() {
   const handleCreateOrder = () => {
     const order_items = cart.map((x) => {
       return {
-        variant_id: x.id,
+        variant_id: x.variant_id,
         quantity: x.quantity,
         unit_price: x.unit_price,
       };
@@ -91,19 +95,26 @@ export default function Checkout() {
       },
     };
 
-    // console.log('data ::', JSON.stringify(data));
-
-    if (payment.gateway === 'CASH') {
-      new APIClient()
-        .createWithToken(`${process.env.REACT_APP_API_URL}/orders`, data)
-        .then((res) => {
-          console.log('res :: ', res);
-          alert('Order thanh cong');
-        })
-        .catch((e) => console.log('err : ', e));
-    } else {
-      //
-    }
+    new APIClient()
+      .createWithToken(`${process.env.REACT_APP_API_URL}/orders`, data)
+      .then((res) => {
+        if (data.payment.gateway === 'CASH') {
+          alert('Bạn đã đặt hàng thành công');
+          navigate('/order');
+        } else if (data.payment.gateway === 'VNPAY') {
+          const order_code = res.code;
+          console.log('order_code ::', order_code);
+          new APIClient()
+            .createWithToken(`${process.env.REACT_APP_API_URL}/vnpay/payment-url`, { order_code })
+            .then((res) => {
+              // navigate(res.url);
+              // window.open(res.url, '_blank');
+              window.location.replace(res.url);
+            })
+            .catch((e) => console.log('err :'));
+        }
+      })
+      .catch((e) => console.log('err : ', e));
   };
   return (
     <div className="bg-gray-50">
@@ -323,7 +334,7 @@ export default function Checkout() {
                 <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
                   <div className="flex items-center">
                     <input
-                      name="payment-type"
+                      name="gateway"
                       type="radio"
                       className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       value="CASH"
@@ -336,7 +347,7 @@ export default function Checkout() {
                     </label>
 
                     <input
-                      name="payment-type"
+                      name="gateway"
                       type="radio"
                       className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       value="VNPAY"

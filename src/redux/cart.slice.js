@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getTotalQuantity } from '../utils';
 const initialState = {
-  cart: [{ id: '', name: '', thumbnail: '', weight: '', quantity: '', unit_price: '', size: '', color: '' }],
+  cart: [
+    { id: '', variant_id: '', name: '', thumbnail: '', weight: '', quantity: '', unit_price: '', size: '', color: '' },
+  ],
   totalQuantity: 0,
 };
 
@@ -10,8 +12,8 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     fetchCart: (state, action) => {
-      state.cart = action.payload;
-      state.totalQuantity = getTotalQuantity(state.cart);
+      state.cart = action.payload.products;
+      state.totalQuantity = action.payload.total;
     },
     addToCart: (state) => {
       state.totalQuantity += 1;
