@@ -1,5 +1,6 @@
 export const formatMoney = (price) => {
-  return price ? price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : 0;
+  const formatedPrice = price ? price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }).slice(0, -3) : 0;
+  return formatedPrice;
 };
 
 export const getTotalPrice = (cart) => {
@@ -32,3 +33,7 @@ export const getProvinceById = (province, id) => {
 export function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
+
+export const formatDate = (stringIso) => {
+  return new Date(stringIso).toLocaleDateString('sv-SE');
+};

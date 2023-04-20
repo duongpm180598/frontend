@@ -1,11 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { APIClient } from '../../helper/api_helper';
 import { useNavigate } from 'react-router-dom';
-
+import { useDispatch } from 'react-redux';
+import { classNames } from '../../utils';
 export default function Payments() {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(window.location.search);
   const params = {};
+  const [check, setCheck] = useState(false);
 
   for (const [key, value] of queryParams.entries()) {
     params[key] = value;
@@ -58,24 +60,39 @@ export default function Payments() {
         imageUrl: 'https://theme.hstatic.net/1000376681/1000508169/14/logo-footer.png',
       },
     },
-    // More posts...
   ];
 
+  const dispath = useDispatch();
   useEffect(() => {
-    new APIClient()
-      .updateWithToken(`${process.env.REACT_APP_API_URL}/payments/vnpay`, params)
-      .then((res) => {
-        console.log('res ::', res);
-        // navigate('/order');
-      })
-      .catch((e) => console.log('e :: ', e));
+    const timer = setTimeout(() => {
+      new APIClient()
+        .updateWithToken(`${process.env.REACT_APP_API_URL}/payments/vnpay`, params)
+        .then((res) => {
+          const { status } = res;
+          if (status == 'PAID') {
+            navigate('/order');
+          } else if (status == 'REJECTED') {
+            alert('Đặt Hàng Không Thành Công');
+            navigate('/checkout');
+          }
+          // navigate('/order');
+        })
+        .catch((e) => {
+          alert('Đặt Hàng Không Thành Công');
+          navigate('/checkout');
+        });
+    }, 3000);
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
+
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Giao Dịch Đang Được Thực Hiện</h2>
-          <p className="mt-2 text-lg leading-8 text-gray-600">Cảm ơn quý khách đã mua hàng</p>
+          <p className="mt-2 text-lg leading-8 text-gray-600">Cảm ơn quý khách đã mua hàng </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {posts.map((post) => (

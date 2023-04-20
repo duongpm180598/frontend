@@ -8,3 +8,4 @@ export const getTotalQuantity = (state) => state.cart.totalQuantity;
 export const getProvinces = (state) => state.GHN.provinces;
 export const getDistricts = (state) => state.GHN.districts;
 export const getWards = (state) => state.GHN.wards;
+export const getOrder = (state) => state.order.listOrder;

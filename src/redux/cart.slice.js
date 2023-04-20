@@ -38,10 +38,37 @@ export const cartSlice = createSlice({
       state.cart = newCart;
       state.totalQuantity = getTotalQuantity(state.cart);
     },
+    fetchQuantity: (state, action) => {
+      state.totalQuantity = action.payload;
+    },
+    restCart: (state) => {
+      state.totalQuantity = 0;
+      state.cart = [
+        {
+          id: '',
+          variant_id: '',
+          name: '',
+          thumbnail: '',
+          weight: '',
+          quantity: '',
+          unit_price: '',
+          size: '',
+          color: '',
+        },
+      ];
+    },
   },
 });
 
-export const { fetchCart, addToCart, upQuantity, downQuantity, removeQuantityWhenError, removeProduct } =
-  cartSlice.actions;
+export const {
+  fetchCart,
+  addToCart,
+  upQuantity,
+  downQuantity,
+  removeQuantityWhenError,
+  removeProduct,
+  fetchQuantity,
+  restCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

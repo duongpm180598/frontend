@@ -1,7 +1,8 @@
 import { APIClient } from '../../helper/api_helper';
 import { fetchProvinces } from '../GHN.slice';
-import { fetchCart } from '../cart.slice';
+import { fetchCart, fetchQuantity } from '../cart.slice';
 import { fetchCategory } from '../category.slice';
+import { fetchOrder } from '../order.slice';
 import { fetchProducts } from '../products.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
 
@@ -32,7 +33,7 @@ const fetchingCart =
   async (dispatch) => {
     const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
     const response = await new APIClient().getWithToken(url_cart, params);
-    const formatResponse = response.map((x) => {
+    const formatResponse = response.items.map((x) => {
       const [size, color] = x.attributes;
       return {
         id: x.id,
@@ -46,7 +47,7 @@ const fetchingCart =
         color: color.value,
       };
     });
-    dispatch(fetchCart(formatResponse));
+    dispatch(fetchCart({ products: formatResponse, total: response.total }));
   };
 
 const fetchingData = () => async (dispatch) => {
@@ -55,32 +56,8 @@ const fetchingData = () => async (dispatch) => {
   const promiseProduct = new APIClient().getWithToken(url_products);
   const promiseCart = new APIClient().getWithToken(url_cart);
   const response = await Promise.all([promiseProduct, promiseCart]);
-  // format Data
-
-  const formatResponse = response[1].items.map((x) => {
-    const [size, color] = x.attributes;
-    return {
-      id: x.id,
-      variant_id: x.variant_id,
-      name: x.name,
-      weight: x.weight,
-      quantity: x.quantity,
-      thumbnail: x.thumbnail,
-      unit_price: x.unit_price,
-      size: size.value,
-      color: color.value,
-    };
-  });
-
-  const data = {
-    total: response[1].total,
-    products: formatResponse,
-  };
-
   dispatch(fetchProducts(response[0].products));
-  dispatch(fetchCart(data));
-
-  // const response = await Promise.all([promiseCategory, promiseAtribute]);
+  dispatch(fetchQuantity(response[1].total));
 };
 
 const fetchingDataGHN = () => async (dispatch) => {
@@ -89,4 +66,31 @@ const fetchingDataGHN = () => async (dispatch) => {
   dispatch(fetchProvinces(response));
 };
 
-export { fetchingCategoryAndAttribute, fetchingProducts, fetchingCart, fetchingData, fetchingDataGHN };
+const fetchingOrder = () => async (dispatch) => {
+  const url_order = `${process.env.REACT_APP_API_URL}/orders?order=desc&limit=3`;
+  const response = await new APIClient().getWithToken(url_order);
+  const dataFormat = response.orders.map((x) => {
+    return {
+      code: x.code,
+      status: x.status,
+      created_at: x.created_at,
+      thumbnail: x.order_items[0].thumbnail,
+      tracking: {
+        customer_name: x.tracking.customer_name,
+        customer_email: x.tracking.customer_email,
+        customer_phone: x.tracking.customer_phone,
+        province: x.tracking.province,
+        district: x.tracking.district,
+        ward: x.tracking.ward,
+        line: x.tracking.line,
+      },
+      payment: {
+        gateway: x.payment.gateway,
+        amount: x.payment.amount,
+      },
+    };
+  });
+  dispatch(fetchOrder(dataFormat));
+};
+
+export { fetchingCategoryAndAttribute, fetchingProducts, fetchingCart, fetchingData, fetchingDataGHN, fetchingOrder };

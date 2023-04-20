@@ -7,11 +7,12 @@ import { getTotalPrice, formatMoney, classNames } from '../../utils/';
 import { downQuantity, removeProduct, upQuantity } from '../../redux/cart.slice';
 import { APIClient } from '../../helper/api_helper';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../../Components/Common/Loading';
 export default function Cart() {
   const navigate = useNavigate();
   const dispath = useDispatch();
-  // cart in redux
   const currCart = useSelector(getCart);
+
   const handleUpQuantity = (product) => {
     dispath(upQuantity(product));
     new APIClient()
@@ -50,10 +51,11 @@ export default function Cart() {
     dispath(fetchingCart());
   }, []);
 
+  if (!currCart) return <Loading />;
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Giỏ Hàng</h1>
         <form
           onSubmit={(e) => e.preventDefault()}
           className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16"
@@ -126,6 +128,7 @@ export default function Cart() {
                 </li>
               ))}
             </ul>
+            {currCart.length ? null : <p className="mt-10 text-sm text-gray-500">Giỏ Hàng Trống</p>}
           </section>
 
           {/* Order summary */}
