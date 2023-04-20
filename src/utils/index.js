@@ -1,5 +1,6 @@
 export const formatMoney = (price) => {
-  return price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+  const formatedPrice = price ? price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }).slice(0, -3) : 0;
+  return formatedPrice;
 };
 
 export const getTotalPrice = (cart) => {
@@ -15,10 +16,24 @@ export const getTotalQuantity = (cart) => {
 };
 
 export const getTotalWeight = (cart) => {
-  // return cart.reduce((res, curr) => (res += curr.weight), 0);
-  return 100;
+  return cart.reduce((res, curr) => (res += curr.weight), 0);
+  // return 100;
+};
+
+export const getDistrictById = (districts, id) => {
+  const districtCurr = districts.find((x) => x.district_id == id);
+  return districtCurr.district_name;
+};
+
+export const getProvinceById = (province, id) => {
+  const provinceCurr = province.find((x) => x.province_id == id);
+  return provinceCurr.province_name;
 };
 
 export function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
+
+export const formatDate = (stringIso) => {
+  return new Date(stringIso).toLocaleDateString('sv-SE');
+};

@@ -9,6 +9,8 @@ import ManageComponent from '../pages/manage/manage';
 import DetailProduct from '../Components/Common/DetailProduct';
 import Cart from '../pages/cart/cart';
 import Checkout from '../pages/checkout/checkout';
+import Payments from '../pages/payment/Payment';
+import Order from '../pages/order/order';
 function StreetRouter() {
   return (
     <>
@@ -39,6 +41,16 @@ function StreetRouter() {
           }
         />
 
+        <Route
+          path="/order"
+          element={
+            <AuthProtected>
+              <Order></Order>
+            </AuthProtected>
+          }
+        />
+
+        <Route path="/payments" element={<Payments />} />
         <Route path="/ProductDetail" element={<DetailProduct />} />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
