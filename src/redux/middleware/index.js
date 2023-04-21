@@ -93,4 +93,18 @@ const fetchingOrder = () => async (dispatch) => {
   dispatch(fetchOrder(dataFormat));
 };
 
-export { fetchingCategoryAndAttribute, fetchingProducts, fetchingCart, fetchingData, fetchingDataGHN, fetchingOrder };
+const fetchingCategory = () => async (dispatch) => {
+  const url_category = `${process.env.REACT_APP_API_URL}/categories`;
+  const response = await new APIClient().get(url_category);
+  dispatch(fetchCategory(response));
+};
+
+export {
+  fetchingCategoryAndAttribute,
+  fetchingProducts,
+  fetchingCart,
+  fetchingData,
+  fetchingDataGHN,
+  fetchingOrder,
+  fetchingCategory,
+};

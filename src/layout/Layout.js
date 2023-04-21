@@ -7,6 +7,8 @@ const Layout = () => {
   return (
     <BrowserRouter>
       <Header></Header>
+      {/* Decorative image and overlay */}
+
       <Content></Content>
       <Footer></Footer>
     </BrowserRouter>
