@@ -4,6 +4,7 @@ import { fetchCart, fetchQuantity } from '../cart.slice';
 import { fetchCategory } from '../category.slice';
 import { fetchOrder } from '../order.slice';
 import { fetchProducts } from '../products.slice';
+import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
 
 const fetchingCategoryAndAttribute =
@@ -50,12 +51,14 @@ const fetchingCart =
     dispatch(fetchCart({ products: formatResponse, total: response.total }));
   };
 
-const fetchingData = () => async (dispatch) => {
+const fetchingData = (params) => async (dispatch) => {
   const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
   const url_products = `${process.env.REACT_APP_API_URL}/products`;
-  const promiseProduct = new APIClient().getWithToken(url_products);
+  const promiseProduct = new APIClient().getWithToken(url_products, params);
   const promiseCart = new APIClient().getWithToken(url_cart);
+  dispatch(statusPending());
   const response = await Promise.all([promiseProduct, promiseCart]);
+  dispatch(statusResolve());
   dispatch(fetchProducts(response[0].products));
   dispatch(fetchQuantity(response[1].total));
 };
