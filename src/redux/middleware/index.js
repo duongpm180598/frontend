@@ -4,6 +4,7 @@ import { fetchCart, fetchQuantity } from '../cart.slice';
 import { fetchCategory } from '../category.slice';
 import { fetchOrder } from '../order.slice';
 import { fetchProducts } from '../products.slice';
+import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
 
 const fetchingCategoryAndAttribute =
@@ -32,6 +33,7 @@ const fetchingCart =
   (params = {}) =>
   async (dispatch) => {
     const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
+    dispatch(statusPending());
     const response = await new APIClient().getWithToken(url_cart, params);
     const formatResponse = response.items.map((x) => {
       const [size, color] = x.attributes;
@@ -47,15 +49,18 @@ const fetchingCart =
         color: color.value,
       };
     });
+    dispatch(statusResolve());
     dispatch(fetchCart({ products: formatResponse, total: response.total }));
   };
 
-const fetchingData = () => async (dispatch) => {
+const fetchingData = (params) => async (dispatch) => {
   const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
   const url_products = `${process.env.REACT_APP_API_URL}/products`;
-  const promiseProduct = new APIClient().getWithToken(url_products);
+  const promiseProduct = new APIClient().getWithToken(url_products, params);
   const promiseCart = new APIClient().getWithToken(url_cart);
+  dispatch(statusPending());
   const response = await Promise.all([promiseProduct, promiseCart]);
+  dispatch(statusResolve());
   dispatch(fetchProducts(response[0].products));
   dispatch(fetchQuantity(response[1].total));
 };
@@ -66,9 +71,11 @@ const fetchingDataGHN = () => async (dispatch) => {
   dispatch(fetchProvinces(response));
 };
 
-const fetchingOrder = () => async (dispatch) => {
-  const url_order = `${process.env.REACT_APP_API_URL}/orders?order=desc&limit=3`;
-  const response = await new APIClient().getWithToken(url_order);
+const fetchingOrder = (params) => async (dispatch) => {
+  const url_order = `${process.env.REACT_APP_API_URL}/orders`;
+  dispatch(statusPending());
+  const response = await new APIClient().getWithToken(url_order, params);
+  dispatch(statusResolve());
   const dataFormat = response.orders.map((x) => {
     return {
       code: x.code,
@@ -93,4 +100,18 @@ const fetchingOrder = () => async (dispatch) => {
   dispatch(fetchOrder(dataFormat));
 };
 
-export { fetchingCategoryAndAttribute, fetchingProducts, fetchingCart, fetchingData, fetchingDataGHN, fetchingOrder };
+const fetchingCategory = () => async (dispatch) => {
+  const url_category = `${process.env.REACT_APP_API_URL}/categories`;
+  const response = await new APIClient().get(url_category);
+  dispatch(fetchCategory(response));
+};
+
+export {
+  fetchingCategoryAndAttribute,
+  fetchingProducts,
+  fetchingCart,
+  fetchingData,
+  fetchingDataGHN,
+  fetchingOrder,
+  fetchingCategory,
+};

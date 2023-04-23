@@ -6,6 +6,7 @@ import productsSlice from './products.slice';
 import cartSlice from './cart.slice';
 import GHNSlice from './GHN.slice';
 import orderSlice from './order.slice';
+import statusGlobalSlice from './status.slice';
 const store = configureStore({
   reducer: {
     category: categorySlice,
@@ -14,6 +15,7 @@ const store = configureStore({
     cart: cartSlice,
     GHN: GHNSlice,
     order: orderSlice,
+    status: statusGlobalSlice,
   },
 });
 
