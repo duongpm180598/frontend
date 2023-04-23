@@ -31,7 +31,6 @@ const removeAuthorization = () => {
 
 class APIClient {
   getWithToken = (url, params) => {
-    console.log('params::', params);
     setAuthorization();
     let response;
 
@@ -43,7 +42,6 @@ class APIClient {
       });
 
       const queryString = paramKeys && paramKeys.length ? paramKeys.join('&') : '';
-      console.log('query string ::', queryString);
       response = axios.get(`${url}?${queryString}`, params);
     } else {
       response = axios.get(`${url}`, params);

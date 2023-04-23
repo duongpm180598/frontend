@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   status: 'idle',
+  gateway: '',
 };
 
 export const statusGlobalSlice = createSlice({
@@ -17,9 +18,16 @@ export const statusGlobalSlice = createSlice({
     statusReject: (state) => {
       state.status = 'reject';
     },
+    setGatewayVNPAY: (state) => {
+      state.gateway = 'VNPAY';
+    },
+    setGatewayZALOPAY: (state) => {
+      state.gateway = 'ZALOPAY';
+    },
   },
 });
 
-export const { statusPending, statusResolve, statusReject } = statusGlobalSlice.actions;
+export const { statusPending, statusResolve, statusReject, setGatewayVNPAY, setGatewayZALOPAY } =
+  statusGlobalSlice.actions;
 
 export default statusGlobalSlice.reducer;

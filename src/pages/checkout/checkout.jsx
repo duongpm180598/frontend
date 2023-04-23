@@ -8,16 +8,18 @@ import { getCart, getDistricts, getProvinces, getWards } from '../../redux/selec
 import { APIClient } from '../../helper/api_helper';
 import { fetchDistricts, fetchWards } from '../../redux/GHN.slice';
 import { useNavigate } from 'react-router-dom';
+import { setGatewayVNPAY, setGatewayZALOPAY } from '../../redux/status.slice';
 
 export default function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // selector
   const provinces = useSelector(getProvinces);
   const districts = useSelector(getDistricts);
   const wards = useSelector(getWards);
   const cart = useSelector(getCart);
 
-  // console.log('cart :: ', cart);
   const [shippingInfomation, setShippingInfomation] = useState({
     name: '',
     phone: '',
@@ -31,7 +33,6 @@ export default function Checkout() {
   });
 
   const [payment, setPayment] = useState({ gateway: 'CASH', amount: 0 });
-
   useEffect(() => {
     dispatch(fetchingDataGHN());
   }, []);
@@ -95,23 +96,33 @@ export default function Checkout() {
       },
     };
 
+    console.log('data ::', data);
+
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/orders`, data)
       .then((res) => {
         if (data.payment.gateway === 'CASH') {
           alert('Bạn đã đặt hàng thành công');
           navigate('/order');
-        } else if (data.payment.gateway === 'VNPAY') {
+        } else if (data.payment.gateway === 'VNPAY' || data.payment.gateway === 'ZALOPAY') {
           const order_code = res.code;
-          console.log('order_code ::', order_code);
-          new APIClient()
-            .createWithToken(`${process.env.REACT_APP_API_URL}/vnpay/payment-url`, { order_code })
-            .then((res) => {
-              // navigate(res.url);
-              // window.open(res.url, '_blank');
-              window.location.replace(res.url);
-            })
-            .catch((e) => console.log('err :'));
+          if (data.payment.gateway === 'VNPAY') {
+            new APIClient()
+              .createWithToken(`${process.env.REACT_APP_API_URL}/vnpay/payment-url`, { order_code })
+              .then((res) => {
+                dispatch(setGatewayVNPAY());
+                window.location.replace(res.url);
+              })
+              .catch((e) => console.log('err :', e));
+          } else {
+            new APIClient()
+              .createWithToken(`${process.env.REACT_APP_API_URL}/zalopay`, { order_code })
+              .then((res) => {
+                dispatch(setGatewayZALOPAY());
+                window.location.replace(res.url);
+              })
+              .catch((e) => console.log('err :', e));
+          }
         }
       })
       .catch((e) => console.log('err : ', e));
@@ -120,7 +131,6 @@ export default function Checkout() {
     <div className="bg-gray-50">
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Checkout</h2>
-
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -305,9 +315,6 @@ export default function Checkout() {
                           <RadioGroup.Description as="span" className="mt-1 flex items-center text-sm text-gray-500">
                             4 - 10 ngày
                           </RadioGroup.Description>
-                          {/* <RadioGroup.Description as="span" className="mt-6 text-sm font-medium text-gray-900">
-                                {deliveryMethod.price}
-                              </RadioGroup.Description> */}
                         </span>
                       </span>
                       <CheckCircleIcon className="h-5 w-5 text-indigo-600" aria-hidden="true" />
@@ -355,7 +362,18 @@ export default function Checkout() {
                         setPayment({ ...payment, [e.target.name]: e.target.value });
                       }}
                     />
-                    <label className="ml-3 block text-sm font-medium text-gray-700">VNPAY</label>
+                    <label className="ml-3 block text-sm font-medium text-gray-700 mr-3">VNPAY</label>
+
+                    <input
+                      name="gateway"
+                      type="radio"
+                      className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      value="ZALOPAY"
+                      onChange={(e) => {
+                        setPayment({ ...payment, [e.target.name]: e.target.value });
+                      }}
+                    />
+                    <label className="ml-3 block text-sm font-medium text-gray-700">ZaloPAY</label>
                   </div>
                 </div>
               </fieldset>

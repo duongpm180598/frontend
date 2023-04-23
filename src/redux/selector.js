@@ -10,3 +10,4 @@ export const getDistricts = (state) => state.GHN.districts;
 export const getWards = (state) => state.GHN.wards;
 export const getOrder = (state) => state.order.listOrder;
 export const getStatus = (state) => state.status.status;
+export const getGateway = (state) => state.status.gateway;
