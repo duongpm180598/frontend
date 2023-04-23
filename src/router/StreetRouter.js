@@ -11,6 +11,7 @@ import Cart from '../pages/cart/cart';
 import Checkout from '../pages/checkout/checkout';
 import Payments from '../pages/payment/Payment';
 import Order from '../pages/order/order';
+import Protected from './Protected';
 function StreetRouter() {
   return (
     <>
@@ -28,7 +29,9 @@ function StreetRouter() {
           path="/checkout"
           element={
             <AuthProtected>
-              <Checkout></Checkout>
+              <Protected>
+                <Checkout></Checkout>
+              </Protected>
             </AuthProtected>
           }
         />
