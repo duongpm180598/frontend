@@ -5,6 +5,7 @@ import { fetchingData } from '../../redux/middleware';
 import ProductComponent from '../../Components/Common/ProductComponent';
 import Loading from '../../Components/Common/Loading';
 import FilterHome from '../../Components/Common/FilterHome';
+import { filterParams } from '../../utils';
 
 function Home() {
   const dispatch = useDispatch();
@@ -13,15 +14,9 @@ function Home() {
   const products = useSelector(getProducts);
   const category = useSelector(getCategory);
   const statusGlobal = useSelector(getStatus);
-  console.log('statusGlobal ::', statusGlobal);
+  // console.log('statusGlobal ::', statusGlobal);
   useEffect(() => {
-    let newParams = {};
-    Object.keys(params).forEach((x) => {
-      if (params[x]) {
-        newParams = { ...newParams, [x]: params[x] };
-      }
-    });
-
+    const newParams = filterParams(params);
     dispatch(fetchingData(newParams));
   }, [params]);
   return (

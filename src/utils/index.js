@@ -37,3 +37,13 @@ export function classNames(...classes) {
 export const formatDate = (stringIso) => {
   return new Date(stringIso).toLocaleDateString('sv-SE');
 };
+
+export const filterParams = (params) => {
+  let newParams = {};
+  Object.keys(params).forEach((x) => {
+    if (params[x]) {
+      newParams = { ...newParams, [x]: params[x] };
+    }
+  });
+  return newParams;
+};

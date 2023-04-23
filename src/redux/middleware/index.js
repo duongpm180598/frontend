@@ -33,6 +33,7 @@ const fetchingCart =
   (params = {}) =>
   async (dispatch) => {
     const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
+    dispatch(statusPending());
     const response = await new APIClient().getWithToken(url_cart, params);
     const formatResponse = response.items.map((x) => {
       const [size, color] = x.attributes;
@@ -48,6 +49,7 @@ const fetchingCart =
         color: color.value,
       };
     });
+    dispatch(statusResolve());
     dispatch(fetchCart({ products: formatResponse, total: response.total }));
   };
 
@@ -69,9 +71,11 @@ const fetchingDataGHN = () => async (dispatch) => {
   dispatch(fetchProvinces(response));
 };
 
-const fetchingOrder = () => async (dispatch) => {
-  const url_order = `${process.env.REACT_APP_API_URL}/orders?order=desc&limit=3`;
-  const response = await new APIClient().getWithToken(url_order);
+const fetchingOrder = (params) => async (dispatch) => {
+  const url_order = `${process.env.REACT_APP_API_URL}/orders`;
+  dispatch(statusPending());
+  const response = await new APIClient().getWithToken(url_order, params);
+  dispatch(statusResolve());
   const dataFormat = response.orders.map((x) => {
     return {
       code: x.code,
