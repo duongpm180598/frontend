@@ -5,6 +5,7 @@ import { fetchingOrder } from '../../redux/middleware';
 import { getOrder, getStatus } from '../../redux/selector';
 import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
+import { useNavigate } from 'react-router-dom';
 
 function Order() {
   // Initial data
@@ -23,9 +24,10 @@ function Order() {
   // selector
   const statusGlobal = useSelector(getStatus);
   const dispatch = useDispatch();
+  const naviagte = useNavigate();
+
   useEffect(() => {
     const newParams = filterParams(params);
-    console.log('new params ::', newParams);
     dispatch(fetchingOrder(newParams));
   }, [params]);
   const listOrder = useSelector(getOrder);
@@ -45,8 +47,11 @@ function Order() {
               {listOrder.length ? (
                 listOrder.map((order) => (
                   <div
+                    onClick={() => {
+                      naviagte(`/detailOrder/${order.code}`, { state: { order: order } });
+                    }}
                     key={order.code}
-                    className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
+                    className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border cursor-pointer hover:opacity-90"
                   >
                     <div className="px-4 py-6 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
                       <div className="sm:flex lg:col-span-7">

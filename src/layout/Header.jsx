@@ -5,9 +5,8 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import { isAdmin } from '../Services/auth.service';
 import { useSelector } from 'react-redux';
 import { getTotalQuantity } from '../redux/selector';
-import { classNames } from '../utils';
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react';
-import { MagnifyingGlassIcon, ShoppingCartIcon, UserIcon } from '@heroicons/react/24/outline';
+import { Dialog, Popover, Transition } from '@headlessui/react';
+import { MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { formatMoney } from '../../utils';
 const ProductComponent = (props) => {
   const navigate = useNavigate();
-  const { id, base_cost, name, thumbnail } = props;
+  const { id, base_cost, name, thumbnail, slug } = props;
 
   const handleShowDetail = () => {
-    navigate('/ProductDetail', { state: { id: id } });
+    navigate(`/ProductDetail/${slug}`, { state: { id: id } });
   };
   return (
     <div onClick={handleShowDetail} className="group relative cursor-pointer">
