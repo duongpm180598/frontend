@@ -12,6 +12,7 @@ import Checkout from '../pages/checkout/checkout';
 import Payments from '../pages/payment/Payment';
 import Order from '../pages/order/order';
 import Protected from './Protected';
+import DetailOrder from '../pages/detailOrder/DetailOrder';
 function StreetRouter() {
   return (
     <>
@@ -44,6 +45,8 @@ function StreetRouter() {
           }
         />
 
+        <Route path="/detailOrder/:slug" element={<DetailOrder />} />
+
         <Route
           path="/order"
           element={
@@ -53,8 +56,15 @@ function StreetRouter() {
           }
         />
 
-        <Route path="/payments" element={<Payments />} />
-        <Route path="/ProductDetail" element={<DetailProduct />} />
+        <Route
+          path="/payments"
+          element={
+            <AuthProtected>
+              <Payments />
+            </AuthProtected>
+          }
+        />
+        <Route path="/ProductDetail/:slug" element={<DetailProduct />} />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/manager" element={<ManageComponent />}></Route>

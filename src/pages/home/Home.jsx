@@ -44,7 +44,14 @@ function Home() {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {products && products.length ? (
               products.map((x) => (
-                <ProductComponent key={x.id} id={x.id} base_cost={x.base_cost} name={x.name} thumbnail={x.thumbnail} />
+                <ProductComponent
+                  key={x.id}
+                  slug={x.slug}
+                  id={x.id}
+                  base_cost={x.base_cost}
+                  name={x.name}
+                  thumbnail={x.thumbnail}
+                />
               ))
             ) : (
               <div className="min-h-[30vh] p-10">
