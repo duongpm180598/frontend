@@ -14,7 +14,6 @@ function Home() {
   const products = useSelector(getProducts);
   const category = useSelector(getCategory);
   const statusGlobal = useSelector(getStatus);
-  // console.log('statusGlobal ::', statusGlobal);
   useEffect(() => {
     const newParams = filterParams(params);
     dispatch(fetchingData(newParams));

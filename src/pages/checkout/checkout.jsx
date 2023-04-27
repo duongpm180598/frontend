@@ -33,6 +33,7 @@ export default function Checkout() {
   });
 
   const [payment, setPayment] = useState({ gateway: 'CASH', amount: 0 });
+
   useEffect(() => {
     dispatch(fetchingDataGHN());
   }, []);
@@ -116,9 +117,9 @@ export default function Checkout() {
               .catch((e) => console.log('err :', e));
           } else {
             new APIClient()
-              .createWithToken(`${process.env.REACT_APP_API_URL}/zalopay`, { order_code })
+              .createWithToken(`${process.env.REACT_APP_API_URL}/zalopay/payment-url`, { order_code })
               .then((res) => {
-                dispatch(setGatewayZALOPAY());
+                // dispatch(setGatewayZALOPAY());
                 window.location.replace(res.url);
               })
               .catch((e) => console.log('err :', e));

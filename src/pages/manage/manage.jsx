@@ -1,18 +1,10 @@
 import React from 'react';
-import CreateProduct from '../../Components/Common/CreateProduct';
+import Manager from '../../Components/Admin';
 function ManageComponent() {
   return (
-    <>
-      <div className="flex ">
-        <div className="flex-none min-w-[150px] mr-5">
-          <div>Create Product</div>
-          <div>Create Category</div>
-        </div>
-        <div className="flex-auto">
-          <CreateProduct></CreateProduct>
-        </div>
-      </div>
-    </>
+    <div className="min-h-screen absolute inset-0 bg-black">
+      <Manager></Manager>
+    </div>
   );
 }
 

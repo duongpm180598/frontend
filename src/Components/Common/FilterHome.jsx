@@ -37,7 +37,7 @@ export default function FilterHome({ params, setParams }) {
         <div className="py-24">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900">Xin Chào </h1>
           <p className="mx-auto mt-4 max-w-3xl text-base text-gray-500">
-            Hãy bỏ những băn khoan phiền muộn và sản phẩm vào giỏ hàng để chúng tôi giúp bạn
+            Chúc Quý Khách Có Khoảng Thời Gian Mua Sắm Vui Vẻ Cùng ECOM GROUP9
           </p>
         </div>
 

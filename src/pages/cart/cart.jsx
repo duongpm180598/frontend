@@ -3,7 +3,7 @@ import { XMarkIcon } from '@heroicons/react/20/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchingCart } from '../../redux/middleware';
 import { getCart, getStatus } from '../../redux/selector';
-import { getTotalPrice, formatMoney, classNames } from '../../utils/';
+import { getTotalPrice, formatMoney, classNames } from '../../utils';
 import { downQuantity, removeProduct, upQuantity } from '../../redux/cart.slice';
 import { APIClient } from '../../helper/api_helper';
 import { useNavigate } from 'react-router-dom';
