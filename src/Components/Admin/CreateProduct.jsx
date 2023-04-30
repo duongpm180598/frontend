@@ -98,7 +98,7 @@ function CreateProduct() {
   const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
 
   return (
-    <div className="bg-[#333]/60 w-full flex justify-start p-5">
+    <div className="w-full flex justify-start p-5">
       <form
         className="grid grid-cols-12 gap-8"
         onSubmit={(e) => {
@@ -106,7 +106,7 @@ function CreateProduct() {
           handleSubmit();
         }}
       >
-        <div className="col-span-6">
+        <div className="col-span-12 lg:col-span-6">
           {/* Ten San Pham */}
           <div className="relative z-0 w-full mb-8 group">
             <input
@@ -182,51 +182,53 @@ function CreateProduct() {
           )}
         </div>
 
-        <div className="col-span-6">
+        <div className="col-span-12 lg:col-span-6">
           {/* variant */}
 
           <div className="">
             <h3 className="uppercase font-Popins font-semibold tracking-wider text-gray-400">variants</h3>
             <div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-400">Inventory</span>
-                <span className="text-sm text-gray-400">Price</span>
-                <span className="text-sm text-gray-400">Weight</span>
+              <div className="grid grid-cols-10 gap-2">
+                <span className="lg:col-span-2 text-sm text-gray-400">Inventory</span>
+                <span className="lg:col-span-2 text-sm text-gray-400">Price</span>
+                <span className="lg:col-span-2 text-sm text-gray-400">Weight</span>
                 {variantAttribute?.map((x, index) => (
-                  <span className="text-sm text-gray-400" key={index}>
+                  <span className="lg:col-span-2 text-sm text-gray-400" key={index}>
                     {x.name}
                   </span>
                 ))}
               </div>
 
               {productVariantList?.map((x, index) => (
-                <div key={index} className="flex justify-between">
-                  <span>{x.inventory}</span>
-                  <span>{x.price}</span>
-                  <span>{x.weight}</span>
+                <div key={index} className="grid grid-cols-10 gap-2">
+                  <span className="lg:col-span-2 text-sm text-gray-400">{x.inventory}</span>
+                  <span className="lg:col-span-2 text-sm text-gray-400">{x.price}</span>
+                  <span className="lg:col-span-2 text-sm text-gray-400">{x.weight}</span>
                   {x.variant_attributes?.map((each) => (
-                    <span key={each.attribute_id}>{each.value}</span>
+                    <span className="lg:col-span-2 text-sm text-gray-400" key={each.attribute_id}>
+                      {each.value}
+                    </span>
                   ))}
                 </div>
               ))}
 
-              <div className="flex justify-between">
+              <div className="grid grid-cols-10 gap-2">
                 <input
-                  className="w-20 px-2"
+                  className="lg:col-span-2"
                   onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value * 1 })}
                   type="number"
                   name="inventory"
                   value={productVariant.inventory}
                 />
                 <input
-                  className="w-20 px-2 ml-2"
+                  className="lg:col-span-2"
                   onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: 1 * e.target.value })}
                   type="number"
                   name="price"
                   value={productVariant.price}
                 />
                 <input
-                  className="w-20 px-2 ml-2"
+                  className="lg:col-span-2"
                   onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: 1 * e.target.value })}
                   type="number"
                   name="weight"
@@ -234,7 +236,7 @@ function CreateProduct() {
                 />
                 {variantAttribute?.map((x) => (
                   <input
-                    className="w-20 px-2 ml-2"
+                    className="lg:col-span-2"
                     key={x.id}
                     onChange={(e) => handleChangeVariantAttribute(e, x.id)}
                     value={getCurrentValue(x.id)}

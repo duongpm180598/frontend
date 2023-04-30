@@ -12,14 +12,15 @@ import {
 } from '@heroicons/react/24/outline';
 import { Bars3Icon } from '@heroicons/react/20/solid';
 import CreateProduct from './CreateProduct';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const navigation = [
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Deployments', href: '#', icon: ServerIcon, current: true },
-  { name: 'Activity', href: '#', icon: SignalIcon, current: false },
-  { name: 'Domains', href: '#', icon: GlobeAltIcon, current: false },
-  { name: 'Usages', href: '#', icon: ChartBarSquareIcon, current: false },
-  { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+  { name: 'Tạo Sản Phẩm', link: 'create-product', icon: FolderIcon, current: false },
+  { name: 'Deployments', link: 'add-image', icon: ServerIcon, current: true },
+  // { name: 'Activity',link: 'create-product', icon: SignalIcon, current: false },
+  // { name: 'Domains',link: 'create-product', icon: GlobeAltIcon, current: false },
+  // { name: 'Usages',link: 'create-product', icon: ChartBarSquareIcon, current: false },
+  // { name: 'Settings', link: 'create-product', icon: Cog6ToothIcon, current: false },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -83,18 +84,18 @@ export default function Manager() {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
-                                  href={item.href}
+                                <NavLink
+                                  to={item.link}
                                   className={classNames(
                                     item.current
                                       ? 'bg-gray-800 text-white'
                                       : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
                                   )}
                                 >
                                   <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                                   {item.name}
-                                </a>
+                                </NavLink>
                               </li>
                             ))}
                           </ul>
@@ -136,18 +137,17 @@ export default function Manager() {
                   <ul role="list" className="-mx-2 space-y-1">
                     {navigation.map((item) => (
                       <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-gray-800 text-white'
-                              : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
+                        <NavLink
+                          to={item.link}
+                          className={(navClass) =>
+                            navClass.isActive
+                              ? 'bg-gray-800 text-white group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
+                              : 'text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold cursor-pointer'
+                          }
                         >
                           <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
                           {item.name}
-                        </a>
+                        </NavLink>
                       </li>
                     ))}
                   </ul>
@@ -167,7 +167,8 @@ export default function Manager() {
           </div>
 
           <main className="w-full">
-            <CreateProduct></CreateProduct>
+            {/* <CreateProduct></CreateProduct> */}
+            <Outlet></Outlet>
           </main>
         </div>
       </div>

@@ -13,6 +13,8 @@ import Payments from '../pages/payment/Payment';
 import Order from '../pages/order/Order';
 import Protected from './Protected';
 import DetailOrder from '../pages/detailOrder/DetailOrder';
+import CreateProduct from '../Components/Admin/CreateProduct';
+import AddImage from '../Components/Admin/AddImage';
 function StreetRouter() {
   return (
     <>
@@ -64,10 +66,21 @@ function StreetRouter() {
             </AuthProtected>
           }
         />
+        <Route
+          path="/manager"
+          element={
+            <AuthProtected>
+              <ManageComponent />
+            </AuthProtected>
+          }
+        >
+          <Route index element={<CreateProduct />} />
+          <Route path="add-image" element={<AddImage />} />
+        </Route>
+
         <Route path="/product-detail/:slug" element={<DetailProduct />} />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/manager" element={<ManageComponent />}></Route>
         <Route path="/register" element={<Register />}></Route>
       </Routes>
     </>

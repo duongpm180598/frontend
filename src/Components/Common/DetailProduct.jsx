@@ -22,14 +22,14 @@ const DetailProduct = () => {
   const dispatch = useDispatch();
 
   const policies = [
-    { name: 'International delivery', icon: GlobeAmericasIcon, description: 'Get your order in 2 years' },
-    { name: 'Loyalty rewards', icon: CurrencyDollarIcon, description: "Don't look at other tees" },
+    { name: 'Giao Hàng Quốc Tế', icon: GlobeAmericasIcon, description: 'Đơn Đặt Hàng Trong Năm' },
+    { name: 'Ưu Đãi Với Khách Quen', icon: CurrencyDollarIcon, description: 'Nhiều Mã Giảm Giá' },
   ];
   const details = [
-    'Only the best materials',
-    'Ethically and locally made',
-    'Pre-washed and pre-shrunk',
-    'Machine wash cold with similar colors',
+    'Được làm từ chất liệu đã chọn lọc',
+    'Quá trình làm tuân thủ quy chuẩn',
+    'Luôn được kiểm tra trước khi giao',
+    'Ảnh cam kết giống thật',
   ];
 
   const getColor = (size) => {
@@ -83,6 +83,8 @@ const DetailProduct = () => {
           });
         });
         setSizes(sizeStore);
+        res.description =
+          ' <p>Sản phẩm thời trang nam mới nhất của chúng tôi luôn hiện đại và lịch lãm</p> <p>Thiết kế là một sự kết hợp tuyệt vời giữa phong cách truyền thống và hiện đại, với cổ áo thắt nơ sang trọng và chi tiết tay áo được làm cong nhẹ giúp tạo nên phong cách cá tính và trẻ trung</p>';
         setProduct(res);
       })
       .catch((e) => console.log('e ::', e));
@@ -204,7 +206,9 @@ const DetailProduct = () => {
                         </div>
                       </RadioGroup>
                     </div>
-                  ) : null}
+                  ) : (
+                    <div className="h-[60px]"></div>
+                  )}
 
                   {/* Price Variant */}
                   {variant.size && variant.color ? (
@@ -214,7 +218,9 @@ const DetailProduct = () => {
                         {getVariant(variant.size, variant.color)[1]}
                       </span>
                     </div>
-                  ) : null}
+                  ) : (
+                    <div className="h-[44px]"></div>
+                  )}
 
                   <button
                     type="submit"
@@ -234,7 +240,7 @@ const DetailProduct = () => {
                 </div>
 
                 <div className="mt-8 border-t border-gray-200 pt-8">
-                  <h2 className="text-sm font-medium text-gray-900">Fabric &amp; Care</h2>
+                  <h2 className="text-sm font-medium text-gray-900">Cam Kết &amp; Đảm Bảo</h2>
 
                   <div className="prose prose-sm mt-4 text-gray-500">
                     <ul role="list">
