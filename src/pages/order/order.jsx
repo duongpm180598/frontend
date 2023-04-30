@@ -48,7 +48,7 @@ function Order() {
                 listOrder.map((order) => (
                   <div
                     onClick={() => {
-                      naviagte(`/detailOrder/${order.code}`, { state: { order: order } });
+                      naviagte(`/detail-order/${order.code}`, { state: { order: order } });
                     }}
                     key={order.code}
                     className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border cursor-pointer hover:opacity-90"

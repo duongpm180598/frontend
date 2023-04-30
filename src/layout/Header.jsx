@@ -88,7 +88,9 @@ export default function Header() {
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   {navigation.map((x) => (
                     <div key={x.name} className="flow-root">
-                      <a className="-m-2 block p-2 font-medium text-gray-900">{x.name}</a>
+                      <NavLink to={x.link} className="-m-2 block p-2 font-medium text-gray-900">
+                        {x.name}
+                      </NavLink>
                     </div>
                   ))}
                 </div>
@@ -107,7 +109,7 @@ export default function Header() {
                 <div className="hidden lg:flex lg:items-center">
                   <span>
                     <span className="sr-only">Your Company</span>
-                    <img className="h-8 w-auto" src={require('../../src/asset/image/logo.png')} alt="#error_picture" />
+                    <img className="h-16 w-auto" src={require('../../src/asset/image/logo.png')} alt="#error_picture" />
                   </span>
                 </div>
 
@@ -151,9 +153,10 @@ export default function Header() {
                 <span className="lg:hidden">
                   <span className="sr-only">Your Company</span>
                   <img
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                    // src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                    src={require('../asset/image/logo.png')}
                     alt=""
-                    className="h-8 w-auto"
+                    className="h-16 w-auto"
                   />
                 </span>
 

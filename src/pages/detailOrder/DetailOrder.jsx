@@ -47,6 +47,7 @@ const statusOrder = [
 
 function DetailOrder() {
   const checkAdmin = isAdmin();
+  console.log('check admin ::', checkAdmin);
   const [currOrder, setCurrOrder] = useState();
 
   let {
@@ -166,7 +167,7 @@ function DetailOrder() {
                     </dd>
                   </div>
                 </dl>
-                {checkAdmin ? (
+                {checkAdmin == 'ADMIN' ? (
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6 grid grid-cols-12 gap-x-5">
                     <button
                       disabled={currOrder.status !== 'PENDING'}
@@ -179,6 +180,20 @@ function DetailOrder() {
                       Xác Nhận
                     </button>
 
+                    <button
+                      disabled={currOrder.status !== 'PENDING'}
+                      onClick={handleCancel}
+                      className={classNames(
+                        currOrder.status !== 'PENDING' ? 'cursor-default opacity-50' : '',
+                        'col-span-6 rounded-md border border-transparent bg-red-500 px-4 py-3 text-base font-medium text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-red-700 focus:ring-offset-2 focus:ring-offset-gray-50'
+                      )}
+                    >
+                      Hủy Đơn
+                    </button>
+                  </div>
+                ) : null}
+                {checkAdmin == 'BUYER' ? (
+                  <div className="border-t border-gray-200 px-4 py-6 sm:px-6 grid grid-cols-12 gap-x-5">
                     <button
                       disabled={currOrder.status !== 'PENDING'}
                       onClick={handleCancel}

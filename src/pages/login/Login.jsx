@@ -31,24 +31,17 @@ function LoginComponent() {
   };
 
   return (
-    <div
-      style={{
-        backgroundImage: `url(${background})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-      }}
-      className="w-full h-full flex justify-center items-center p-4 fixed top-0 left-0 right-0 bottom-0"
-    >
+    <div className="w-full h-full flex justify-center items-center p-4 fixed top-0 left-0 right-0 bottom-0 bg-gray-50 dark:bg-gray-900">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[500px] rounded-[10px] bg-black h-[90%] sm:px-[55px] sm:pt-[65px] sm:pb-[54px]"
+        className="w-[500px] rounded-[10px] bg-gray-50 h-[90%] sm:px-[55px] sm:pt-[65px] sm:pb-[54px]"
       >
         <p className="font-Popins font-bold text-[39px] text-[#333] leading-[1.2] text-center pb-[49px]">Login</p>
 
         <div className="flex  flex-wrap border-b-2 mb-5 pb-[2px] relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-slate-600  after:transition-all after:ease-linear hover:after:w-full after:duration-500">
           <span className="text-sm text-[#333] font-Popins leading-[1.5]">Username</span>
-          <div className="w-full flex justify-start items-center h-[55px]">
-            <PersonIcon className="text-white" />
+          <div className="w-full flex justify-start items-center h-[55px] relative">
+            <PersonIcon className="text-white absolute left-1 " />
             <input
               {...register('email', {
                 required: 'This field is required',
@@ -61,7 +54,7 @@ function LoginComponent() {
                 color: 'white',
               }}
               placeholder="Type Your Email"
-              className="outline-none border-none text-base bg-transparent p-4 placeholder:font-Popins placeholder:font-semibold text-white w-full"
+              className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark: focus:bg-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               type="text"
             />
           </div>
@@ -74,8 +67,8 @@ function LoginComponent() {
 
         <div className="flex flex-wrap border-b-2 mb-5 relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-slate-600  after:transition-all after:ease-linear hover:after:w-full after:duration-500">
           <span className="text-sm text-[#333] font-Popins leading-[1.5]">Password</span>
-          <div className="w-full flex justify-start items-center h-[55px]">
-            <LockIcon className="text-white" />
+          <div className="w-full flex justify-start items-center h-[55px]  relative">
+            <LockIcon className="text-white absolute left-1" />
             <input
               {...register('password', {
                 required: 'This field is required',
@@ -84,11 +77,11 @@ function LoginComponent() {
                   message: 'Minimum eight characters, at least one letter, one number and one special character',
                 },
               })}
-              className="w-full text-white outline-none border-none text-base bg-transparent p-4 placeholder:font-Popins placeholder:font-semibold"
+              className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark: focus:bg-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Type Your Password"
               type={visibalePass ? 'text' : 'password'}
             />
-            <div className="cursor-pointer" onClick={() => setVisibalePass(!visibalePass)}>
+            <div className="cursor-pointer absolute right-1" onClick={() => setVisibalePass(!visibalePass)}>
               {visibalePass ? (
                 <RemoveRedEyeOutlinedIcon className="text-white" />
               ) : (
@@ -105,7 +98,7 @@ function LoginComponent() {
 
         <div className="text-right pt-2 pb-8 w-full font-Popins"></div>
 
-        <div className="cursor-pointer flex justify-center items-center rounded-[25px] bg-gradient-to-l from-[#00dbde] via-[#fc00ff] to-[#00dbde] bg-200% hover:bg-right transition-all ease-in-out duration-700">
+        <div className="cursor-pointer flex justify-center items-center rounded-[25px] bg-gradient-to-l from-gray-900 via-gray-400 to-gray-900 bg-200% hover:bg-right transition-all ease-in-out duration-700">
           <button className="uppercase tracking-[2px] w-full p-4 text-white" type="submit">
             Login
           </button>

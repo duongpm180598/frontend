@@ -3,7 +3,7 @@ import { XMarkIcon } from '@heroicons/react/20/solid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchingCart } from '../../redux/middleware';
 import { getCart, getStatus } from '../../redux/selector';
-import { getTotalPrice, formatMoney, classNames } from '../../utils/';
+import { getTotalPrice, formatMoney, classNames } from '../../utils';
 import { downQuantity, removeProduct, upQuantity } from '../../redux/cart.slice';
 import { APIClient } from '../../helper/api_helper';
 import { useNavigate } from 'react-router-dom';
@@ -85,7 +85,7 @@ export default function Cart() {
                     </div>
 
                     <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-                      <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                      <div className="relative pr-9 sm:grid ssm:grid-cols-1 md:grid-cols-2 sm:gap-x-6 sm:pr-0">
                         <div>
                           <div className="flex justify-between">
                             <h3 className="text-sm">
@@ -101,7 +101,7 @@ export default function Cart() {
                           <p className="mt-5 text-sm font-medium text-gray-900">{formatMoney(x.unit_price)}</p>
                         </div>
 
-                        <div className="mt-4 sm:mt-0 sm:pr-9">
+                        <div className="sm:mt-4 ssm:mt-2 md:pr-9">
                           <div>
                             <button
                               onClick={() => handleUpQuantity(x)}

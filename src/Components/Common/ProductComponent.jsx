@@ -6,7 +6,7 @@ const ProductComponent = (props) => {
   const { id, base_cost, name, thumbnail, slug } = props;
 
   const handleShowDetail = () => {
-    navigate(`/ProductDetail/${slug}`, { state: { id: id } });
+    navigate(`/product-detail/${slug}`, { state: { id: id } });
   };
   return (
     <div onClick={handleShowDetail} className="group relative cursor-pointer">

@@ -5,14 +5,16 @@ import Page404 from './../pages/page404/Page404';
 import Login from '../pages/login/Login';
 import AuthProtected from './AuthProtected';
 import Register from '../pages/register/Register';
-import ManageComponent from '../pages/manage/manage';
+import ManageComponent from '../pages/manage/Manage';
 import DetailProduct from '../Components/Common/DetailProduct';
-import Cart from '../pages/cart/cart';
-import Checkout from '../pages/checkout/checkout';
+import Cart from '../pages/cart/Cart';
+import Checkout from '../pages/checkout/Checkout';
 import Payments from '../pages/payment/Payment';
-import Order from '../pages/order/order';
+import Order from '../pages/order/Order';
 import Protected from './Protected';
 import DetailOrder from '../pages/detailOrder/DetailOrder';
+import CreateProduct from '../Components/Admin/CreateProduct';
+import AddImage from '../Components/Admin/AddImage';
 function StreetRouter() {
   return (
     <>
@@ -45,7 +47,7 @@ function StreetRouter() {
           }
         />
 
-        <Route path="/detailOrder/:slug" element={<DetailOrder />} />
+        <Route path="/detail-order/:slug" element={<DetailOrder />} />
 
         <Route
           path="/order"
@@ -64,10 +66,21 @@ function StreetRouter() {
             </AuthProtected>
           }
         />
-        <Route path="/ProductDetail/:slug" element={<DetailProduct />} />
+        <Route
+          path="/manager"
+          element={
+            <AuthProtected>
+              <ManageComponent />
+            </AuthProtected>
+          }
+        >
+          <Route index element={<CreateProduct />} />
+          <Route path="add-image" element={<AddImage />} />
+        </Route>
+
+        <Route path="/product-detail/:slug" element={<DetailProduct />} />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
-        <Route path="/manager" element={<ManageComponent />}></Route>
         <Route path="/register" element={<Register />}></Route>
       </Routes>
     </>
