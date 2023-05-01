@@ -6,6 +6,8 @@ import { fetchOrder } from '../order.slice';
 import { fetchProducts } from '../products.slice';
 import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
+import { fetchSuppliers } from '../suppliers.slice';
+import { fetchProductVariant } from '../productVariant.slice';
 
 const fetchingCategoryAndAttribute =
   (params = {}) =>
@@ -106,6 +108,18 @@ const fetchingCategory = () => async (dispatch) => {
   dispatch(fetchCategory(response));
 };
 
+const fetchingSupplier = () => async (dispatch) => {
+  const url_suppliers = `${process.env.REACT_APP_API_URL}/suppliers`;
+  const response = await new APIClient().getWithToken(url_suppliers);
+  dispatch(fetchSuppliers(response));
+};
+
+const fetchingProductVariant = (product_id) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/products/${product_id}/variants`;
+  const response = await new APIClient().getWithToken(url_variant);
+  dispatch(fetchProductVariant(response));
+};
+
 export {
   fetchingCategoryAndAttribute,
   fetchingProducts,
@@ -114,4 +128,6 @@ export {
   fetchingDataGHN,
   fetchingOrder,
   fetchingCategory,
+  fetchingSupplier,
+  fetchingProductVariant,
 };

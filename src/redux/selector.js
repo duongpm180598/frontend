@@ -11,3 +11,5 @@ export const getWards = (state) => state.GHN.wards;
 export const getOrder = (state) => state.order.listOrder;
 export const getStatus = (state) => state.status.status;
 export const getGateway = (state) => state.status.gateway;
+export const getSuppliers = (state) => state.suppliers.suppliers;
+export const getProductVariant = (state) => state.productVariant.productVariant;

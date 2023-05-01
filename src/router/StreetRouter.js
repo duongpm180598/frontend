@@ -5,16 +5,17 @@ import Page404 from './../pages/page404/Page404';
 import Login from '../pages/login/Login';
 import AuthProtected from './AuthProtected';
 import Register from '../pages/register/Register';
-import ManageComponent from '../pages/manage/Manage';
+import ManageComponent from '../pages/manage/manage';
 import DetailProduct from '../Components/Common/DetailProduct';
-import Cart from '../pages/cart/Cart';
-import Checkout from '../pages/checkout/Checkout';
+import Cart from '../pages/cart/cart';
+import Checkout from '../pages/checkout/checkout';
 import Payments from '../pages/payment/Payment';
-import Order from '../pages/order/Order';
+import Order from '../pages/order/order';
 import Protected from './Protected';
 import DetailOrder from '../pages/detailOrder/DetailOrder';
 import CreateProduct from '../Components/Admin/CreateProduct';
 import AddImage from '../Components/Admin/AddImage';
+import ImportProduct from '../pages/import-product/ImportProduct';
 function StreetRouter() {
   return (
     <>
@@ -82,6 +83,14 @@ function StreetRouter() {
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route
+          path="/import"
+          element={
+            <AuthProtected>
+              <ImportProduct />
+            </AuthProtected>
+          }
+        ></Route>
       </Routes>
     </>
   );
