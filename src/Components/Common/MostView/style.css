@@ -1,0 +1,3 @@
+.mySwiper {
+  @apply mt-10 relative w-full h-[400px] overflow-hidden rounded-lg;
+}

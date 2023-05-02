@@ -4,7 +4,6 @@ import { getCart } from '../redux/selector';
 import { Navigate } from 'react-router-dom';
 function Protected(props) {
   const cart = useSelector(getCart);
-  console.log('cart ::', cart);
   return !(cart.length && cart[0].id) ? <Navigate to="/" /> : props.children;
 }
 

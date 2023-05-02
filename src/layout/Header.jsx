@@ -18,7 +18,6 @@ export default function Header() {
       ? [
           { name: 'Home', link: '/' },
           { name: 'Cart', link: '/cart' },
-          { name: 'Order', link: '/order' },
           { name: 'Manager', link: '/manager' },
         ]
       : [
@@ -152,12 +151,7 @@ export default function Header() {
                 {/* Logo (lg-) */}
                 <span className="lg:hidden">
                   <span className="sr-only">Your Company</span>
-                  <img
-                    // src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    src={require('../asset/image/logo.png')}
-                    alt=""
-                    className="h-16 w-auto"
-                  />
+                  <img src={require('../asset/image/logo.png')} alt="" className="h-16 w-auto" />
                 </span>
 
                 <div className="flex flex-1 items-center justify-end">
