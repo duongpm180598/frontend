@@ -13,12 +13,28 @@ function classNames(...classes) {
 
 const DetailProduct = () => {
   const {
-    state: { id },
+    state: { slug },
   } = useLocation();
 
+  // state
   const [product, setProduct] = useState();
   const [variant, setVariant] = useState({ size: '', color: '', number: '', price: '' });
   const [sizes, setSizes] = useState([]);
+
+  // initial data;
+  const description =
+    '<p>Sản phẩm thời trang nam mới nhất của chúng tôi luôn hiện đại và lịch lãm</p> <p>Thiết kế là một sự kết hợp tuyệt vời giữa phong cách truyền thống và hiện đại, với cổ áo thắt nơ sang trọng và chi tiết tay áo được làm cong nhẹ giúp tạo nên phong cách cá tính và trẻ trung</p>';
+  const colorHash = {
+    Xám: 'bg-[#A9A9A9]',
+    Trắng: 'bg-[#FFFFFF]',
+    Lục: 'bg-[#228B22]',
+    Xanh: 'bg-[#0000FF]',
+    Cam: 'bg-[#FF8C00]',
+    Đen: 'bg-[#000000]',
+    Vàng: 'bg-[#FFD700]',
+    Be: 'bg-[#F5F5DC]',
+  };
+
   const dispatch = useDispatch();
 
   const policies = [
@@ -64,7 +80,9 @@ const DetailProduct = () => {
     dispatch(addToCart());
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
-      .then((res) => {})
+      .then((res) => {
+        alert('Thêm Vào Giỏ Hành Thành Công');
+      })
       .catch((e) => {
         console.log('e ::', e);
         dispatch(removeQuantityWhenError());
@@ -72,7 +90,7 @@ const DetailProduct = () => {
   };
 
   useEffect(() => {
-    const stringQuery = `${process.env.REACT_APP_API_URL}/products/${id}`;
+    const stringQuery = `${process.env.REACT_APP_API_URL}/products/p/${slug}`;
     new APIClient()
       .getWithToken(stringQuery)
       .then((res) => {
@@ -83,8 +101,6 @@ const DetailProduct = () => {
           });
         });
         setSizes(sizeStore);
-        res.description =
-          ' <p>Sản phẩm thời trang nam mới nhất của chúng tôi luôn hiện đại và lịch lãm</p> <p>Thiết kế là một sự kết hợp tuyệt vời giữa phong cách truyền thống và hiện đại, với cổ áo thắt nơ sang trọng và chi tiết tay áo được làm cong nhẹ giúp tạo nên phong cách cá tính và trẻ trung</p>';
         setProduct(res);
       })
       .catch((e) => console.log('e ::', e));
@@ -169,7 +185,7 @@ const DetailProduct = () => {
                   {/* Color picker */}
                   {variant.size ? (
                     <div>
-                      <h2 className="text-sm font-medium text-gray-900">Color</h2>
+                      <h2 className="text-sm font-medium text-gray-900">Màu</h2>
 
                       <RadioGroup className="mt-2">
                         <RadioGroup.Label className="sr-only"> Choose a color </RadioGroup.Label>
@@ -185,19 +201,16 @@ const DetailProduct = () => {
                                 classNames(
                                   'ring-gray-900',
                                   active && checked ? 'ring ring-offset-1' : '',
-                                  !active && checked ? 'ring-2' : '',
+                                  !active && checked ? 'ring-1' : '',
                                   'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
                                 )
                               }
                             >
-                              <RadioGroup.Label as="span" className="sr-only">
-                                {' '}
-                                {1}{' '}
-                              </RadioGroup.Label>
+                              <RadioGroup.Label as="span" className="sr-only"></RadioGroup.Label>
                               <span
                                 aria-hidden="true"
                                 className={classNames(
-                                  'bg-gray-900',
+                                  colorHash[x],
                                   'h-8 w-8 rounded-full border border-black border-opacity-10'
                                 )}
                               />
@@ -213,9 +226,9 @@ const DetailProduct = () => {
                   {/* Price Variant */}
                   {variant.size && variant.color ? (
                     <div className="mt-5">
-                      <span className="text-sm font-medium text-gray-900">Price :</span>
+                      <span className="text-sm font-medium text-gray-900">Giá :</span>
                       <span className="text-sm font-medium text-[#333] ml-5 opacity-70">
-                        {getVariant(variant.size, variant.color)[1]}
+                        {getVariant(variant.size, variant.color)[1]} VND
                       </span>
                     </div>
                   ) : (
@@ -226,16 +239,16 @@ const DetailProduct = () => {
                     type="submit"
                     className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
-                    Add to cart
+                    Thêm Vào Giỏ Hàng
                   </button>
                 </form>
 
                 {/* Product details */}
                 <div className="mt-10">
-                  <h2 className="text-sm font-medium text-gray-900">Description</h2>
+                  <h2 className="text-sm font-medium text-gray-900">Mô tả</h2>
                   <div
                     className="prose prose-sm mt-4 text-gray-500"
-                    dangerouslySetInnerHTML={{ __html: product.description }}
+                    dangerouslySetInnerHTML={{ __html: product.description || description }}
                   />
                 </div>
 

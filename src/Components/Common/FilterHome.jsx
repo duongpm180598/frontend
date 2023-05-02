@@ -12,16 +12,13 @@ import _ from 'lodash';
 
 const sortOptions = [
   { name: 'Default', value: {} },
-  { name: 'Thời Gian Tạo (Giảm Dần)', value: { sort_by: 'created_at', order: 'desc' } },
+  { name: 'Thời Gian Tạo Gần Đây', value: { sort_by: 'created_at', order: 'desc' } },
   { name: 'Giá Tiền (Giảm Dần)', value: { sort_by: 'base_cost', order: 'desc' } },
-  { name: 'Thời Gian Tạo (Tăng Dần)', value: { sort_by: 'created_at', order: 'asc' } },
   { name: 'Giá Tiền (Tăng Dần)', value: { sort_by: 'base_cost', order: 'asc' } },
 ];
 
 export default function FilterHome({ params, setParams }) {
-  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const { name, category, order } = params;
   const [currCategory, setCurrCategory] = useState('Phân Loại');
   const [currSort, setCurrSort] = useState('Sắp Xếp');
   const reduxCategory = useSelector(getCategory);

@@ -4,6 +4,7 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { classNames } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
+import { isAdmin } from '../../Services/auth.service';
 
 const sortOptions = [
   { name: 'Default', value: {} },

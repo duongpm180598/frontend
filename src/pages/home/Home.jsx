@@ -6,10 +6,13 @@ import ProductComponent from '../../Components/Common/ProductComponent';
 import Loading from '../../Components/Common/Loading';
 import FilterHome from '../../Components/Common/FilterHome';
 import { filterParams } from '../../utils';
+import { APIClient } from '../../helper/api_helper';
+import MostViewProducts from '../../Components/Common/MostView/MostViewProducts';
 
 function Home() {
   const dispatch = useDispatch();
   const [params, setParams] = useState({ name: '', category_id: '', sort_by: '', order: '' });
+  const [hotView, setHostView] = useState('false');
   // selector
   const products = useSelector(getProducts);
   const category = useSelector(getCategory);
@@ -18,6 +21,13 @@ function Home() {
     const newParams = filterParams(params);
     dispatch(fetchingData(newParams));
   }, [params]);
+
+  useEffect(() => {
+    if (!hotView) return;
+    new APIClient().get();
+  }, [hotView]);
+
+  useEffect(() => {});
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-14 lg:max-w-7xl lg:px-8">
@@ -32,15 +42,17 @@ function Home() {
           </div>
         </div>
 
-        {/* -------------- filter -----------------*/}
-        <FilterHome params={params} setParams={setParams} />
+        <MostViewProducts />
 
+        {/* -------------- filter -----------------*/}
+
+        <FilterHome params={params} setParams={setParams} />
         {/* -------------- products -----------------*/}
 
         {statusGlobal == 'pending' ? (
           <Loading />
         ) : (
-          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 smd:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {products && products.length ? (
               products.map((x) => (
                 <ProductComponent

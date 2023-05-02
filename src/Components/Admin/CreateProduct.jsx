@@ -44,7 +44,7 @@ function CreateProduct() {
     const reader = new FileReader();
     reader.readAsDataURL(acceptedFiles[0]);
     reader.onload = () => {
-      console.log('reader ::', reader.result);
+      // console.log('reader ::', reader.result);
       setProduct({ ...product, thumbnail: reader.result });
     };
   };
@@ -55,7 +55,7 @@ function CreateProduct() {
 
   const handleChangeCategory = (e) => {
     const currentCategory = category.find((x) => x.name == e.target.value);
-    console.log('curr:', currentCategory);
+    // console.log('curr:', currentCategory);
     setProduct({ ...product, category_id: currentCategory.id });
   };
   const handleChangeVariantAttribute = (e, attr_id) => {
@@ -115,13 +115,13 @@ function CreateProduct() {
                 setProduct({ ...product, [e.target.name]: e.target.value });
               }}
               id="floating_email"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-gray-600 focus:outline-none focus:ring-0 focus:border-gray-600 peer"
               placeholder=" "
               required
             />
             <label
               htmlFor="floating_email"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-black dark:black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Tên Sản Phẩm
             </label>
@@ -134,13 +134,13 @@ function CreateProduct() {
                 setProduct({ ...product, [e.target.name]: e.target.value * 1 });
               }}
               id="floating_basecost"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-gray-600 focus:outline-none focus:ring-0 focus:border-gray-600 peer"
               placeholder=" "
               required
             />
             <label
               htmlFor="floating_basecost"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-black dark:black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-focus:dark:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Base Cost
             </label>
@@ -148,7 +148,7 @@ function CreateProduct() {
 
           {/* category */}
 
-          <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">
             Chọn Loại
           </label>
           <select
@@ -156,7 +156,7 @@ function CreateProduct() {
             onChange={(e) => handleChangeCategory(e)}
             name="category_id"
             id="category"
-            className="bg-gray-50 mb-8 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 mb-8 border border-gray-300 text-black text-sm rounded-lg focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-400 dark:hover:bg-gray-400 dark:border-gray-400 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
           >
             {category?.map((x) => (
               <option key={x.id}>{x.name}</option>
@@ -175,7 +175,7 @@ function CreateProduct() {
           ) : (
             <div className="h-[200px]" {...getRootProps()}>
               <input {...getInputProps()} accept="image/jpeg,image/png,image/gif" />
-              <p className="w-[200px] cursor-pointer p-2 border border-solid border-gray-400 capitalize font-Popins text-sm text-gray-400 tracking-wider">
+              <p className="w-[200px] cursor-pointer p-2 border border-solid border-gray-400 capitalize font-Popins text-sm black tracking-wider">
                 Chọn Thumbnail
               </p>
             </div>
@@ -186,14 +186,14 @@ function CreateProduct() {
           {/* variant */}
 
           <div className="">
-            <h3 className="uppercase font-Popins font-semibold tracking-wider text-gray-400">variants</h3>
+            <h3 className="uppercase font-Popins font-semibold tracking-wider black">variants</h3>
             <div>
               <div className="grid grid-cols-10 gap-2">
-                <span className="lg:col-span-2 text-sm text-gray-400">Inventory</span>
-                <span className="lg:col-span-2 text-sm text-gray-400">Price</span>
-                <span className="lg:col-span-2 text-sm text-gray-400">Weight</span>
+                <span className="col-span-2 text-sm black">Inventory</span>
+                <span className="col-span-2 text-sm black">Price</span>
+                <span className="col-span-2 text-sm black">Weight</span>
                 {variantAttribute?.map((x, index) => (
-                  <span className="lg:col-span-2 text-sm text-gray-400" key={index}>
+                  <span className="col-span-2 text-sm black" key={index}>
                     {x.name}
                   </span>
                 ))}
@@ -201,11 +201,11 @@ function CreateProduct() {
 
               {productVariantList?.map((x, index) => (
                 <div key={index} className="grid grid-cols-10 gap-2">
-                  <span className="lg:col-span-2 text-sm text-gray-400">{x.inventory}</span>
-                  <span className="lg:col-span-2 text-sm text-gray-400">{x.price}</span>
-                  <span className="lg:col-span-2 text-sm text-gray-400">{x.weight}</span>
+                  <span className="col-span-2 text-sm black">{x.inventory}</span>
+                  <span className="col-span-2 text-sm black">{x.price}</span>
+                  <span className="col-span-2 text-sm black">{x.weight}</span>
                   {x.variant_attributes?.map((each) => (
-                    <span className="lg:col-span-2 text-sm text-gray-400" key={each.attribute_id}>
+                    <span className="col-span-2 text-sm black" key={each.attribute_id}>
                       {each.value}
                     </span>
                   ))}
@@ -214,21 +214,21 @@ function CreateProduct() {
 
               <div className="grid grid-cols-10 gap-2">
                 <input
-                  className="lg:col-span-2"
+                  className="col-span-2 border-gray-600 border "
                   onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: e.target.value * 1 })}
                   type="number"
                   name="inventory"
                   value={productVariant.inventory}
                 />
                 <input
-                  className="lg:col-span-2"
+                  className="col-span-2 border-gray-600 border "
                   onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: 1 * e.target.value })}
                   type="number"
                   name="price"
                   value={productVariant.price}
                 />
                 <input
-                  className="lg:col-span-2"
+                  className="col-span-2 border-gray-600 border "
                   onChange={(e) => setProductVariant({ ...productVariant, [e.target.name]: 1 * e.target.value })}
                   type="number"
                   name="weight"
@@ -236,7 +236,7 @@ function CreateProduct() {
                 />
                 {variantAttribute?.map((x) => (
                   <input
-                    className="lg:col-span-2"
+                    className="col-span-2 border-gray-600 border "
                     key={x.id}
                     onChange={(e) => handleChangeVariantAttribute(e, x.id)}
                     value={getCurrentValue(x.id)}
@@ -259,7 +259,7 @@ function CreateProduct() {
 
         <button
           type="submit"
-          className="col-span-3 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          className="md:col-span-3 ssm:col-span-4 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
         >
           Thêm Sản phẩm
         </button>

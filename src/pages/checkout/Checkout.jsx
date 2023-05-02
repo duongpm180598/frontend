@@ -8,7 +8,6 @@ import { getCart, getDistricts, getProvinces, getWards } from '../../redux/selec
 import { APIClient } from '../../helper/api_helper';
 import { fetchDistricts, fetchWards } from '../../redux/GHN.slice';
 import { useNavigate } from 'react-router-dom';
-import { setGatewayVNPAY, setGatewayZALOPAY } from '../../redux/status.slice';
 
 export default function Checkout() {
   const dispatch = useDispatch();
@@ -97,8 +96,6 @@ export default function Checkout() {
       },
     };
 
-    console.log('data ::', data);
-
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/orders`, data)
       .then((res) => {
@@ -111,7 +108,6 @@ export default function Checkout() {
             new APIClient()
               .createWithToken(`${process.env.REACT_APP_API_URL}/vnpay/payment-url`, { order_code })
               .then((res) => {
-                dispatch(setGatewayVNPAY());
                 window.location.replace(res.url);
               })
               .catch((e) => console.log('err :', e));
@@ -119,7 +115,6 @@ export default function Checkout() {
             new APIClient()
               .createWithToken(`${process.env.REACT_APP_API_URL}/zalopay/payment-url`, { order_code })
               .then((res) => {
-                // dispatch(setGatewayZALOPAY());
                 window.location.replace(res.url);
               })
               .catch((e) => console.log('err :', e));

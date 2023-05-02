@@ -6,6 +6,7 @@ import { getOrder, getStatus } from '../../redux/selector';
 import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
 import { useNavigate } from 'react-router-dom';
+import { isAdmin } from '../../Services/auth.service';
 
 function Order() {
   // Initial data
