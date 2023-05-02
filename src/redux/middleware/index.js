@@ -131,6 +131,33 @@ const fetchingStatisticsInMonth = (params) => async (dispatch) => {
   const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/in-month`;
   const response = await new APIClient().getWithToken(url_variant, params);
   dispatch(fetchStatisticData(response));
+  const fakeData = [
+    {
+      id: '10151860-6741-4f75-aec7-abc61cb8ebc5',
+      name: 'Áo Len Extra Fine Merino Cổ Tròn Dài Tay',
+      total: 799000,
+      sold: 1,
+    },
+    {
+      id: '14146ef0-a783-4027-8c2e-0373d6847eb4',
+      name: 'AirSense Áo Khoác (Siêu Nhẹ) (Glen Kẻ Caro)',
+      total: 17988000,
+      sold: 12,
+    },
+    {
+      id: 'b67a7fba-5150-46e8-ae7a-2e4bb9147eef',
+      name: 'AirSense Áo Blazer (Siêu Nhẹ)',
+      total: 500000,
+      sold: 2,
+    },
+    {
+      id: 'bffde639-402e-4920-95d5-59cca7a7c5cb',
+      name: 'Áo Khoác Giả Lông Cừu Loại Dày Kéo Khóa Dài Tay',
+      total: 1398000,
+      sold: '2',
+    },
+  ];
+  dispatch(fetchStatisticData(fakeData));
 };
 
 const createBill = async (data) => {
