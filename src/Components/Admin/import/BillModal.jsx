@@ -4,17 +4,20 @@ import { useSelector } from 'react-redux';
 import { getProductVariant } from '../../../redux/selector';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Card } from '@mui/material';
+import { Card } from 'antd';
+import { CheckCircleTwoTone } from '@ant-design/icons';
+import { createBill, exportBill } from '../../../redux/middleware';
 
-const BillModal = ({ isModalOpen, handleOk, handleCancel, selectedRowKeys, selectedProduct, selectedSupplier }) => {
+const BillModal = ({ isModalOpen, toggleModal, selectedRowKeys, selectedProduct, selectedSupplier, resetStep }) => {
   const productVariant = useSelector(getProductVariant);
   const [currentProductVariant, setCurrentProductVariant] = useState([]);
+  let billId = '';
 
   const handleChangeQuantity = (e, id) => {
     const index = currentProductVariant.findIndex((item) => item.id === id);
     if (e.target.value <= 0 || e.target.value > currentProductVariant[index].inventory) return;
     const newProductVariant = [...currentProductVariant];
-    newProductVariant[index] = { ...newProductVariant[index], quantity: e.target.value };
+    newProductVariant[index] = { ...newProductVariant[index], quantity: Number(e.target.value) };
     setCurrentProductVariant(newProductVariant);
   };
 
@@ -35,6 +38,59 @@ const BillModal = ({ isModalOpen, handleOk, handleCancel, selectedRowKeys, selec
       total += item.price * item.quantity;
     });
     return total;
+  };
+
+  const handleCancel = () => {
+    toggleModal(false);
+  };
+
+  const handleOk = async () => {
+    toggleModal(false);
+    const data = {
+      supplier_id: selectedSupplier.id,
+      items: currentProductVariant.map((item) => ({
+        variant_id: item.id,
+        quantity: item.quantity,
+        unit_price: item.price,
+      })),
+    };
+    try {
+      billId = await createBill(data);
+      success();
+    } catch (error) {
+      errorModal();
+    }
+  };
+
+  const handleExportBill = async () => {
+    try {
+      exportBill(billId, 'bill.xlsx');
+    } catch (error) {
+      errorModal();
+    } finally {
+      resetStep();
+    }
+  };
+
+  const errorModal = () => {
+    Modal.error({
+      title: 'This is an error message',
+      content: 'Có lỗi đã xảy ra',
+    });
+  };
+
+  const success = () => {
+    Modal.confirm({
+      title: 'Tạo bill thành công',
+      content: 'Bạn có muốn xuất hóa đơn không?',
+      onOk: handleExportBill,
+      onCancel: () => {
+        Modal.destroyAll();
+      },
+      okText: 'Có',
+      cancelText: 'Không',
+      icon: <CheckCircleTwoTone twoToneColor="#52c41a" />,
+    });
   };
 
   useEffect(() => {
@@ -68,7 +124,7 @@ const BillModal = ({ isModalOpen, handleOk, handleCancel, selectedRowKeys, selec
       <h3>
         <b>Danh sách sản phẩm: </b>
       </h3>
-      <Card className="mt-3">
+      <Card className="mt-3" style={{ padding: '0 15px' }}>
         <List
           itemLayout="horizontal"
           dataSource={currentProductVariant}

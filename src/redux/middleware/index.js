@@ -8,6 +8,7 @@ import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
 import { fetchSuppliers } from '../suppliers.slice';
 import { fetchProductVariant } from '../productVariant.slice';
+import { fetchStatisticData } from '../statistic.slice';
 
 const fetchingCategoryAndAttribute =
   (params = {}) =>
@@ -115,9 +116,32 @@ const fetchingSupplier = () => async (dispatch) => {
 };
 
 const fetchingProductVariant = (product_id) => async (dispatch) => {
-  const url_variant = `${process.env.REACT_APP_API_URL}/products/${product_id}/variants`;
+  const url_variant = `${process.env.REACT_APP_API_URL}/products/${product_id}`;
   const response = await new APIClient().getWithToken(url_variant);
-  dispatch(fetchProductVariant(response));
+  dispatch(fetchProductVariant(response.product_variants));
+};
+
+const fetchingStatisticsInRange = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  dispatch(fetchStatisticData(response));
+};
+
+const fetchingStatisticsInMonth = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/in-month`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  dispatch(fetchStatisticData(response));
+};
+
+const createBill = async (data) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/bills`;
+  const response = await new APIClient().createWithToken(url_variant, data);
+  return response.id;
+};
+
+const exportBill = async (id, filename) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/bills/${id}/export`;
+  await new APIClient().exportFile(url_variant, filename);
 };
 
 export {
@@ -130,4 +154,8 @@ export {
   fetchingCategory,
   fetchingSupplier,
   fetchingProductVariant,
+  fetchingStatisticsInRange,
+  fetchingStatisticsInMonth,
+  createBill,
+  exportBill,
 };

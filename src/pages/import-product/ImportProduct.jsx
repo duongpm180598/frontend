@@ -1,12 +1,12 @@
+import { FileDoneOutlined, LeftOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@mui/icons-material';
+import { Button, Input, Space, Steps, Table } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Table, Button, Input, Steps } from 'antd';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
+import BillModal from '../../Components/Admin/import/BillModal';
 import { fetchingProductVariant, fetchingProducts, fetchingSupplier } from '../../redux/middleware';
 import { getProductVariant, getProducts, getSuppliers } from '../../redux/selector';
-import { SearchOutlined } from '@mui/icons-material';
-import Highlighter from 'react-highlight-words';
-import { LeftOutlined, FileDoneOutlined } from '@ant-design/icons';
-import BillModal from '../../Components/Admin/import/BillModal';
 
 const ImportProduct = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -16,13 +16,10 @@ const ImportProduct = () => {
   const [selectedSupplier, setSelectedSupplier] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -32,15 +29,18 @@ const ImportProduct = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
-  const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-  const handleReset = (clearFilters) => {
+
+  const handleResetStep = () => {
+    setActiveStep(0);
+    setSelectedRowKeys([]);
+  };
+
+  const handleResetFilter = (clearFilters) => {
     clearFilters();
     setSearchText('');
   };
@@ -78,7 +78,7 @@ const ImportProduct = () => {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleResetFilter(clearFilters)}
             size="small"
             style={{
               width: 90,
@@ -227,12 +227,14 @@ const ImportProduct = () => {
   const onSelectChange = (newSelectedRowKeys, selectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
+
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const handleExportBill = () => {
-    setIsModalOpen(true);
+
+  const toggleModal = (show) => {
+    setIsModalOpen(show);
   };
 
   return (
@@ -252,7 +254,7 @@ const ImportProduct = () => {
               title: 'Chọn loại sản phẩm',
             },
           ]}
-          className="mb-3"
+          style={{ marginBottom: '20px' }}
         />
         {activeStep === 0 ? (
           <React.Fragment>
@@ -285,9 +287,8 @@ const ImportProduct = () => {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  backgroundColor: selectedRowKeys.length !== 0 && '#1677ff',
                 }}
-                onClick={handleExportBill}
+                onClick={() => toggleModal(true)}
                 type="primary"
                 disabled={selectedRowKeys.length === 0}
               >
@@ -296,11 +297,11 @@ const ImportProduct = () => {
             </div>
             <BillModal
               isModalOpen={isModalOpen}
-              handleOk={handleOk}
-              handleCancel={handleCancel}
+              toggleModal={toggleModal}
               selectedRowKeys={selectedRowKeys}
               selectedSupplier={selectedSupplier}
               selectedProduct={selectedProduct}
+              resetStep={handleResetStep}
             />
           </React.Fragment>
         )}

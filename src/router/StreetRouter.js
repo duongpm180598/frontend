@@ -16,6 +16,7 @@ import DetailOrder from '../pages/detailOrder/DetailOrder';
 import CreateProduct from '../Components/Admin/CreateProduct';
 import AddImage from '../Components/Admin/AddImage';
 import ImportProduct from '../pages/import-product/ImportProduct';
+import Statistic from '../pages/statistics/Statistic';
 function StreetRouter() {
   return (
     <>
@@ -88,6 +89,14 @@ function StreetRouter() {
           element={
             <AuthProtected>
               <ImportProduct />
+            </AuthProtected>
+          }
+        ></Route>
+        <Route
+          path="/statistic"
+          element={
+            <AuthProtected>
+              <Statistic />
             </AuthProtected>
           }
         ></Route>
