@@ -54,9 +54,9 @@ function StreetRouter() {
           path="/order"
           element={
             <AuthProtected>
-              <PermissionProtected>
-                <Order></Order>
-              </PermissionProtected>
+              {/* <PermissionProtected> */}
+              <Order></Order>
+              {/* </PermissionProtected> */}
             </AuthProtected>
           }
         />
