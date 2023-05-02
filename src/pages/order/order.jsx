@@ -34,7 +34,7 @@ function Order() {
   const listOrder = useSelector(getOrder);
 
   return (
-    <div className={isAdmin() == 'ADMIN' ? 'bg-gray-800' : 'bg-gray-50'}>
+    <div className="bg-gray-50">
       <FilterOrder params={params} setParams={setParams} />
       <main className="mx-auto max-w-2xl pb-24 sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8 lg:pt-2">
         <section aria-labelledby="products-heading" className="mt-6">

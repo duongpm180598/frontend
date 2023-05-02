@@ -33,7 +33,7 @@ function Register() {
       });
   };
   return (
-    <div className="w-full h-full flex justify-center items-center p-4 fixed top-0 left-0 right-0 bottom-0 bg-gray-50 dark:bg-gray-900">
+    <div className="w-full h-full flex justify-center items-center p-4 fixed inset-0 z-10 bg-gray-50 dark:bg-gray-900">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-[500px] rounded-[10px] bg-gray-50 h-[90%] sm:px-[55px] sm:pt-[30px] sm:pb-[54px]"

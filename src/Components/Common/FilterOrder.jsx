@@ -27,7 +27,7 @@ export default function FilterOrder({ params, setParams }) {
 
   //   console.log('params ::', params);
   return (
-    <div className={isAdmin() == 'ADMIN' ? 'bg-gray-800' : 'bg-gray-50'}>
+    <div className="bg-gray-50">
       <div className="mx-auto max-w-2xl sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8 lg:pt-2">
         <section aria-labelledby="filter-heading" className="pt-6">
           <div className="grid md:grid-cols-12 lg:gap-x-8 lg:py-8 md:gap-x-6 ssm:gap-y-3 items-center ssm:px-3 sm:px-0">
