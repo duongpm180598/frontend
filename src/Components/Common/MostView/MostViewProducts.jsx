@@ -51,9 +51,6 @@ export default function MostViewProducts() {
         delay: 2500,
         disableOnInteraction: false,
       }}
-      // pagination={{ clickable: true }}
-      // onSwiper={(swiper) => console.log(swiper)}
-      // onSlideChange={() => console.log('slide change')}
     >
       {mostViewProducts.map((x, index) => (
         <SwiperSlide className="swiperSlide" key={index} virtualIndex={index}>
