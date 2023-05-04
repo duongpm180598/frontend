@@ -55,7 +55,7 @@ export default function FilterHome({ params, setParams }) {
                   name="name"
                   value={params.name}
                   onChange={(e) => {
-                    const value = e.target.value.trim();
+                    const value = e.target.value;
                     setParams({ ...params, name: value });
                   }}
                   className="shadow-md block w-full px-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus-visible:border-gray-400 focus-visible:ring-white "

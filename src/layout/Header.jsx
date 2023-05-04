@@ -16,14 +16,14 @@ export default function Header() {
   const navigation =
     isAdmin() == 'ADMIN'
       ? [
-          { name: 'Home', link: '/' },
-          { name: 'Cart', link: '/cart' },
-          { name: 'Manager', link: '/manager' },
+          { name: 'Trang Chủ', link: '/' },
+          { name: 'Giỏ Hàng', link: '/cart' },
+          { name: 'Quản Lý', link: '/manager' },
         ]
       : [
-          { name: 'Home', link: '/' },
-          { name: 'Cart', link: '/cart' },
-          { name: 'Order', link: '/order' },
+          { name: 'Trang Chủ', link: '/' },
+          { name: 'Giỏ Hàng', link: '/cart' },
+          { name: 'Đơn Hàng', link: '/order' },
         ];
 
   const [open, setOpen] = useState(false);
