@@ -8,6 +8,8 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Register() {
   const [error, setError] = useState('');
   const [visibalePass, setVisibalePass] = useState(false);
@@ -25,13 +27,14 @@ function Register() {
       .register(data)
       .then((successfull) => {
         alert('Register Cuccessfull');
+        notify('Đăng ký thành công', 'success');
         navigate('/login');
       })
       .catch((err) => {
-        // console.log('error :: ', err);
-        alert(err);
+        notify(err, 'error');
       });
   };
+  const notify = (message, type) => toast(message, { type });
   return (
     <div className="w-full h-full flex justify-center items-center p-4 fixed inset-0 z-10 bg-gray-50 dark:bg-gray-900">
       <form
@@ -151,6 +154,7 @@ function Register() {
           </p>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 }
