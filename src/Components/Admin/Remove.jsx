@@ -1,9 +1,13 @@
 import Modal from '@mui/material/Modal';
 import { APIClient } from '../../helper/api_helper';
+import { useNavigate } from 'react-router-dom';
 export default function RemoveComponent({ open, setOpen, name, id, setCheckCall }) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const navigate = useNavigate();
+
   const handleRemove = () => {
     new APIClient()
       .deleteWithToken(`${process.env.REACT_APP_API_URL}/products/${id}`)
@@ -11,6 +15,7 @@ export default function RemoveComponent({ open, setOpen, name, id, setCheckCall 
         alert('xóa thành công');
         setOpen(false);
         setCheckCall(true);
+        navigate('/manager');
       })
       .catch((e) => console.log('e::', e));
   };
