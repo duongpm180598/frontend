@@ -4,6 +4,8 @@ import Loading from '../Common/Loading';
 import FormUpdate from './FormUpdate';
 import RemoveComponent from './Remove';
 import { classNames } from '../../utils';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function UpdateComponent() {
   const [listProduct, setListProduct] = useState([]);
   const [productSelected, setProductSelected] = useState();
@@ -16,6 +18,7 @@ export default function UpdateComponent() {
     const element = listProduct.find((x) => x.id == id);
     return element.name;
   };
+  const notify = (message, type) => toast(message, { type });
   useEffect(() => {
     if (!checkCall) return;
     new APIClient()
@@ -78,16 +81,18 @@ export default function UpdateComponent() {
           Xóa
         </button>
       </div>
-      {check.update ? <FormUpdate id={productSelected} /> : null}
+      {check.update ? <FormUpdate id={productSelected} setCheckCall={setCheckCall} notify={notify} /> : null}
       {check.delete ? (
         <RemoveComponent
           open={open}
           setOpen={setOpen}
           setCheckCall={setCheckCall}
+          notify={notify}
           id={productSelected}
           name={getProductNameById(productSelected)}
         />
       ) : null}
+      <ToastContainer></ToastContainer>
     </div>
   );
 }

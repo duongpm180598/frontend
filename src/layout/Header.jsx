@@ -13,6 +13,7 @@ export default function Header() {
   const navigate = useNavigate();
   const [totalQuantity, setTotalQuantity] = useState();
   const quantity = useSelector(getTotalQuantity);
+  console.log('total quantity ::', totalQuantity);
   const navigation =
     isAdmin() == 'ADMIN'
       ? [
@@ -39,7 +40,7 @@ export default function Header() {
         navigate('/login');
       })
       .catch((e) => {
-        console.log('called in header: ', e);
+        navigate('/login');
       });
   };
 

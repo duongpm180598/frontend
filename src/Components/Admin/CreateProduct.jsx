@@ -10,6 +10,9 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import AddImage from './AddImage';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const formData = new FormData();
 
 function CreateProduct() {
@@ -103,15 +106,19 @@ function CreateProduct() {
         });
       })
       .then((res) => {
-        alert('Thêm Sản Phẩm Thành Công');
+        notify('Thêm Thành Công', 'success');
       })
-      .catch((e) => alert(e));
+      .catch((e) => {
+        notify('Thêm Thất Bại', 'error');
+      });
   };
 
   const handleAddVariant = () => {
     setProductVariantList([...productVariantList, productVariant]);
     setProductVariant({ inventory: '', price: '', weight: '', variant_attributes: variant_attributes });
   };
+
+  const notify = (message, type) => toast(message, { type });
   const { getRootProps, getInputProps } = useDropzone({ onDrop, maxFiles: 1 });
   return (
     <div className="w-full flex justify-start p-5">
@@ -174,6 +181,9 @@ function CreateProduct() {
             id="category"
             className="bg-gray-50 mb-8 border border-gray-300 text-black text-sm rounded-lg focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5 dark:bg-gray-400 dark:hover:bg-gray-400 dark:border-gray-400 dark:placeholder-gray-400 dark:text-black dark:focus:ring-gray-400 dark:focus:border-gray-400"
           >
+            <option hidden value="">
+              Lựa chọn danh mục
+            </option>
             {category?.map((x) => (
               <option key={x.id}>{x.name}</option>
             ))}
@@ -314,6 +324,7 @@ function CreateProduct() {
           Thêm Sản phẩm
         </button>
       </form>
+      <ToastContainer></ToastContainer>
     </div>
   );
 }

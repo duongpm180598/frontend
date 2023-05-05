@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-export default function FormUpdate({ id }) {
+export default function FormUpdate({ id, notify, setCheckCall }) {
   const [product, setProduct] = useState({ name: '', category_id: '', base_cost: 0, thumbnail: '' });
   const [category, setCategory] = useState([]);
   const [description, setDescription] = useState('');
@@ -50,10 +50,13 @@ export default function FormUpdate({ id }) {
     const data = { ...product, description: description };
     new APIClient()
       .updateWithToken(`${process.env.REACT_APP_API_URL}/products/${id}`, data)
-      .then((res) => alert('Thay doi thanh cong'))
-      .catch((e) => console.log('e ::', e));
-    // console.log('product ::', product);
-    // console.log('descript ::', description);
+      .then((res) => {
+        notify('Thay Đổi Thành Công', 'success');
+        setCheckCall(true);
+      })
+      .catch((e) => {
+        notify('Thay Đổi Thất Bại', 'error');
+      });
   };
   if (!id) return;
   if (!product) return <Loading></Loading>;

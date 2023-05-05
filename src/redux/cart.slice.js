@@ -13,7 +13,6 @@ export const cartSlice = createSlice({
   reducers: {
     fetchCart: (state, action) => {
       state.cart = action.payload.products;
-      state.totalQuantity = action.payload.total;
     },
     addToCart: (state) => {
       state.totalQuantity += 1;
