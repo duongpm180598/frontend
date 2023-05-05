@@ -8,6 +8,8 @@ import { useDispatch } from 'react-redux';
 import { addToCart, removeQuantityWhenError } from '../../redux/cart.slice';
 import Loading from './Loading';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -16,6 +18,8 @@ const DetailProduct = () => {
   const {
     state: { slug },
   } = useLocation();
+
+  const notify = (type) => toast('Thêm Sản Phẩm Thành Công', { type });
 
   // state
   const [product, setProduct] = useState();
@@ -80,14 +84,15 @@ const DetailProduct = () => {
   const handleAddToCart = () => {
     const id_variant = getVariant(variant.size, variant.color)[0];
     const data = { variant_id: id_variant, quantity: 1 };
+    const resolveWithSomeData = new Promise((resolve) => setTimeout(() => resolve('world'), 3000));
     dispatch(addToCart());
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
       .then((res) => {
-        alert('Thêm Vào Giỏ Hành Thành Công');
+        notify('success');
       })
       .catch((e) => {
-        console.log('e ::', e);
+        notify('error');
         dispatch(removeQuantityWhenError());
       });
   };
@@ -98,7 +103,7 @@ const DetailProduct = () => {
       .getWithToken(stringQuery)
       .then((res) => {
         const sizeStore = [];
-        console.log('res.product_variant::', res.product_variants);
+        // console.log('res.product_variant::', res.product_variants);
         res.product_variants.forEach((x) => {
           x.variant_attributes.forEach((y) => {
             if (y.name === 'Size' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
@@ -106,12 +111,8 @@ const DetailProduct = () => {
         });
         const initValue = res.product_variants[0].variant_attributes;
         setListVariants(res.product_variants);
-        // setVariant({ size: initValue[0].value, color: initValue[1].value, number: '', price: '' });
-        // setCheck(true);
         setSizes(sizeStore);
         setProduct(res);
-        // setProduct(res);
-        // setDefaultVariant();
       })
       .catch((e) => console.log('e ::', e));
   }, []);
@@ -298,6 +299,8 @@ const DetailProduct = () => {
                 </section>
               </div>
             </div>
+            {/* <button onClick={notify}>Notify!</button> */}
+            <ToastContainer />
           </div>
         </div>
       </div>
