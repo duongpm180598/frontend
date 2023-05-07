@@ -2,7 +2,15 @@ import React from 'react';
 import { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import logo from '../../asset/image/logo.png';
-import { FolderIcon, ServerIcon, XMarkIcon, HomeIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import {
+  FolderIcon,
+  ServerIcon,
+  XMarkIcon,
+  HomeIcon,
+  ShoppingCartIcon,
+  DocumentArrowDownIcon,
+  ChartPieIcon,
+} from '@heroicons/react/24/outline';
 import { Bars3Icon } from '@heroicons/react/20/solid';
 import { NavLink, Outlet } from 'react-router-dom';
 import { classNames } from '../../utils';
@@ -12,6 +20,10 @@ const navigation = [
   { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
   { name: 'Đơn Hàng', link: 'order', icon: ShoppingCartIcon },
   { name: 'Trang Chủ', link: '../', icon: HomeIcon },
+  { name: 'Nhập hàng', link: 'import', icon: DocumentArrowDownIcon },
+  { name: 'Thống kê sản phẩm', link: 'product-statistic', icon: ChartPieIcon },
+  { name: 'Thống kê doanh thu', link: 'revenue-statistic', icon: ChartPieIcon },
+  { name: 'Thống kê nhập hàng', link: 'import-statistic', icon: ChartPieIcon },
 ];
 function ManageComponent() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

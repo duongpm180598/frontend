@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Card } from 'antd';
 import { CheckCircleTwoTone } from '@ant-design/icons';
 import { createBill, exportBill } from '../../../redux/middleware';
+import './style.css'
 
 const BillModal = ({ isModalOpen, toggleModal, selectedRowKeys, selectedProduct, selectedSupplier, resetStep }) => {
   const productVariant = useSelector(getProductVariant);
@@ -124,7 +125,7 @@ const BillModal = ({ isModalOpen, toggleModal, selectedRowKeys, selectedProduct,
       <h3>
         <b>Danh sách sản phẩm: </b>
       </h3>
-      <Card className="mt-3" style={{ padding: '0 15px' }}>
+      <Card className="mt-3">
         <List
           itemLayout="horizontal"
           dataSource={currentProductVariant}

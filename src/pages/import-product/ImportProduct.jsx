@@ -238,74 +238,71 @@ const ImportProduct = () => {
   };
 
   return (
-    <div className="flex" style={{ minHeight: 'calc(100vh - 65px)' }}>
-      <div className="flex-none min-w-[200px] bg-slate-500"></div>
-      <div className="flex-auto px-5 py-5">
-        <Steps
-          current={activeStep}
-          items={[
-            {
-              title: 'Chọn nhà cung cấp',
-            },
-            {
-              title: 'Chọn sản phẩm',
-            },
-            {
-              title: 'Chọn loại sản phẩm',
-            },
-          ]}
-          style={{ marginBottom: '20px' }}
-        />
-        {activeStep === 0 ? (
-          <React.Fragment>
-            <Table columns={supplierColumn} dataSource={suppliers} />
-          </React.Fragment>
-        ) : activeStep === 1 ? (
-          <React.Fragment>
-            <Table columns={productColumn} dataSource={products} />
+    <div style={{padding: 20}}>
+      <Steps
+        current={activeStep}
+        items={[
+          {
+            title: 'Chọn nhà cung cấp',
+          },
+          {
+            title: 'Chọn sản phẩm',
+          },
+          {
+            title: 'Chọn loại sản phẩm',
+          },
+        ]}
+        style={{ marginBottom: '20px' }}
+      />
+      {activeStep === 0 ? (
+        <React.Fragment>
+          <Table columns={supplierColumn} dataSource={suppliers} />
+        </React.Fragment>
+      ) : activeStep === 1 ? (
+        <React.Fragment>
+          <Table columns={productColumn} dataSource={products} />
+          <Button icon={<LeftOutlined />} style={{ display: 'flex', alignItems: 'center' }} onClick={handleBack}>
+            Back
+          </Button>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Table
+            pagination={{
+              position: ['bottomCenter'],
+            }}
+            rowKey="id"
+            columns={variantColumn}
+            dataSource={productVariant}
+            rowSelection={rowSelection}
+          />
+          <div className="flex justify-between">
             <Button icon={<LeftOutlined />} style={{ display: 'flex', alignItems: 'center' }} onClick={handleBack}>
               Back
             </Button>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Table
-              pagination={{
-                position: ['bottomCenter'],
+            <Button
+              icon={<FileDoneOutlined />}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
               }}
-              rowKey="id"
-              columns={variantColumn}
-              dataSource={productVariant}
-              rowSelection={rowSelection}
-            />
-            <div className="flex justify-between">
-              <Button icon={<LeftOutlined />} style={{ display: 'flex', alignItems: 'center' }} onClick={handleBack}>
-                Back
-              </Button>
-              <Button
-                icon={<FileDoneOutlined />}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-                onClick={() => toggleModal(true)}
-                type="primary"
-                disabled={selectedRowKeys.length === 0}
-              >
-                Xuất bill
-              </Button>
-            </div>
-            <BillModal
-              isModalOpen={isModalOpen}
-              toggleModal={toggleModal}
-              selectedRowKeys={selectedRowKeys}
-              selectedSupplier={selectedSupplier}
-              selectedProduct={selectedProduct}
-              resetStep={handleResetStep}
-            />
-          </React.Fragment>
-        )}
-      </div>
+              onClick={() => toggleModal(true)}
+              type="primary"
+              disabled={selectedRowKeys.length === 0}
+            >
+              Xuất bill
+            </Button>
+          </div>
+          <BillModal
+            isModalOpen={isModalOpen}
+            toggleModal={toggleModal}
+            selectedRowKeys={selectedRowKeys}
+            selectedSupplier={selectedSupplier}
+            selectedProduct={selectedProduct}
+            resetStep={handleResetStep}
+          />
+        </React.Fragment>
+      )}
     </div>
   );
 };

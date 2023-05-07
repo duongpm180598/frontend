@@ -102,14 +102,15 @@ class APIClient {
     return axios.delete(url, { ...config });
   };
 
-  exportFile = (url, filename) => {
+  exportFile = (url, filename, params) => {
     setAuthorization();
     const response = axios
       .get(url, {
+        params,
         responseType: 'blob',
       })
       .then((res) => {
-        const file = new File([res], filename, {type: "text/plain;charset=utf-8"});
+        const file = new File([res], filename, { type: 'text/plain;charset=utf-8' });
         FileSaver.saveAs(file);
       });
     return response;

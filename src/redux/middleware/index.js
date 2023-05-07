@@ -129,43 +129,64 @@ const fetchingProductVariant = (product_id) => async (dispatch) => {
   dispatch(fetchProductVariant(response.product_variants));
 };
 
-const fetchingStatisticsInRange = (params) => async (dispatch) => {
+// Product Statistic
+const fetchingProductStatisticsInRange = (params) => async (dispatch) => {
   const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  const data = response.map((item) => ({ ...item, sold: Number(item.sold) }));
+  dispatch(fetchStatisticData(data));
+};
+
+const exportProductStatisticsInRange = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/export`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+const fetchingProductStatisticsInMonth = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/in-month`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  const data = response.map((item) => ({ ...item, sold: Number(item.sold) }));
+  dispatch(fetchStatisticData(data));
+};
+
+const exportProductStatisticsInMonth = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/export/in-month`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+// Revenue Statistic
+const fetchingRevenueStatisticsInRange = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics`;
   const response = await new APIClient().getWithToken(url_variant, params);
   dispatch(fetchStatisticData(response));
 };
 
-const fetchingStatisticsInMonth = (params) => async (dispatch) => {
-  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/in-month`;
+const exportRevenueStatisticsInRange = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics/export`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+const fetchingRevenueStatisticsInYear = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics/in-year`;
   const response = await new APIClient().getWithToken(url_variant, params);
   dispatch(fetchStatisticData(response));
-  const fakeData = [
-    {
-      id: '10151860-6741-4f75-aec7-abc61cb8ebc5',
-      name: 'Áo Len Extra Fine Merino Cổ Tròn Dài Tay',
-      total: 799000,
-      sold: 1,
-    },
-    {
-      id: '14146ef0-a783-4027-8c2e-0373d6847eb4',
-      name: 'AirSense Áo Khoác (Siêu Nhẹ) (Glen Kẻ Caro)',
-      total: 17988000,
-      sold: 12,
-    },
-    {
-      id: 'b67a7fba-5150-46e8-ae7a-2e4bb9147eef',
-      name: 'AirSense Áo Blazer (Siêu Nhẹ)',
-      total: 500000,
-      sold: 2,
-    },
-    {
-      id: 'bffde639-402e-4920-95d5-59cca7a7c5cb',
-      name: 'Áo Khoác Giả Lông Cừu Loại Dày Kéo Khóa Dài Tay',
-      total: 1398000,
-      sold: '2',
-    },
-  ];
-  dispatch(fetchStatisticData(fakeData));
+};
+
+const exportRevenueStatisticsInYear = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics/export/in-year`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+// Import Statistic
+const fetchingImportStatisticsInMonth = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/import-statistics/in-month`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  dispatch(fetchStatisticData(response));
+};
+
+const exportImportStatisticsInMonth = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/import-statistics/export/in-month`;
+  await new APIClient().exportFile(url_variant, filename, params);
 };
 
 const createBill = async (data) => {
@@ -189,8 +210,16 @@ export {
   fetchingCategory,
   fetchingSupplier,
   fetchingProductVariant,
-  fetchingStatisticsInRange,
-  fetchingStatisticsInMonth,
+  fetchingProductStatisticsInRange,
+  fetchingProductStatisticsInMonth,
+  exportProductStatisticsInMonth,
+  exportProductStatisticsInRange,
   createBill,
   exportBill,
+  fetchingRevenueStatisticsInRange,
+  exportRevenueStatisticsInRange,
+  fetchingRevenueStatisticsInYear,
+  exportRevenueStatisticsInYear,
+  fetchingImportStatisticsInMonth,
+  exportImportStatisticsInMonth,
 };

@@ -1,83 +1,46 @@
-import { CheckSquareOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Select } from 'antd';
+import { CheckSquareOutlined, ExportOutlined } from '@ant-design/icons';
+import { Button, DatePicker, Form, Select, Card, Modal } from 'antd';
 import { default as React, useEffect, useState } from 'react';
 import { MONTHS } from '../../utils/utils';
 import { DualAxes } from '@ant-design/plots';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStatisticData } from '../../redux/selector';
-import { fetchingStatisticsInMonth } from '../../redux/middleware';
+import {
+  exportProductStatisticsInMonth,
+  exportProductStatisticsInRange,
+  fetchingProductStatisticsInMonth,
+  fetchingProductStatisticsInRange,
+} from '../../redux/middleware';
 import { fetchStatisticData } from '../../redux/statistic.slice';
 
 const { RangePicker } = DatePicker;
 
-const Statistic = () => {
+const ProductStatistic = () => {
   const [form] = Form.useForm();
   const statisticData = useSelector(getStatisticData);
   const [chartType, setChartType] = useState('range');
+  const [isSubmit, setIsSubmit] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(fetchStatisticData([]));
+    };
+  }, []);
 
   const handleSubmit = async (values) => {
     if (chartType === 'range') {
-      const yearFrom = values.times[0].format('YYYY-MM-DD');
-      const yearTo = values.times[1].format('YYYY-MM-DD');
-      const group = values.group;
-      console.log(yearFrom, yearTo, group);
+      const from = values.times[0].format('YYYY-MM-DD');
+      const to = values.times[1].format('YYYY-MM-DD');
+      const group_by = values.group;
+      dispatch(fetchingProductStatisticsInRange({ from, to, group_by }));
     } else {
       const month = values.time.format('M');
       const year = values.time.format('YYYY');
-      dispatch(fetchingStatisticsInMonth({ month, year }));
+      dispatch(fetchingProductStatisticsInMonth({ month, year }));
     }
-    const newData = [];
-    MONTHS.forEach((month, index) => {
-      newData.push({ month, value: response[index] });
-    });
+    setIsSubmit(true);
   };
-
-  const response = [
-    1000000, 2000000, 5000000, 12000000, 7000000, 15000000, 8000000, 5000000, 12000000, 7000000, 3000000, 9000000,
-  ];
-
-  // const config = {
-  //   data: chartData,
-  //   xField: 'month',
-  //   yField: 'value',
-  //   point: {
-  //     size: 5,
-  //     style: {
-  //       fill: 'white',
-  //       stroke: '#5B8FF9',
-  //       lineWidth: 2,
-  //     },
-  //   },
-  //   tooltip: {
-  //     formatter: (data) => {
-  //       return {
-  //         value: new Intl.NumberFormat('vi-VN', {
-  //           style: 'currency',
-  //           currency: 'VND',
-  //         }).format(data.value),
-  //       };
-  //     },
-  //   },
-  //   state: {
-  //     active: {
-  //       style: {
-  //         shadowBlur: 4,
-  //         stroke: '#000',
-  //         fill: 'red',
-  //       },
-  //     },
-  //   },
-  //   interactions: [
-  //     {
-  //       type: 'marker-active',
-  //     },
-  //   ],
-  //   style: {
-  //     maxHeight: '350px',
-  //   },
-  //   smooth: true,
-  // };
 
   const config = {
     data: [statisticData, statisticData],
@@ -98,17 +61,46 @@ const Statistic = () => {
 
   const handleChangeType = (value) => {
     setChartType(value);
-    dispatch(fetchStatisticData([]))
+    if (isSubmit) setIsSubmit(false);
+    dispatch(fetchStatisticData([]));
+  };
+
+  const handleChangeForm = (value) => {
+    if (isSubmit) setIsSubmit(false);
+  };
+
+  const handleExport = () => {
+    const values = form.getFieldsValue();
+    if (chartType === 'range') {
+      const from = values.times[0].format('YYYY-MM-DD');
+      const to = values.times[1].format('YYYY-MM-DD');
+      const group_by = values.group;
+      try {
+        exportProductStatisticsInRange('product-statistic-by-range.xlsx', { from, to, group_by });
+      } catch (error) {
+        errorModal();
+      }
+    } else {
+      const month = values.time.format('M');
+      const year = values.time.format('YYYY');
+      try {
+        exportProductStatisticsInMonth('product-statistic-in-month.xlsx', { month, year });
+      } catch (error) {
+        errorModal();
+      }
+    }
+  };
+
+  const errorModal = () => {
+    Modal.error({
+      title: 'This is an error message',
+      content: 'Có lỗi đã xảy ra',
+    });
   };
 
   return (
-    <div className="flex" style={{ minHeight: 'calc(100vh - 65px)' }}>
-      <div className="flex-none min-w-[200px] bg-slate-500"></div>
-      <div className="flex-auto px-5 py-5">
-        <p style={{ fontSize: '20px' }}>
-          <b>Thống kê doanh thu</b>
-        </p>
-
+    <div style={{ padding: 20 }}>
+      <Card style={{ minHeight: 'calc(100vh - 104px)' }} title={<b className="text-lg">Thống kê sản phẩm</b>}>
         <Form.Item label="Kiểu thống kê">
           <Select
             defaultValue={chartType}
@@ -126,7 +118,8 @@ const Statistic = () => {
           layout="horizontal"
           onFinish={handleSubmit}
           form={form}
-          style={{ marginBottom: '50px' }}
+          style={{ marginBottom: '20px' }}
+          onValuesChange={handleChangeForm}
         >
           {chartType === 'month' ? (
             <Form.Item
@@ -175,9 +168,7 @@ const Statistic = () => {
                 />
               </Form.Item>
             </React.Fragment>
-          ) : (
-            ''
-          )}
+          ) : ''}
           <div>
             <Button
               type="danger"
@@ -189,10 +180,42 @@ const Statistic = () => {
             </Button>
           </div>
         </Form>
-        {chartType === 'month' ? <DualAxes {...config} /> : chartType === ''}
-      </div>
+        {isSubmit && statisticData.length === 0 ? (
+          <span>Không có dữ liệu</span>
+        ) : chartType === 'month' && isSubmit ? (
+          <React.Fragment>
+            <div className="flex justify-end">
+              <Button
+                type="primary"
+                style={{ display: 'flex', alignItems: 'center', float: '' }}
+                onClick={handleExport}
+              >
+                <ExportOutlined />
+                Xuất báo cáo
+              </Button>
+            </div>
+
+            <DualAxes {...config} />
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <div className="flex justify-end">
+              <Button
+                type="primary"
+                style={{ display: 'flex', alignItems: 'center', float: '' }}
+                onClick={handleExport}
+              >
+                <ExportOutlined />
+                Xuất báo cáo
+              </Button>
+            </div>
+
+            <DualAxes {...config} />
+          </React.Fragment>
+        )}
+      </Card>
     </div>
   );
 };
 
-export default Statistic;
+export default ProductStatistic;

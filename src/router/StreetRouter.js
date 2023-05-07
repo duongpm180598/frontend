@@ -16,9 +16,11 @@ import DetailOrder from '../pages/detailOrder/DetailOrder';
 import CreateProduct from '../Components/Admin/CreateProduct';
 import AddImage from '../Components/Admin/AddImage';
 import ImportProduct from '../pages/import-product/ImportProduct';
-import Statistic from '../pages/statistics/Statistic';
+import ProductStatistic from '../pages/statistics/ProductStatistic';
 import PermissionProtected from './PermissionProtected';
 import UpdateComponent from '../Components/Admin/Update';
+import RevenueStatistic from '../pages/statistics/RevenueStatistic';
+import ImportStatistic from '../pages/statistics/ImportStatistic';
 function StreetRouter() {
   return (
     <>
@@ -82,28 +84,16 @@ function StreetRouter() {
           {/* <Route path="add-image" element={<AddImage />} /> */}
           <Route path="update" element={<UpdateComponent />} />
           <Route path="order" element={<Order />} />
+          <Route path="import" element={<ImportProduct />} />
+          <Route path="product-statistic" element={<ProductStatistic />} />
+          <Route path="revenue-statistic" element={<RevenueStatistic />} />
+          <Route path="import-statistic" element={<ImportStatistic />} />
         </Route>
 
         <Route path="/product-detail/:slug" element={<DetailProduct />} />
         <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
-        <Route
-          path="/import"
-          element={
-            <AuthProtected>
-              <ImportProduct />
-            </AuthProtected>
-          }
-        ></Route>
-        <Route
-          path="/statistic"
-          element={
-            <AuthProtected>
-              <Statistic />
-            </AuthProtected>
-          }
-        ></Route>
       </Routes>
     </>
   );
