@@ -18,6 +18,7 @@ import AddImage from '../Components/Admin/AddImage';
 import ImportProduct from '../pages/import-product/ImportProduct';
 import Statistic from '../pages/statistics/Statistic';
 import PermissionProtected from './PermissionProtected';
+import UpdateComponent from '../Components/Admin/Update';
 function StreetRouter() {
   return (
     <>
@@ -56,9 +57,7 @@ function StreetRouter() {
           path="/order"
           element={
             <AuthProtected>
-              {/* <PermissionProtected> */}
               <Order></Order>
-              {/* </PermissionProtected> */}
             </AuthProtected>
           }
         />
@@ -80,7 +79,8 @@ function StreetRouter() {
           }
         >
           <Route index element={<CreateProduct />} />
-          <Route path="add-image" element={<AddImage />} />
+          {/* <Route path="add-image" element={<AddImage />} /> */}
+          <Route path="update" element={<UpdateComponent />} />
           <Route path="order" element={<Order />} />
         </Route>
 

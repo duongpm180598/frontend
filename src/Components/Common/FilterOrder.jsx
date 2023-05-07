@@ -8,8 +8,8 @@ import { isAdmin } from '../../Services/auth.service';
 
 const sortOptions = [
   { name: 'Default', value: {} },
-  { name: 'Thời Gian Tạo (Giảm Dần)', value: { sort_by: 'created_at', order: 'desc' } },
-  { name: 'Thời Gian Tạo (Tăng Dần)', value: { sort_by: 'created_at', order: 'asc' } },
+  { name: 'Mới Nhất', value: { sort_by: 'created_at', order: 'desc' } },
+  { name: 'Cũ Nhất', value: { sort_by: 'created_at', order: 'asc' } },
 ];
 
 const statusOrder = [

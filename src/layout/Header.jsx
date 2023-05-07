@@ -13,17 +13,18 @@ export default function Header() {
   const navigate = useNavigate();
   const [totalQuantity, setTotalQuantity] = useState();
   const quantity = useSelector(getTotalQuantity);
+  console.log('total quantity ::', totalQuantity);
   const navigation =
     isAdmin() == 'ADMIN'
       ? [
-          { name: 'Home', link: '/' },
-          { name: 'Cart', link: '/cart' },
-          { name: 'Manager', link: '/manager' },
+          { name: 'Trang Chủ', link: '/' },
+          { name: 'Giỏ Hàng', link: '/cart' },
+          { name: 'Quản Lý', link: '/manager' },
         ]
       : [
-          { name: 'Home', link: '/' },
-          { name: 'Cart', link: '/cart' },
-          { name: 'Order', link: '/order' },
+          { name: 'Trang Chủ', link: '/' },
+          { name: 'Giỏ Hàng', link: '/cart' },
+          { name: 'Đơn Hàng', link: '/order' },
         ];
 
   const [open, setOpen] = useState(false);
@@ -39,7 +40,7 @@ export default function Header() {
         navigate('/login');
       })
       .catch((e) => {
-        console.log('called in header: ', e);
+        navigate('/login');
       });
   };
 
@@ -142,10 +143,10 @@ export default function Header() {
 
                   {/* Search */}
                   {/* <input type="text" /> */}
-                  <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
+                  {/* <a href="#" className="ml-2 p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
                     <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
-                  </a>
+                  </a> */}
                 </div>
 
                 {/* Logo (lg-) */}
@@ -157,12 +158,12 @@ export default function Header() {
                 <div className="flex flex-1 items-center justify-end">
                   <div className="flex items-center lg:ml-8">
                     <div className="flex space-x-8">
-                      <div className="hidden lg:flex">
+                      {/* <div className="hidden lg:flex">
                         <a href="#" className="-m-2 p-2 text-gray-400 hover:text-gray-500">
                           <span className="sr-only">Search</span>
                           <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
                         </a>
-                      </div>
+                      </div> */}
 
                       <div className="flex">
                         <NavLink to="/cart" className="group -m-2 flex items-center p-2">

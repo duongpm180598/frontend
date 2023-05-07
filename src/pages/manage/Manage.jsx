@@ -9,7 +9,7 @@ import { classNames } from '../../utils';
 
 const navigation = [
   { name: 'Tạo Sản Phẩm', link: '/manager', icon: FolderIcon },
-  { name: 'Thêm Ảnh', link: 'add-image', icon: ServerIcon },
+  { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
   { name: 'Đơn Hàng', link: 'order', icon: ShoppingCartIcon },
   { name: 'Trang Chủ', link: '../', icon: HomeIcon },
 ];
@@ -132,7 +132,7 @@ function ManageComponent() {
 
           <div className="xl:pl-72 h-screen overflow-y-scroll">
             {/* Sticky search header */}
-            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-gray-50 px-4 shadow-sm sm:px-6 lg:px-8">
+            <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-6 border-b border-white/5 bg-gray-50 lg:bg-[#f6f6f6] px-4 shadow-sm sm:px-6 lg:px-8">
               <button
                 type="button"
                 className="-m-2.5 p-2.5 text-gray-800 xl:hidden"
@@ -143,7 +143,7 @@ function ManageComponent() {
               </button>
             </div>
 
-            <main className="w-full bg-gray-50 h-screen">
+            <main className="w-full bg-[#f6f6f6] border-t-0  border rounded min-h-screen">
               <Outlet></Outlet>
             </main>
           </div>

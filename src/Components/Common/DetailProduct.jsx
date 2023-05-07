@@ -6,7 +6,10 @@ import { CurrencyDollarIcon, GlobeAmericasIcon } from '@heroicons/react/24/outli
 import { formatMoney } from '../../utils';
 import { useDispatch } from 'react-redux';
 import { addToCart, removeQuantityWhenError } from '../../redux/cart.slice';
+import Loading from './Loading';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -16,10 +19,14 @@ const DetailProduct = () => {
     state: { slug },
   } = useLocation();
 
+  const notify = (type) => toast('Thêm Sản Phẩm Thành Công', { type });
+
   // state
   const [product, setProduct] = useState();
   const [variant, setVariant] = useState({ size: '', color: '', number: '', price: '' });
   const [sizes, setSizes] = useState([]);
+  const [check, setCheck] = useState(false);
+  const [listVariants, setListVariants] = useState([]);
 
   // initial data;
   const description =
@@ -77,14 +84,15 @@ const DetailProduct = () => {
   const handleAddToCart = () => {
     const id_variant = getVariant(variant.size, variant.color)[0];
     const data = { variant_id: id_variant, quantity: 1 };
+    const resolveWithSomeData = new Promise((resolve) => setTimeout(() => resolve('world'), 3000));
     dispatch(addToCart());
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
       .then((res) => {
-        alert('Thêm Vào Giỏ Hành Thành Công');
+        notify('success');
       })
       .catch((e) => {
-        console.log('e ::', e);
+        notify('error');
         dispatch(removeQuantityWhenError());
       });
   };
@@ -95,18 +103,21 @@ const DetailProduct = () => {
       .getWithToken(stringQuery)
       .then((res) => {
         const sizeStore = [];
+        // console.log('res.product_variant::', res.product_variants);
         res.product_variants.forEach((x) => {
           x.variant_attributes.forEach((y) => {
             if (y.name === 'Size' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
           });
         });
+        const initValue = res.product_variants[0].variant_attributes;
+        setListVariants(res.product_variants);
         setSizes(sizeStore);
         setProduct(res);
       })
       .catch((e) => console.log('e ::', e));
   }, []);
 
-  if (!product) return <h1>Loading...</h1>;
+  if (!product) return <Loading></Loading>;
   return (
     <>
       <div className="bg-white">
@@ -161,6 +172,7 @@ const DetailProduct = () => {
                             key={index}
                             value={size}
                             onClick={() => {
+                              setCheck(false);
                               setVariant({ ...variant, size, color: '' });
                             }}
                             className={({ active, checked }) =>
@@ -170,7 +182,8 @@ const DetailProduct = () => {
                                 checked
                                   ? 'border-transparent bg-indigo-600 text-white hover:bg-indigo-700'
                                   : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
-                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 text-black'
+                                // check ? 'first:bg-indigo-600 first:text-white' : '',
+                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 text-black '
                               )
                             }
                             disabled={false}
@@ -195,6 +208,7 @@ const DetailProduct = () => {
                               key={index}
                               value={x}
                               onClick={() => {
+                                setCheck(false);
                                 setVariant({ ...variant, color: x });
                               }}
                               className={({ active, checked }) =>
@@ -202,7 +216,8 @@ const DetailProduct = () => {
                                   'ring-gray-900',
                                   active && checked ? 'ring ring-offset-1' : '',
                                   !active && checked ? 'ring-1' : '',
-                                  'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
+                                  // check ? 'first:ring first:ring-offset-1' : '',
+                                  'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none '
                                 )
                               }
                             >
@@ -284,6 +299,8 @@ const DetailProduct = () => {
                 </section>
               </div>
             </div>
+            {/* <button onClick={notify}>Notify!</button> */}
+            <ToastContainer />
           </div>
         </div>
       </div>

@@ -9,6 +9,9 @@ import { useEffect, useState } from 'react';
 import { APIClient } from '../../helper/api_helper';
 import Loading from '../../Components/Common/Loading';
 import { isAdmin } from '../../Services/auth.service';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Initial Data :
 const statusOrder = [
   {
@@ -47,7 +50,8 @@ const statusOrder = [
 
 function DetailOrder() {
   const checkAdmin = isAdmin();
-  console.log('check admin ::', checkAdmin);
+  const notify = (message) => toast(`${message}`, { type: 'success' });
+  // console.log('check admin ::', checkAdmin);
   const [currOrder, setCurrOrder] = useState();
 
   let {
@@ -62,7 +66,8 @@ function DetailOrder() {
     new APIClient()
       .updateWithToken(`${process.env.REACT_APP_API_URL}/orders/${currOrder.id}/confirm`)
       .then((res) => {
-        alert('Đã Xác Nhận Đơn Hàng');
+        // alert('Đã Xác Nhận Đơn Hàng');
+        notify('Xác Nhận Thành Công');
         setCurrOrder({ ...currOrder, status: 'READY_TO_PICK' });
       })
       .catch((e) => {
@@ -74,7 +79,8 @@ function DetailOrder() {
     new APIClient()
       .updateWithToken(`${process.env.REACT_APP_API_URL}/orders/${currOrder.id}/cancel`)
       .then((res) => {
-        alert('Đã Hủy Đơn Hàng');
+        // alert('Đã Hủy Đơn Hàng');
+        notify('Đã Hủy Đơn Hàng');
         setCurrOrder({ ...currOrder, status: 'CANCEL' });
       })
       .catch((e) => {
@@ -210,6 +216,7 @@ function DetailOrder() {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </main>
     </div>
   );

@@ -38,8 +38,10 @@ const fetchingCart =
     const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
     dispatch(statusPending());
     const response = await new APIClient().getWithToken(url_cart, params);
+    let totalProducts = 0;
     const formatResponse = response.items.map((x) => {
       const [size, color] = x.attributes;
+      totalProducts += x.quantity;
       return {
         id: x.id,
         variant_id: x.variant_id,
@@ -53,19 +55,25 @@ const fetchingCart =
       };
     });
     dispatch(statusResolve());
-    dispatch(fetchCart({ products: formatResponse, total: response.total }));
+    dispatch(fetchQuantity(totalProducts));
+    dispatch(fetchCart({ products: formatResponse }));
   };
 
 const fetchingData = (params) => async (dispatch) => {
+  let quantity = 0;
   const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
   const url_products = `${process.env.REACT_APP_API_URL}/products`;
   const promiseProduct = new APIClient().getWithToken(url_products, params);
   const promiseCart = new APIClient().getWithToken(url_cart);
   dispatch(statusPending());
   const response = await Promise.all([promiseProduct, promiseCart]);
+  response[1].items.forEach((x) => {
+    quantity += x.quantity;
+  });
   dispatch(statusResolve());
   dispatch(fetchProducts(response[0].products));
-  dispatch(fetchQuantity(response[1].total));
+
+  dispatch(fetchQuantity(quantity));
 };
 
 const fetchingDataGHN = () => async (dispatch) => {

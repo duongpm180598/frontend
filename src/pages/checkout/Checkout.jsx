@@ -8,11 +8,14 @@ import { getCart, getDistricts, getProvinces, getWards } from '../../redux/selec
 import { APIClient } from '../../helper/api_helper';
 import { fetchDistricts, fetchWards } from '../../redux/GHN.slice';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { fetchQuantity } from '../../redux/cart.slice';
 
 export default function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const notify = (message, type) => toast(message, { type });
   // selector
   const provinces = useSelector(getProvinces);
   const districts = useSelector(getDistricts);
@@ -100,8 +103,11 @@ export default function Checkout() {
       .createWithToken(`${process.env.REACT_APP_API_URL}/orders`, data)
       .then((res) => {
         if (data.payment.gateway === 'CASH') {
-          alert('Bạn đã đặt hàng thành công');
-          navigate('/order');
+          notify('Đặt Hàng Thành Công', 'success');
+          dispatch(fetchQuantity(0));
+          setTimeout(() => {
+            navigate('/order');
+          }, 3000);
         } else if (data.payment.gateway === 'VNPAY' || data.payment.gateway === 'ZALOPAY') {
           const order_code = res.code;
           if (data.payment.gateway === 'VNPAY') {
@@ -443,6 +449,7 @@ export default function Checkout() {
             </div>
           </div>
         </form>
+        <ToastContainer />
       </div>
     </div>
   );
