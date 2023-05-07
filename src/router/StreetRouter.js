@@ -15,8 +15,12 @@ import Protected from './Protected';
 import DetailOrder from '../pages/detailOrder/DetailOrder';
 import CreateProduct from '../Components/Admin/CreateProduct';
 import AddImage from '../Components/Admin/AddImage';
+import ImportProduct from '../pages/import-product/ImportProduct';
+import ProductStatistic from '../pages/statistics/ProductStatistic';
 import PermissionProtected from './PermissionProtected';
 import UpdateComponent from '../Components/Admin/Update';
+import RevenueStatistic from '../pages/statistics/RevenueStatistic';
+import ImportStatistic from '../pages/statistics/ImportStatistic';
 function StreetRouter() {
   return (
     <>
@@ -80,6 +84,10 @@ function StreetRouter() {
           {/* <Route path="add-image" element={<AddImage />} /> */}
           <Route path="update" element={<UpdateComponent />} />
           <Route path="order" element={<Order />} />
+          <Route path="import" element={<ImportProduct />} />
+          <Route path="product-statistic" element={<ProductStatistic />} />
+          <Route path="revenue-statistic" element={<RevenueStatistic />} />
+          <Route path="import-statistic" element={<ImportStatistic />} />
         </Route>
 
         <Route path="/product-detail/:slug" element={<DetailProduct />} />

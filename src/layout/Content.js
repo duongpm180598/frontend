@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 function Content() {
   return (
     <>
-      <StreetRouter></StreetRouter>;
+      <StreetRouter></StreetRouter>
     </>
   );
 }

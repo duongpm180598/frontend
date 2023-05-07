@@ -6,6 +6,9 @@ import { fetchOrder } from '../order.slice';
 import { fetchProducts } from '../products.slice';
 import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
+import { fetchSuppliers } from '../suppliers.slice';
+import { fetchProductVariant } from '../productVariant.slice';
+import { fetchStatisticData } from '../statistic.slice';
 
 const fetchingCategoryAndAttribute =
   (params = {}) =>
@@ -114,6 +117,89 @@ const fetchingCategory = () => async (dispatch) => {
   dispatch(fetchCategory(response));
 };
 
+const fetchingSupplier = () => async (dispatch) => {
+  const url_suppliers = `${process.env.REACT_APP_API_URL}/suppliers`;
+  const response = await new APIClient().getWithToken(url_suppliers);
+  dispatch(fetchSuppliers(response));
+};
+
+const fetchingProductVariant = (product_id) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/products/${product_id}`;
+  const response = await new APIClient().getWithToken(url_variant);
+  dispatch(fetchProductVariant(response.product_variants));
+};
+
+// Product Statistic
+const fetchingProductStatisticsInRange = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  const data = response.map((item) => ({ ...item, sold: Number(item.sold) }));
+  dispatch(fetchStatisticData(data));
+};
+
+const exportProductStatisticsInRange = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/export`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+const fetchingProductStatisticsInMonth = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/in-month`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  const data = response.map((item) => ({ ...item, sold: Number(item.sold) }));
+  dispatch(fetchStatisticData(data));
+};
+
+const exportProductStatisticsInMonth = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/product-statistics/export/in-month`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+// Revenue Statistic
+const fetchingRevenueStatisticsInRange = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  dispatch(fetchStatisticData(response));
+};
+
+const exportRevenueStatisticsInRange = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics/export`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+const fetchingRevenueStatisticsInYear = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics/in-year`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  dispatch(fetchStatisticData(response));
+};
+
+const exportRevenueStatisticsInYear = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/revenue-statistics/export/in-year`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+// Import Statistic
+const fetchingImportStatisticsInMonth = (params) => async (dispatch) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/import-statistics/in-month`;
+  const response = await new APIClient().getWithToken(url_variant, params);
+  dispatch(fetchStatisticData(response));
+};
+
+const exportImportStatisticsInMonth = async (filename, params) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/import-statistics/export/in-month`;
+  await new APIClient().exportFile(url_variant, filename, params);
+};
+
+const createBill = async (data) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/bills`;
+  const response = await new APIClient().createWithToken(url_variant, data);
+  return response.id;
+};
+
+const exportBill = async (id, filename) => {
+  const url_variant = `${process.env.REACT_APP_API_URL}/bills/${id}/export`;
+  await new APIClient().exportFile(url_variant, filename);
+};
+
 export {
   fetchingCategoryAndAttribute,
   fetchingProducts,
@@ -122,4 +208,18 @@ export {
   fetchingDataGHN,
   fetchingOrder,
   fetchingCategory,
+  fetchingSupplier,
+  fetchingProductVariant,
+  fetchingProductStatisticsInRange,
+  fetchingProductStatisticsInMonth,
+  exportProductStatisticsInMonth,
+  exportProductStatisticsInRange,
+  createBill,
+  exportBill,
+  fetchingRevenueStatisticsInRange,
+  exportRevenueStatisticsInRange,
+  fetchingRevenueStatisticsInYear,
+  exportRevenueStatisticsInYear,
+  fetchingImportStatisticsInMonth,
+  exportImportStatisticsInMonth,
 };
