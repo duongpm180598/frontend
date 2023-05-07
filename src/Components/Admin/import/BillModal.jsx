@@ -113,6 +113,7 @@ const BillModal = ({ isModalOpen, toggleModal, selectedRowKeys, selectedProduct,
         </Button>,
       ]}
       width={700}
+      className='bill-modal'
     >
       <h3>
         <b>Nhà cung cấp: </b>
