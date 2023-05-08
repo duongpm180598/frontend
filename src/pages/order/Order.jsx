@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { classNames, filterParams, formatDate, formatMoney } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchingOrder } from '../../redux/middleware';
-import { getOrder, getStatus } from '../../redux/selector';
+import { getOrder, getStatus, getTotalOrder } from '../../redux/selector';
 import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
 import { useNavigate } from 'react-router-dom';
 import { isAdmin } from '../../Services/auth.service';
+import Pagination from '../../Components/Common/Pagination';
 
 function Order() {
   // Initial data
@@ -17,10 +18,21 @@ function Order() {
     DONE: 'Giao Hàng Thành Công',
     CANCEL: 'Đã Hủy Đơn',
   };
+  const listOrder = useSelector(getOrder);
+  const totalOrder = useSelector(getTotalOrder);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5;
+  const totalPages = totalOrder ? Math.ceil(totalOrder / ordersPerPage) : 0;
 
   // state
 
-  const [params, setParams] = useState({ status: '', sort_by: '', order: '', limit: 5 });
+  const [params, setParams] = useState({
+    status: '',
+    sort_by: '',
+    order: '',
+    limit: ordersPerPage,
+    offset: 0,
+  });
 
   // selector
   const statusGlobal = useSelector(getStatus);
@@ -31,7 +43,6 @@ function Order() {
     const newParams = filterParams(params);
     dispatch(fetchingOrder(newParams));
   }, [params]);
-  const listOrder = useSelector(getOrder);
 
   return (
     <div className="bg-gray-50">
@@ -104,6 +115,13 @@ function Order() {
               )}
             </div>
           )}
+          <Pagination
+            setParams={setParams}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            ordersPerPage={ordersPerPage}
+          ></Pagination>
         </section>
       </main>
     </div>

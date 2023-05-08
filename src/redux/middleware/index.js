@@ -2,7 +2,7 @@ import { APIClient } from '../../helper/api_helper';
 import { fetchProvinces } from '../GHN.slice';
 import { fetchCart, fetchQuantity } from '../cart.slice';
 import { fetchCategory } from '../category.slice';
-import { fetchOrder } from '../order.slice';
+import { fetchOrder, fetchTotalOrder } from '../order.slice';
 import { fetchProducts } from '../products.slice';
 import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
@@ -109,6 +109,7 @@ const fetchingOrder = (params) => async (dispatch) => {
     };
   });
   dispatch(fetchOrder(dataFormat));
+  dispatch(fetchTotalOrder(response.total));
 };
 
 const fetchingCategory = () => async (dispatch) => {

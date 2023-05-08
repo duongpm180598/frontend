@@ -25,7 +25,6 @@ export default function FilterOrder({ params, setParams }) {
   const [currStatus, setCurrStatus] = useState('Trạng Thái Đơn');
   const [currSort, setCurrSort] = useState('Sắp Xếp');
 
-  //   console.log('params ::', params);
   return (
     <div className="bg-gray-50">
       <div className="mx-auto max-w-2xl sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8 lg:pt-2">
