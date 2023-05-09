@@ -1,5 +1,5 @@
 import { CheckSquareOutlined, ExportOutlined } from '@ant-design/icons';
-import { Line } from '@ant-design/plots';
+import { Line, Pie } from '@ant-design/plots';
 import { Button, Card, DatePicker, Form, Modal, Select } from 'antd';
 import { default as React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,6 +60,28 @@ const RevenueStatistic = () => {
       },
     ],
     smooth: true,
+  };
+
+  const pieConfig = {
+    appendPadding: 10,
+    data: statisticData,
+    angleField: 'revenue',
+    colorField: chartType === 'range' ? 'year' : 'month',
+    radius: 0.9,
+    label: {
+      type: 'inner',
+      offset: '-30%',
+      content: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
+      style: {
+        fontSize: 14,
+        textAlign: 'center',
+      },
+    },
+    interactions: [
+      {
+        type: 'element-active',
+      },
+    ],
   };
 
   const handleChangeType = (value) => {
@@ -162,11 +184,11 @@ const RevenueStatistic = () => {
           <div>
             <Button
               type="danger"
-              style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}
+              style={{ display: 'flex', alignItems: 'center', marginRight: '20px', backgroundColor: '#FF4D4F' }}
               htmlType="submit"
             >
               <CheckSquareOutlined />
-              Confirm
+              Xác nhận
             </Button>
           </div>
         </Form>
@@ -177,15 +199,16 @@ const RevenueStatistic = () => {
             <div className="flex justify-end">
               <Button
                 type="primary"
-                style={{ display: 'flex', alignItems: 'center', float: '' }}
+                style={{ display: 'flex', alignItems: 'center', float: '', backgroundColor: '#1677ff' }}
                 onClick={handleExport}
               >
                 <ExportOutlined />
                 Xuất báo cáo
               </Button>
             </div>
-
             <Line {...config} />
+            <h2 style={{ textAlign: 'center', marginTop: 20 }}>Biểu đồ tròn</h2>
+            <Pie {...pieConfig} />
           </React.Fragment>
         ) : (
           ''

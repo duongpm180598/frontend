@@ -68,14 +68,14 @@ const ImportProduct = () => {
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
+            icon={<SearchOutlined fontSize='14' />}
             size="small"
             style={{
               width: 90,
               backgroundColor: '#1677ff',
             }}
           >
-            Search
+            Tìm kiếm
           </Button>
           <Button
             onClick={() => clearFilters && handleResetFilter(clearFilters)}
@@ -84,7 +84,7 @@ const ImportProduct = () => {
               width: 90,
             }}
           >
-            Reset
+            Xóa hết
           </Button>
         </Space>
       </div>
@@ -238,7 +238,7 @@ const ImportProduct = () => {
   };
 
   return (
-    <div style={{padding: 20}}>
+    <div style={{ padding: 20 }}>
       <Steps
         current={activeStep}
         items={[
@@ -285,6 +285,7 @@ const ImportProduct = () => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
+                backgroundColor: '#1677ff',
               }}
               onClick={() => toggleModal(true)}
               type="primary"

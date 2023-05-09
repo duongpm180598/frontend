@@ -119,11 +119,11 @@ const ImportStatistic = () => {
           <div>
             <Button
               type="danger"
-              style={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}
+              style={{ display: 'flex', alignItems: 'center', marginRight: '20px', backgroundColor: '#FF4D4F' }}
               htmlType="submit"
             >
               <CheckSquareOutlined />
-              Confirm
+              Xác nhận
             </Button>
           </div>
         </Form>
@@ -134,7 +134,7 @@ const ImportStatistic = () => {
             <div className="flex justify-end">
               <Button
                 type="primary"
-                style={{ display: 'flex', alignItems: 'center', float: '' }}
+                style={{ display: 'flex', alignItems: 'center', float: '', backgroundColor: '#1677ff' }}
                 onClick={handleExport}
               >
                 <ExportOutlined />
