@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { classNames, filterParams, formatDate, formatMoney } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchingOrder } from '../../redux/middleware';
-import { getOrder, getStatus } from '../../redux/selector';
+import { getOrder, getStatus, getTotalOrder } from '../../redux/selector';
 import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { isAdmin } from '../../Services/auth.service';
+import Pagination from '../../Components/Common/Pagination';
 
 function Order() {
   // Initial data
@@ -17,24 +18,33 @@ function Order() {
     DONE: 'Giao Hàng Thành Công',
     CANCEL: 'Đã Hủy Đơn',
   };
+  const listOrder = useSelector(getOrder);
+  const totalOrder = useSelector(getTotalOrder);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 5;
+  const totalPages = totalOrder ? Math.ceil(totalOrder / ordersPerPage) : 0;
 
   // state
 
-  const [params, setParams] = useState({ status: '', sort_by: '', order: '', limit: 5 });
+  const [params, setParams] = useState({
+    status: '',
+    sort_by: '',
+    order: '',
+    limit: ordersPerPage,
+    offset: 0,
+  });
 
   // selector
   const statusGlobal = useSelector(getStatus);
   const dispatch = useDispatch();
   const naviagte = useNavigate();
-
   useEffect(() => {
     const newParams = filterParams(params);
     dispatch(fetchingOrder(newParams));
   }, [params]);
-  const listOrder = useSelector(getOrder);
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 min-h-[100vh]">
       <FilterOrder params={params} setParams={setParams} />
       <main className="mx-auto max-w-2xl pb-24 sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8 lg:pt-2">
         <section aria-labelledby="products-heading" className="mt-6">
@@ -104,6 +114,16 @@ function Order() {
               )}
             </div>
           )}
+          {listOrder.length ? (
+            <Pagination
+              link="/manager/order"
+              setParams={setParams}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              ordersPerPage={ordersPerPage}
+            ></Pagination>
+          ) : null}
         </section>
       </main>
     </div>

@@ -22,6 +22,7 @@ const initialState = {
       },
     },
   ],
+  totalOrder: 0,
 };
 
 export const orderSlice = createSlice({
@@ -31,10 +32,13 @@ export const orderSlice = createSlice({
     fetchOrder: (state, action) => {
       state.listOrder = action.payload;
     },
+    fetchTotalOrder: (state, action) => {
+      state.totalOrder = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { fetchOrder } = orderSlice.actions;
+export const { fetchOrder, fetchTotalOrder } = orderSlice.actions;
 
 export default orderSlice.reducer;

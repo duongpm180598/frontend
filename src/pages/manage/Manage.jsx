@@ -19,11 +19,11 @@ const navigation = [
   { name: 'Tạo Sản Phẩm', link: '/manager', icon: FolderIcon },
   { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
   { name: 'Đơn Hàng', link: 'order', icon: ShoppingCartIcon },
-  { name: 'Trang Chủ', link: '../', icon: HomeIcon },
   { name: 'Nhập hàng', link: 'import', icon: DocumentArrowDownIcon },
   { name: 'Thống kê sản phẩm', link: 'product-statistic', icon: ChartPieIcon },
   { name: 'Thống kê doanh thu', link: 'revenue-statistic', icon: ChartPieIcon },
   { name: 'Thống kê nhập hàng', link: 'import-statistic', icon: ChartPieIcon },
+  { name: 'Trang Chủ', link: '../', icon: HomeIcon },
 ];
 function ManageComponent() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -2,8 +2,8 @@ import { APIClient } from '../../helper/api_helper';
 import { fetchProvinces } from '../GHN.slice';
 import { fetchCart, fetchQuantity } from '../cart.slice';
 import { fetchCategory } from '../category.slice';
-import { fetchOrder } from '../order.slice';
-import { fetchProducts } from '../products.slice';
+import { fetchOrder, fetchTotalOrder } from '../order.slice';
+import { fetchProducts, fetchTotalProduct } from '../products.slice';
 import { statusPending, statusResolve } from '../status.slice';
 import { fetchVariantAttribute } from '../variantAttribute.slice';
 import { fetchSuppliers } from '../suppliers.slice';
@@ -62,7 +62,7 @@ const fetchingCart =
 const fetchingData = (params) => async (dispatch) => {
   let quantity = 0;
   const url_cart = `${process.env.REACT_APP_API_URL}/cart-items`;
-  const url_products = `${process.env.REACT_APP_API_URL}/products`;
+  const url_products = `${process.env.REACT_APP_API_URL}/products/`;
   const promiseProduct = new APIClient().getWithToken(url_products, params);
   const promiseCart = new APIClient().getWithToken(url_cart);
   dispatch(statusPending());
@@ -72,6 +72,7 @@ const fetchingData = (params) => async (dispatch) => {
   });
   dispatch(statusResolve());
   dispatch(fetchProducts(response[0].products));
+  dispatch(fetchTotalProduct(response[0].total));
 
   dispatch(fetchQuantity(quantity));
 };
@@ -109,6 +110,7 @@ const fetchingOrder = (params) => async (dispatch) => {
     };
   });
   dispatch(fetchOrder(dataFormat));
+  dispatch(fetchTotalOrder(response.total));
 };
 
 const fetchingCategory = () => async (dispatch) => {
