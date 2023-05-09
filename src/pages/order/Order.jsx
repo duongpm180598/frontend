@@ -5,7 +5,7 @@ import { fetchingOrder } from '../../redux/middleware';
 import { getOrder, getStatus, getTotalOrder } from '../../redux/selector';
 import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { isAdmin } from '../../Services/auth.service';
 import Pagination from '../../Components/Common/Pagination';
 
@@ -38,7 +38,6 @@ function Order() {
   const statusGlobal = useSelector(getStatus);
   const dispatch = useDispatch();
   const naviagte = useNavigate();
-
   useEffect(() => {
     const newParams = filterParams(params);
     dispatch(fetchingOrder(newParams));
@@ -116,6 +115,7 @@ function Order() {
             </div>
           )}
           <Pagination
+            link="/manager/order"
             setParams={setParams}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
