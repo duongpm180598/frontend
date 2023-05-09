@@ -44,7 +44,7 @@ function Order() {
   }, [params]);
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 min-h-[100vh]">
       <FilterOrder params={params} setParams={setParams} />
       <main className="mx-auto max-w-2xl pb-24 sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8 lg:pt-2">
         <section aria-labelledby="products-heading" className="mt-6">
@@ -114,14 +114,16 @@ function Order() {
               )}
             </div>
           )}
-          <Pagination
-            link="/manager/order"
-            setParams={setParams}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            ordersPerPage={ordersPerPage}
-          ></Pagination>
+          {listOrder.length ? (
+            <Pagination
+              link="/manager/order"
+              setParams={setParams}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              ordersPerPage={ordersPerPage}
+            ></Pagination>
+          ) : null}
         </section>
       </main>
     </div>

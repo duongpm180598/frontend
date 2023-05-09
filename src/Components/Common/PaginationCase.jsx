@@ -19,9 +19,9 @@ export default function PaginationCase({
       <button
         key={x}
         onClick={() => {
-          setCurrentPage(x);
-          setParams((prev) => ({ ...prev, offset: (x - 1) * ordersPerPage }));
-          x === 1 ? navigate(`${link}`) : navigate(`${link}/?page=${x}`);
+          setCurrentPage(x + 1);
+          setParams((prev) => ({ ...prev, offset: x * ordersPerPage }));
+          x === 0 ? navigate(`${link}`) : navigate(`${link}/?page=${x + 1}`);
         }}
         className={classNames(
           'inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700',

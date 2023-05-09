@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategory, getProducts, getStatus } from '../../redux/selector';
+import { getCategory, getProducts, getStatus, getTotalProducts } from '../../redux/selector';
 import { fetchingData } from '../../redux/middleware';
 import ProductComponent from '../../Components/Common/ProductComponent';
 import Loading from '../../Components/Common/Loading';
@@ -8,15 +8,27 @@ import FilterHome from '../../Components/Common/FilterHome';
 import { filterParams } from '../../utils';
 import { APIClient } from '../../helper/api_helper';
 import MostViewProducts from '../../Components/Common/MostView/MostViewProducts';
+import Pagination from '../../Components/Common/Pagination';
 
 function Home() {
-  const dispatch = useDispatch();
-  const [params, setParams] = useState({ name: '', category_id: '', sort_by: '', order: '' });
-  const [hotView, setHostView] = useState('false');
   // selector
   const products = useSelector(getProducts);
   const category = useSelector(getCategory);
   const statusGlobal = useSelector(getStatus);
+  const totalProducts = useSelector(getTotalProducts);
+  const [currentPage, setCurrentPage] = useState(1);
+  const dispatch = useDispatch();
+  const ordersPerPage = 20;
+  const totalPages = totalProducts ? Math.ceil(totalProducts / ordersPerPage) : 0;
+  const [params, setParams] = useState({
+    name: '',
+    category_id: '',
+    sort_by: '',
+    order: '',
+    limit: ordersPerPage,
+    offset: 0,
+  });
+  const [hotView, setHostView] = useState('false');
   useEffect(() => {
     const newParams = filterParams(params);
     dispatch(fetchingData(newParams));
@@ -71,6 +83,16 @@ function Home() {
             )}
           </div>
         )}
+        {products?.length ? (
+          <Pagination
+            link=""
+            setParams={setParams}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            ordersPerPage={ordersPerPage}
+          ></Pagination>
+        ) : null}
       </div>
     </div>
   );
