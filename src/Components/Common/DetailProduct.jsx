@@ -30,7 +30,7 @@ const DetailProduct = () => {
 
   // initial data;
   const description =
-    '<p>Sản phẩm thời trang nam mới nhất của chúng tôi luôn hiện đại và lịch lãm</p> <p>Thiết kế là một sự kết hợp tuyệt vời giữa phong cách truyền thống và hiện đại, với cổ áo thắt nơ sang trọng và chi tiết tay áo được làm cong nhẹ giúp tạo nên phong cách cá tính và trẻ trung</p>';
+    '<p>Sản phẩm luôn được cập nhật mới nhất từ các nhà cung cấp</p> <p>Thiết kế là một sự kết hợp tuyệt vời giữa phong cách truyền thống và hiện đại, với sự mỏng nhẹ và bo tròn viền ở giúp tạo nên phong cách cá tính và trẻ trung</p>';
   const colorHash = {
     Xám: 'bg-[#A9A9A9]',
     Trắng: 'bg-[#FFFFFF]',
@@ -40,6 +40,10 @@ const DetailProduct = () => {
     Đen: 'bg-[#000000]',
     Vàng: 'bg-[#FFD700]',
     Be: 'bg-[#F5F5DC]',
+    Bạc: 'bg-[#C0C0C0]',
+    Tím: 'bg-[#eb34c9]',
+    Đỏ: 'bg-[#de0b2e]',
+    Hồng: 'bg-[#FF1493]',
   };
 
   const dispatch = useDispatch();
@@ -49,10 +53,10 @@ const DetailProduct = () => {
     { name: 'Ưu Đãi Với Khách Quen', icon: CurrencyDollarIcon, description: 'Nhiều Mã Giảm Giá' },
   ];
   const details = [
-    'Được làm từ chất liệu đã chọn lọc',
-    'Quá trình làm tuân thủ quy chuẩn',
+    'Sản Phẩm Chính Hãng',
+    'Giá Bán Cạnh Tranh',
     'Luôn được kiểm tra trước khi giao',
-    'Ảnh cam kết giống thật',
+    'Đổi Trả Và Bảo Hành',
   ];
 
   const getColor = (size) => {
@@ -103,10 +107,9 @@ const DetailProduct = () => {
       .getWithToken(stringQuery)
       .then((res) => {
         const sizeStore = [];
-        // console.log('res.product_variant::', res.product_variants);
         res.product_variants.forEach((x) => {
           x.variant_attributes.forEach((y) => {
-            if (y.name === 'Size' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
+            if (y.name === 'Dung lượng' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
           });
         });
         const initValue = res.product_variants[0].variant_attributes;
@@ -142,7 +145,7 @@ const DetailProduct = () => {
                       src={x.url}
                       alt={x.external_name}
                       className={classNames(
-                        index == 0 ? 'lg:col-span-2 lg:row-span-2' : 'hidden lg:block',
+                        index == 0 ? 'lg:col-span-2 lg:row-span-2 w-full h-full' : 'hidden lg:block',
                         'rounded-lg'
                       )}
                     />

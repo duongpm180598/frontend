@@ -80,20 +80,70 @@ function StreetRouter() {
             </AuthProtected>
           }
         >
-          <Route index element={<CreateProduct />} />
-          {/* <Route path="add-image" element={<AddImage />} /> */}
-          <Route path="update" element={<UpdateComponent />} />
-          <Route path="order" element={<Order />} />
-          <Route path="import" element={<ImportProduct />} />
-          <Route path="product-statistic" element={<ProductStatistic />} />
-          <Route path="revenue-statistic" element={<RevenueStatistic />} />
-          <Route path="import-statistic" element={<ImportStatistic />} />
+          <Route
+            path="order"
+            element={
+              <PermissionProtected role={['SELLER', 'ADMIN']}>
+                <Order />
+              </PermissionProtected>
+            }
+          />
+
+          <Route
+            path="create-product"
+            element={
+              <PermissionProtected role={['WAREHOUSESTAFF', 'ADMIN']}>
+                <CreateProduct />
+              </PermissionProtected>
+            }
+          />
+          <Route
+            path="update"
+            element={
+              <PermissionProtected role={['WAREHOUSESTAFF', 'ADMIN']}>
+                <UpdateComponent />
+              </PermissionProtected>
+            }
+          />
+          <Route
+            path="import"
+            element={
+              <PermissionProtected role={['WAREHOUSESTAFF', 'ADMIN']}>
+                <ImportProduct />
+              </PermissionProtected>
+            }
+          />
+
+          <Route
+            path="product-statistic"
+            element={
+              <PermissionProtected role={['ADMIN']}>
+                <ProductStatistic />
+              </PermissionProtected>
+            }
+          />
+          <Route
+            path="revenue-statistic"
+            element={
+              <PermissionProtected role={['ADMIN']}>
+                <RevenueStatistic />
+              </PermissionProtected>
+            }
+          />
+          <Route
+            path="import-statistic"
+            element={
+              <PermissionProtected role={['ADMIN']}>
+                <ImportStatistic />
+              </PermissionProtected>
+            }
+          />
         </Route>
 
         <Route path="/product-detail/:slug" element={<DetailProduct />} />
-        <Route path="*" element={<Page404 />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
+        <Route path="*" element={<Page404 />}></Route>
       </Routes>
     </>
   );
