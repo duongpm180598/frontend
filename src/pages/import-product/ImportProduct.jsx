@@ -1,15 +1,14 @@
-import { FileDoneOutlined, LeftOutlined } from '@ant-design/icons';
 import { SearchOutlined } from '@mui/icons-material';
-import { Button, Input, Space, Steps, Table, Image } from 'antd';
+import { Button, Image, Input, Space, Steps } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import BillModal from '../../Components/Admin/import/BillModal';
+import BillDetail from '../../Components/Admin/import/BillDetail';
+import ProductStep from '../../Components/Admin/import/ProductStep';
+import SupplierStep from '../../Components/Admin/import/SupplierStep';
+import VariantModal from '../../Components/Admin/import/VariantModal';
 import { fetchingProductVariant, fetchingProducts, fetchingSupplier } from '../../redux/middleware';
 import { getProductVariant, getProducts, getSuppliers } from '../../redux/selector';
-import SupplierStep from '../../Components/Admin/import/SupplierStep';
-import ProductStep from '../../Components/Admin/import/ProductStep';
-import VariantModal from '../../Components/Admin/import/VariantModal';
 
 const ImportProduct = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -20,7 +19,6 @@ const ImportProduct = () => {
   const productVariant = useSelector(getProductVariant);
 
   const [selectedSupplier, setSelectedSupplier] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [selectedVariantList, setSelectedVariantList] = useState([]);
 
@@ -30,7 +28,6 @@ const ImportProduct = () => {
   const searchInput = useRef(null);
 
   const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
-  const [isBillModalOpen, setIsBillModalOpen] = useState(false);
 
   // Step
   const handleNext = () => {
@@ -137,7 +134,6 @@ const ImportProduct = () => {
   };
 
   const handleSelectProduct = (item) => {
-    setSelectedProduct(item);
     dispatch(fetchingProductVariant(item.id));
     toggleVariantModal(true);
   };
@@ -147,14 +143,9 @@ const ImportProduct = () => {
     setIsVariantModalOpen(show);
   };
 
-  const toggleBillModal = (show) => {
-    setIsBillModalOpen(show);
-  };
-
   const handleChangeSelectedVariantList = (newVariantList) => {
-    console.log(newVariantList);
-    setSelectedVariantList(newVariantList)
-  }
+    setSelectedVariantList(newVariantList);
+  };
 
   // Column Table
   const supplierColumn = [
@@ -275,8 +266,22 @@ const ImportProduct = () => {
       />
       {activeStep === 0 ? (
         <SupplierStep columns={supplierColumn} dataSource={suppliers} />
+      ) : activeStep === 1 ? (
+        <ProductStep
+          columns={productColumn}
+          dataSource={products}
+          handleBack={handleBack}
+          handleNext={handleNext}
+          selectedVariantList={selectedVariantList}
+        />
       ) : (
-        <ProductStep columns={productColumn} dataSource={products} handleBack={handleBack} />
+        <BillDetail
+          handleBack={handleBack}
+          selectedVariantList={selectedVariantList}
+          handleChangeSelectedVariantList={handleChangeSelectedVariantList}
+          selectedSupplier={selectedSupplier}
+          resetStep={handleResetStep}
+        />
       )}
       <VariantModal
         isOpen={isVariantModalOpen}
@@ -285,54 +290,7 @@ const ImportProduct = () => {
         selectedVariantList={selectedVariantList}
         handleChangeSelectedVariantList={handleChangeSelectedVariantList}
       />
-      {/* <BillModal
-        isModalOpen={isBillModalOpen}
-        toggleModal={toggleBillModal}
-        selectedRowKeys={selectedVariantList}
-        selectedSupplier={selectedSupplier}
-        selectedProduct={selectedProduct}
-        resetStep={handleResetStep}
-      /> */}
     </div>
-    // ) : (
-    //   <React.Fragment>
-    //     <Table
-    //       pagination={{
-    //         position: ['bottomCenter'],
-    //       }}
-    //       rowKey="id"
-    //       columns={variantColumn}
-    //       dataSource={productVariant}
-    //       rowSelection={rowVariantSelection}
-    //     />
-    //     <div className="flex justify-between">
-    //       <Button icon={<LeftOutlined />} style={{ display: 'flex', alignItems: 'center' }} onClick={handleBack}>
-    //         Back
-    //       </Button>
-    //       <Button
-    //         icon={<FileDoneOutlined />}
-    //         style={{
-    //           display: 'flex',
-    //           alignItems: 'center',
-    //           backgroundColor: '#1677ff',
-    //         }}
-    //         onClick={() => toggleModal(true)}
-    //         type="primary"
-    //         disabled={selectedVariantList.length === 0}
-    //       >
-    //         Xuất bill
-    //       </Button>
-    //     </div>
-    //     <BillModal
-    //       isModalOpen={isModalOpen}
-    //       toggleModal={toggleModal}
-    //       selectedRowKeys={selectedVariantList}
-    //       selectedSupplier={selectedSupplier}
-    //       selectedProduct={selectedProduct}
-    //       resetStep={handleResetStep}
-    //     />
-    //   </React.Fragment>
-    // )}
   );
 };
 

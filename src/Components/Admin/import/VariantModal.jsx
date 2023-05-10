@@ -35,12 +35,20 @@ const VariantModal = ({
     currentProductVariant.forEach((variant) => {
       const selectedVariantIndex = newSelectedVariantList.findIndex((item) => item.id === variant.id);
       if (selectedVariantIndex > -1) {
-        newSelectedVariantList[selectedVariantIndex] = {
-          ...newSelectedVariantList[selectedVariantIndex],
-          quantity: variant.quantity,
-        };
+        if (variant.quantity === 0) {
+          newSelectedVariantList.splice(selectedVariantIndex, 1);
+        } else {
+          newSelectedVariantList[selectedVariantIndex] = {
+            ...newSelectedVariantList[selectedVariantIndex],
+            quantity: variant.quantity,
+          };
+        }
       } else {
-        newSelectedVariantList = [...newSelectedVariantList, variant];
+        if (variant.quantity === 0) {
+          return;
+        } else {
+          newSelectedVariantList = [...newSelectedVariantList, variant];
+        }
       }
     });
     handleChangeSelectedVariantList(newSelectedVariantList);
