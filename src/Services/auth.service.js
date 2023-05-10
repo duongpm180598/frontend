@@ -1,11 +1,11 @@
-import { APIClient } from "../helper/api_helper";
+import { APIClient } from '../helper/api_helper';
 // import jwt_decode from "jsonwebtoken";
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 const api = new APIClient();
 
 // Gets the logged in user data from local session
 export const getLoggedInUser = () => {
-  const user = localStorage.getItem("token");
+  const user = localStorage.getItem('token');
   if (user) return JSON.parse(user);
   return null;
 };
@@ -17,8 +17,8 @@ export const isUserAuthenticated = () => {
 
 // check role user
 
-export const isAdmin = () => {
-  const token = localStorage.getItem("token") || "";
+export const userRole = () => {
+  const token = localStorage.getItem('token') || '';
   if (token) {
     const { role } = jwt_decode(token);
     return role;

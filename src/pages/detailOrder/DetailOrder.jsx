@@ -8,7 +8,7 @@ import { classNames, formatDate, formatMoney, getTotalPrice } from '../../utils'
 import { useEffect, useState } from 'react';
 import { APIClient } from '../../helper/api_helper';
 import Loading from '../../Components/Common/Loading';
-import { isAdmin } from '../../Services/auth.service';
+import { userRole } from '../../Services/auth.service';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,7 +49,7 @@ const statusOrder = [
 ];
 
 function DetailOrder() {
-  const checkAdmin = isAdmin();
+  const checkAdmin = userRole();
   const notify = (message) => toast(`${message}`, { type: 'success' });
   // console.log('check admin ::', checkAdmin);
   const [currOrder, setCurrOrder] = useState();
@@ -173,7 +173,7 @@ function DetailOrder() {
                     </dd>
                   </div>
                 </dl>
-                {checkAdmin == 'ADMIN' ? (
+                {checkAdmin == 'ADMIN' || checkAdmin == 'SELLER' ? (
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6 grid grid-cols-12 gap-x-5">
                     <button
                       disabled={currOrder.status !== 'PENDING'}

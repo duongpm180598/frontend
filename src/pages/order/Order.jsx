@@ -6,7 +6,6 @@ import { getOrder, getStatus, getTotalOrder } from '../../redux/selector';
 import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { isAdmin } from '../../Services/auth.service';
 import Pagination from '../../Components/Common/Pagination';
 
 function Order() {

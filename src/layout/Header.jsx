@@ -2,7 +2,7 @@ import { useEffect, useState, Fragment } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { authActions } from '../auth/auth.action';
 import { useNavigate, NavLink } from 'react-router-dom';
-import { isAdmin } from '../Services/auth.service';
+import { userRole } from '../Services/auth.service';
 import { useSelector } from 'react-redux';
 import { getTotalQuantity } from '../redux/selector';
 import { Dialog, Popover, Transition } from '@headlessui/react';
@@ -13,9 +13,8 @@ export default function Header() {
   const navigate = useNavigate();
   const [totalQuantity, setTotalQuantity] = useState();
   const quantity = useSelector(getTotalQuantity);
-  console.log('total quantity ::', totalQuantity);
   const navigation =
-    isAdmin() == 'ADMIN'
+    userRole() !== 'BUYER'
       ? [
           { name: 'Trang Chủ', link: '/' },
           { name: 'Giỏ Hàng', link: '/cart' },

@@ -92,6 +92,8 @@ function CreateProduct() {
 
   const handleSubmit = () => {
     const data = { ...product, description, product_variants: productVariantList };
+    console.log('producVariant ::', productVariantList);
+    console.log('data ::', data);
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/products`, data)
       .then((res) => {
