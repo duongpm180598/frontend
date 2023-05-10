@@ -1,24 +1,17 @@
 import { CheckSquareOutlined, ExportOutlined } from '@ant-design/icons';
 import { DualAxes } from '@ant-design/plots';
-import { Button, Card, DatePicker, Form, Modal, Select } from 'antd';
+import { Button, Card, DatePicker, Form, Modal } from 'antd';
 import { default as React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   exportImportStatisticsInMonth,
-  exportRevenueStatisticsInRange,
-  exportRevenueStatisticsInYear,
-  fetchingImportStatisticsInMonth,
-  fetchingRevenueStatisticsInRange,
-  fetchingRevenueStatisticsInYear,
+  fetchingImportStatisticsInMonth
 } from '../../redux/middleware';
 import { getStatisticData } from '../../redux/selector';
 import { fetchStatisticData } from '../../redux/statistic.slice';
 
-const { RangePicker } = DatePicker;
-
 const ImportStatistic = () => {
   const [form] = Form.useForm();
-  const [chartType, setChartType] = useState('range');
   const [isSubmit, setIsSubmit] = useState(false);
   const statisticData = useSelector(getStatisticData);
   const dispatch = useDispatch();
@@ -45,13 +38,14 @@ const ImportStatistic = () => {
         },
       },
     ],
+    xAxis: {
+      label: {
+        autoRotate: true,
+        autoHide: false,
+        autoEllipsis: false,
+      },
+    },
   };
-
-  // const handleChangeType = (value) => {
-  //   setChartType(value);
-  //   if (isSubmit) setIsSubmit(false);
-  //   dispatch(fetchStatisticData([]));
-  // };
 
   const handleChangeForm = (value) => {
     if (isSubmit) setIsSubmit(false);
@@ -84,17 +78,6 @@ const ImportStatistic = () => {
   return (
     <div style={{ padding: 20 }}>
       <Card style={{ minHeight: 'calc(100vh - 104px)' }} title={<b className="text-lg">Thống kê nhập hàng</b>}>
-        {/* <Form.Item label="Kiểu thống kê">
-          <Select
-            defaultValue={chartType}
-            style={{ width: 250 }}
-            onChange={handleChangeType}
-            options={[
-              { value: 'range', label: 'Thống kê trong khoảng' },
-              { value: 'year', label: 'Thống kê trong năm' },
-            ]}
-          />
-        </Form.Item> */}
         <Form
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 14 }}
