@@ -22,7 +22,7 @@ export default function UpdateComponent() {
   useEffect(() => {
     if (!checkCall) return;
     new APIClient()
-      .get(`${process.env.REACT_APP_API_URL}/products`)
+      .get(`${process.env.REACT_APP_API_URL}/products/?limit=100`)
       .then((res) => {
         const listData = res.products.map((x) => ({ id: x.id, name: x.name }));
         setListProduct(listData);

@@ -7,6 +7,7 @@ import Loading from '../../Components/Common/Loading';
 import FilterOrder from '../../Components/Common/FilterOrder';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Pagination from '../../Components/Common/Pagination';
+import { userRole } from '../../Services/auth.service';
 
 function Order() {
   // Initial data
@@ -17,6 +18,12 @@ function Order() {
     DONE: 'Giao Hàng Thành Công',
     CANCEL: 'Đã Hủy Đơn',
   };
+
+  const role = userRole();
+  let link = '/order';
+  if (role === 'SELLER' || role === 'ADMIN') {
+    link = '/manager/order';
+  }
   const listOrder = useSelector(getOrder);
   const totalOrder = useSelector(getTotalOrder);
   const [currentPage, setCurrentPage] = useState(1);
@@ -115,7 +122,7 @@ function Order() {
           )}
           {listOrder.length ? (
             <Pagination
-              link="/manager/order"
+              link={link}
               setParams={setParams}
               setCurrentPage={setCurrentPage}
               currentPage={currentPage}
