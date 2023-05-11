@@ -19,6 +19,15 @@ const RevenueStatistic = () => {
   const [chartType, setChartType] = useState('range');
   const [isSubmit, setIsSubmit] = useState(false);
   const statisticData = useSelector(getStatisticData);
+  const [chartData, setChartData] = useState([]);
+
+  useEffect(() => {
+    const newChartData = statisticData.map((item) => ({
+      month: `${item.month}`,
+      revenue: item.revenue,
+    }));
+    setChartData(newChartData);
+  }, [statisticData]);
   const dispatch = useDispatch();
 
   const handleSubmit = async (values) => {
@@ -34,7 +43,7 @@ const RevenueStatistic = () => {
   };
 
   const config = {
-    data: statisticData,
+    data: chartData,
     xField: chartType === 'range' ? 'year' : 'month',
     yField: 'revenue',
     point: {
@@ -60,11 +69,37 @@ const RevenueStatistic = () => {
       },
     ],
     smooth: true,
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <div className="py-3">
+            <p>
+              <b>{title}</b>
+            </p>
+            <ul>
+              {items.map((item, index) => (
+                <li key={index} className="mb-2">
+                  <b>
+                    <span style={{ color: item.color }}>Doanh thu: </span>
+                  </b>
+                  <span>
+                    {new Intl.NumberFormat('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND',
+                    }).format(item.value)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      },
+    },
   };
 
   const pieConfig = {
     appendPadding: 10,
-    data: statisticData,
+    data: chartData,
     angleField: 'revenue',
     colorField: chartType === 'range' ? 'year' : 'month',
     radius: 0.9,
@@ -126,6 +161,14 @@ const RevenueStatistic = () => {
       dispatch(fetchStatisticData([]));
     };
   }, []);
+
+  useEffect(() => {
+    const newChartData = statisticData.map((item) => ({
+      month: `Tháng ${item.month}`,
+      revenue: item.revenue,
+    }));
+    setChartData(newChartData);
+  }, [statisticData]);
 
   return (
     <div style={{ padding: 20 }}>
@@ -207,7 +250,7 @@ const RevenueStatistic = () => {
               </Button>
             </div>
             <Line {...config} />
-            <h2 style={{ textAlign: 'center', marginTop: 30, marginRight: 25, fontSize: 20 }}>Biểu đồ tròn</h2>
+            <h2 style={{ textAlign: 'center', marginTop: 30, marginRight: 100, fontSize: 20 }}>Biểu đồ tròn</h2>
             <Pie {...pieConfig} />
           </React.Fragment>
         ) : (

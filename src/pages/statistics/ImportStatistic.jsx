@@ -3,10 +3,7 @@ import { DualAxes } from '@ant-design/plots';
 import { Button, Card, DatePicker, Form, Modal } from 'antd';
 import { default as React, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  exportImportStatisticsInMonth,
-  fetchingImportStatisticsInMonth
-} from '../../redux/middleware';
+import { exportImportStatisticsInMonth, fetchingImportStatisticsInMonth } from '../../redux/middleware';
 import { getStatisticData } from '../../redux/selector';
 import { fetchStatisticData } from '../../redux/statistic.slice';
 
@@ -26,7 +23,7 @@ const ImportStatistic = () => {
   const config = {
     data: [statisticData, statisticData],
     xField: 'name',
-    yField: ['total', 'total_quantity'],
+    yField: ['total_quantity', 'total'],
     geometryOptions: [
       {
         geometry: 'column',
@@ -43,6 +40,33 @@ const ImportStatistic = () => {
         autoRotate: true,
         autoHide: false,
         autoEllipsis: false,
+      },
+    },
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <div className="py-3">
+            <p>
+              <b>Sản phẩm: </b>
+              {title}
+            </p>
+            <ul>
+              {items.map((item, index) => (
+                <li key={index} className="mb-2">
+                  <span style={{ color: item.color }}>{item.name === 'total' ? 'Doanh thu' : 'Số lượng'}: </span>
+                  <strong>
+                    {item.name === 'total'
+                      ? new Intl.NumberFormat('vi-VN', {
+                          style: 'currency',
+                          currency: 'VND',
+                        }).format(item.value)
+                      : item.value}
+                  </strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
       },
     },
   };
