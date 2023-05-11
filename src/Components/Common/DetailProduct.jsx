@@ -169,7 +169,7 @@ const DetailProduct = () => {
 
                     <RadioGroup className="mt-2">
                       <RadioGroup.Label className="sr-only"> Choose a size </RadioGroup.Label>
-                      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                      <div className="grid grid-cols-3 gap-3">
                         {sizes.map((size, index) => (
                           <RadioGroup.Option
                             key={index}
@@ -185,8 +185,7 @@ const DetailProduct = () => {
                                 checked
                                   ? 'border-transparent bg-indigo-600 text-white hover:bg-indigo-700'
                                   : 'border-gray-200 bg-white text-gray-900 hover:bg-gray-50',
-                                // check ? 'first:bg-indigo-600 first:text-white' : '',
-                                'flex items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase sm:flex-1 text-black '
+                                'items-center justify-center rounded-md border py-3 px-3 text-sm font-medium uppercase col-span-1 text-black'
                               )
                             }
                             disabled={false}

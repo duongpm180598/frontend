@@ -18,7 +18,6 @@ import { classNames } from '../../utils';
 
 function ManageComponent() {
   const role = userRole();
-  console.log('role ::', role);
 
   const navigation =
     role === 'ADMIN'
