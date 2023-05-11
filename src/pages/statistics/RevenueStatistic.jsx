@@ -207,7 +207,7 @@ const RevenueStatistic = () => {
               </Button>
             </div>
             <Line {...config} />
-            <h2 style={{ textAlign: 'center', marginTop: 20 }}>Biểu đồ tròn</h2>
+            <h2 style={{ textAlign: 'center', marginTop: 30, marginRight: 25, fontSize: 20 }}>Biểu đồ tròn</h2>
             <Pie {...pieConfig} />
           </React.Fragment>
         ) : (

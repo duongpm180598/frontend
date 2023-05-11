@@ -2,7 +2,7 @@ import { CheckSquareOutlined, ExportOutlined } from '@ant-design/icons';
 import { Button, DatePicker, Form, Select, Card, Modal } from 'antd';
 import { default as React, useEffect, useState } from 'react';
 import { MONTHS } from '../../utils/utils';
-import { DualAxes } from '@ant-design/plots';
+import { DualAxes, Column } from '@ant-design/plots';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStatisticData } from '../../redux/selector';
 import {
@@ -20,6 +20,8 @@ const ProductStatistic = () => {
   const statisticData = useSelector(getStatisticData);
   const [chartType, setChartType] = useState('range');
   const [isSubmit, setIsSubmit] = useState(false);
+  const [dataChart, setDataChart] = useState();
+  const [dataChart2, setDataChart2] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,6 +29,26 @@ const ProductStatistic = () => {
       dispatch(fetchStatisticData([]));
     };
   }, []);
+
+  useEffect(() => {
+    if (chartType === 'range') {
+      if (form.getFieldsValue().group === 'month') {
+        const newData = statisticData.map((item) => ({
+          time: `${item.month}/${item.year}`,
+          sold: item.sold,
+        }));
+        setDataChart(newData);
+        const newData2 = statisticData.map((item) => ({
+          time: `${item.month}/${item.year}`,
+          total: item.total,
+          name: item.name,
+        }));
+        setDataChart(newData2);
+        console.log(newData, newData2);
+      } else {
+      }
+    }
+  }, [statisticData]);
 
   const handleSubmit = async (values) => {
     if (chartType === 'range') {
@@ -42,7 +64,33 @@ const ProductStatistic = () => {
     setIsSubmit(true);
   };
 
-  const config = {
+  const configRangeMonth = {
+    data: dataChart2,
+    isGroup: true,
+    xField: 'time',
+    yField: 'total',
+    seriesField: 'name',
+    label: {
+      // 可手动配置 label 数据标签位置
+      position: 'middle',
+      // 'top', 'middle', 'bottom'
+      // 可配置附加的布局方法
+      layout: [
+        // 柱形图数据标签位置自动调整
+        {
+          type: 'interval-adjust-position',
+        }, // 数据标签防遮挡
+        {
+          type: 'interval-hide-overlap',
+        }, // 数据标签文颜色自动调整
+        {
+          type: 'adjust-color',
+        },
+      ],
+    },
+  };
+
+  const configRangeYear = {
     data: [statisticData, statisticData],
     xField: 'name',
     yField: ['total', 'sold'],
@@ -57,6 +105,37 @@ const ProductStatistic = () => {
         },
       },
     ],
+    xAxis: {
+      label: {
+        autoRotate: true,
+        autoHide: false,
+        autoEllipsis: false,
+      },
+    },
+  };
+
+  const configMonth = {
+    data: [statisticData, statisticData],
+    xField: 'name',
+    yField: ['total', 'sold'],
+    geometryOptions: [
+      {
+        geometry: 'column',
+      },
+      {
+        geometry: 'line',
+        lineStyle: {
+          lineWidth: 2,
+        },
+      },
+    ],
+    xAxis: {
+      label: {
+        autoRotate: true,
+        autoHide: false,
+        autoEllipsis: false,
+      },
+    },
   };
 
   const handleChangeType = (value) => {
@@ -168,7 +247,9 @@ const ProductStatistic = () => {
                 />
               </Form.Item>
             </React.Fragment>
-          ) : ''}
+          ) : (
+            ''
+          )}
           <div>
             <Button
               type="danger"
@@ -194,10 +275,9 @@ const ProductStatistic = () => {
                 Xuất báo cáo
               </Button>
             </div>
-
-            <DualAxes {...config} />
+            <DualAxes {...configMonth} />
           </React.Fragment>
-        ) : (
+        ) : chartType === 'range' && isSubmit ? (
           <React.Fragment>
             <div className="flex justify-end">
               <Button
@@ -210,8 +290,10 @@ const ProductStatistic = () => {
               </Button>
             </div>
 
-            <DualAxes {...config} />
+            {/* <Column {...configRangeMonth} /> */}
           </React.Fragment>
+        ) : (
+          ''
         )}
       </Card>
     </div>
