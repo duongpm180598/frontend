@@ -19,7 +19,7 @@ const DetailProduct = () => {
     state: { slug },
   } = useLocation();
 
-  const notify = (type) => toast('Thêm Sản Phẩm Thành Công', { type });
+  const notify = (message, type) => toast(message, { type });
 
   // state
   const [product, setProduct] = useState();
@@ -93,10 +93,10 @@ const DetailProduct = () => {
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
       .then((res) => {
-        notify('success');
+        notify('Thêm sản phẩm thành công', 'success');
       })
       .catch((e) => {
-        notify('error');
+        notify('thêm sản phẩm thất bại', 'error');
         dispatch(removeQuantityWhenError());
       });
   };
@@ -164,7 +164,7 @@ const DetailProduct = () => {
                   {/* Size picker */}
                   <div className="mt-8 mb-8">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-sm font-medium text-gray-900">Size</h2>
+                      <h2 className="text-sm font-medium text-gray-900">Dung Lượng</h2>
                     </div>
 
                     <RadioGroup className="mt-2">
