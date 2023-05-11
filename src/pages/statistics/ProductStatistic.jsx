@@ -18,7 +18,7 @@ const { RangePicker } = DatePicker;
 const ProductStatistic = () => {
   const [form] = Form.useForm();
   const statisticData = useSelector(getStatisticData);
-  const [chartType, setChartType] = useState('range');
+  const [chartType, setChartType] = useState('month');
   const [isSubmit, setIsSubmit] = useState(false);
   const [dataChart, setDataChart] = useState();
   const [dataChart2, setDataChart2] = useState();
@@ -117,7 +117,7 @@ const ProductStatistic = () => {
   const configMonth = {
     data: [statisticData, statisticData],
     xField: 'name',
-    yField: ['total', 'sold'],
+    yField: ['sold', 'total'],
     geometryOptions: [
       {
         geometry: 'column',
@@ -134,6 +134,33 @@ const ProductStatistic = () => {
         autoRotate: true,
         autoHide: false,
         autoEllipsis: false,
+      },
+    },
+    tooltip: {
+      customContent: (title, items) => {
+        return (
+          <div className="py-3">
+            <p>
+              <b>Sản phẩm: </b>
+              {title}
+            </p>
+            <ul>
+              {items.map((item, index) => (
+                <li key={index} className="mb-2">
+                  <span style={{ color: item.color }}>{item.name === 'total' ? 'Doanh thu' : 'Đã bán'}: </span>
+                  <strong>
+                    {item.name === 'total'
+                      ? new Intl.NumberFormat('vi-VN', {
+                          style: 'currency',
+                          currency: 'VND',
+                        }).format(item.value)
+                      : item.value}
+                  </strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
       },
     },
   };
@@ -180,7 +207,7 @@ const ProductStatistic = () => {
   return (
     <div style={{ padding: 20 }}>
       <Card style={{ minHeight: 'calc(100vh - 104px)' }} title={<b className="text-lg">Thống kê sản phẩm</b>}>
-        <Form.Item label="Kiểu thống kê">
+        {/* <Form.Item label="Kiểu thống kê">
           <Select
             defaultValue={chartType}
             style={{ width: 250 }}
@@ -190,7 +217,7 @@ const ProductStatistic = () => {
               { value: 'month', label: 'Thống kê trong tháng' },
             ]}
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 14 }}
