@@ -22,12 +22,32 @@ const RevenueStatistic = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const newChartData = statisticData.map((item) => ({
-      month: `${item.month}`,
-      revenue: item.revenue,
-    }));
-    setChartData(newChartData);
-  }, [statisticData]);
+    if (chartType === 'range') {
+      let newChartData = [...statisticData];
+      newChartData = newChartData.sort((a, b) => {
+        if (a.year > b.year) return 1;
+        if (a.year < b.year) return -1;
+        return 0;
+      });
+      newChartData = newChartData.map((item) => ({
+        year: `${item.year}`,
+        revenue: item.revenue,
+      }));
+      setChartData(newChartData);
+    } else if (chartType === 'year') {
+      let newChartData = [...statisticData];
+      newChartData = newChartData.sort((a, b) => {
+        if (a.month > b.month) return 1;
+        if (a.month < b.month) return -1;
+        return 0;
+      });
+      newChartData = newChartData.map((item) => ({
+        month: `Tháng ${item.month}`,
+        revenue: item.revenue,
+      }));
+      setChartData(newChartData);
+    }
+  }, [statisticData, chartType]);
   const dispatch = useDispatch();
 
   const handleSubmit = async (values) => {
@@ -161,14 +181,6 @@ const RevenueStatistic = () => {
       dispatch(fetchStatisticData([]));
     };
   }, []);
-
-  useEffect(() => {
-    const newChartData = statisticData.map((item) => ({
-      month: `Tháng ${item.month}`,
-      revenue: item.revenue,
-    }));
-    setChartData(newChartData);
-  }, [statisticData]);
 
   return (
     <div style={{ padding: 20 }}>
