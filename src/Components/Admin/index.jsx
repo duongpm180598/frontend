@@ -17,10 +17,6 @@ import { NavLink, Outlet } from 'react-router-dom';
 const navigation = [
   { name: 'Tạo Sản Phẩm', link: 'create-product', icon: FolderIcon, current: false },
   { name: 'Deployments', link: 'add-image', icon: ServerIcon, current: true },
-  // { name: 'Activity',link: 'create-product', icon: SignalIcon, current: false },
-  // { name: 'Domains',link: 'create-product', icon: GlobeAltIcon, current: false },
-  // { name: 'Usages',link: 'create-product', icon: ChartBarSquareIcon, current: false },
-  // { name: 'Settings', link: 'create-product', icon: Cog6ToothIcon, current: false },
 ];
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -167,7 +163,6 @@ export default function Manager() {
           </div>
 
           <main className="w-full">
-            {/* <CreateProduct></CreateProduct> */}
             <Outlet></Outlet>
           </main>
         </div>

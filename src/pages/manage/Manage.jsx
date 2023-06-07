@@ -11,6 +11,7 @@ import {
   ShoppingCartIcon,
   DocumentArrowDownIcon,
   ChartPieIcon,
+  ServerStackIcon,
 } from '@heroicons/react/24/outline';
 import { Bars3Icon } from '@heroicons/react/20/solid';
 import { NavLink, Outlet } from 'react-router-dom';
@@ -29,6 +30,11 @@ function ManageComponent() {
           { name: 'Thống kê sản phẩm', link: 'product-statistic', icon: ChartPieIcon },
           { name: 'Thống kê doanh thu', link: 'revenue-statistic', icon: ChartPieIcon },
           { name: 'Thống kê nhập hàng', link: 'import-statistic', icon: ChartPieIcon },
+          {
+            name: 'Dashboard',
+            link: 'https://group9ptit.grafana.net/d/ca606605-3da1-4bd7-afe7-b04eb9bd3448/mis?orgId=1&refresh=30s',
+            icon: ServerStackIcon,
+          },
           { name: 'Trang Chủ', link: '../', icon: HomeIcon },
         ]
       : role === 'SELLER'
