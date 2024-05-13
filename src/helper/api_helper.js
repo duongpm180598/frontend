@@ -92,6 +92,14 @@ class APIClient {
     return axios.post(url, data);
   };
 
+  createFormdata = (url, data) => {
+    removeAuthorization();
+    const headers = {
+      'Content-Type': 'multipart/form-data', // Set the content type to 'multipart/form-data'
+    };
+    return axios.post(url, data, { headers });
+  };
+
   update = (url, data) => {
     removeAuthorization();
     return axios.put(url, data);

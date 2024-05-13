@@ -87,10 +87,6 @@ export default function Footer() {
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <img className="h-16" src={require('./../asset/image/logo.png')} alt="Company name" />
-            <p className="text-sm leading-6 text-gray-600 italic opacity-70">
-              Cùng <span className="text-gray-600 opacity-100 font-bold">GROUP9 </span>Tô Thêm Sắc Màu Vào Cuộc Sống Của
-              Bạn
-            </p>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
                 <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
@@ -132,7 +128,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-          <p className="text-xs leading-5 text-gray-500">&copy; 2023 Group9, Inc. All rights reserved.</p>
+          <p className="text-xs leading-5 text-gray-500">&copy; 2024, Inc. All rights reserved.</p>
         </div>
       </div>
     </footer>

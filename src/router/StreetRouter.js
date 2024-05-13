@@ -14,13 +14,12 @@ import Order from '../pages/order/Order';
 import Protected from './Protected';
 import DetailOrder from '../pages/detailOrder/DetailOrder';
 import CreateProduct from '../Components/Admin/CreateProduct';
-import AddImage from '../Components/Admin/AddImage';
-import ImportProduct from '../pages/import-product/ImportProduct';
 import ProductStatistic from '../pages/statistics/ProductStatistic';
 import PermissionProtected from './PermissionProtected';
 import UpdateComponent from '../Components/Admin/Update';
 import RevenueStatistic from '../pages/statistics/RevenueStatistic';
-import ImportStatistic from '../pages/statistics/ImportStatistic';
+import ListProducts from '../Components/Admin/ListProducts';
+
 function StreetRouter() {
   return (
     <>
@@ -88,7 +87,14 @@ function StreetRouter() {
               </PermissionProtected>
             }
           />
-
+          <Route
+            path="products"
+            element={
+              <PermissionProtected role={['WAREHOUSESTAFF', 'ADMIN']}>
+                <ListProducts />
+              </PermissionProtected>
+            }
+          />
           <Route
             path="create-product"
             element={
@@ -98,22 +104,13 @@ function StreetRouter() {
             }
           />
           <Route
-            path="update"
+            path="update/:id"
             element={
               <PermissionProtected role={['WAREHOUSESTAFF', 'ADMIN']}>
                 <UpdateComponent />
               </PermissionProtected>
             }
           />
-          <Route
-            path="import"
-            element={
-              <PermissionProtected role={['WAREHOUSESTAFF', 'ADMIN']}>
-                <ImportProduct />
-              </PermissionProtected>
-            }
-          />
-
           <Route
             path="product-statistic"
             element={
@@ -127,14 +124,6 @@ function StreetRouter() {
             element={
               <PermissionProtected role={['ADMIN']}>
                 <RevenueStatistic />
-              </PermissionProtected>
-            }
-          />
-          <Route
-            path="import-statistic"
-            element={
-              <PermissionProtected role={['ADMIN']}>
-                <ImportStatistic />
               </PermissionProtected>
             }
           />

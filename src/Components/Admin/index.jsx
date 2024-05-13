@@ -1,17 +1,11 @@
-import { Fragment, useState } from 'react';
-import { Dialog, Menu, Transition } from '@headlessui/react';
-import logo from '../../asset/image/logo.png';
-import {
-  ChartBarSquareIcon,
-  Cog6ToothIcon,
-  FolderIcon,
-  GlobeAltIcon,
-  ServerIcon,
-  SignalIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { Dialog, Transition } from '@headlessui/react';
 import { Bars3Icon } from '@heroicons/react/20/solid';
-import CreateProduct from './CreateProduct';
+import {
+    FolderIcon,
+    ServerIcon,
+    XMarkIcon,
+} from '@heroicons/react/24/outline';
+import { Fragment, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const navigation = [

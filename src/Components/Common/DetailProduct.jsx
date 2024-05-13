@@ -61,11 +61,12 @@ const DetailProduct = () => {
 
   const getColor = (size) => {
     const colorStore = [];
+    console.log({ size });
     product.product_variants.forEach((x) => {
-      const [size1, color] = x.variant_attributes;
-      if (size1.value == size) {
-        colorStore.push(color.value);
-      }
+        const [color, size1] = x.variant_attributes;
+        if (size1.value == size) {
+          colorStore.push(color.value);
+        }
     });
     return colorStore;
   };
@@ -74,7 +75,7 @@ const DetailProduct = () => {
     let id_variant = '',
       price = '';
     product.product_variants.forEach((x) => {
-      const [size1, color1] = x.variant_attributes;
+      const [color1, size1] = x.variant_attributes;
       if (size1.value == size && color1.value === color) {
         id_variant = x.id;
         price = x.price;
@@ -88,7 +89,6 @@ const DetailProduct = () => {
   const handleAddToCart = () => {
     const id_variant = getVariant(variant.size, variant.color)[0];
     const data = { variant_id: id_variant, quantity: 1 };
-    const resolveWithSomeData = new Promise((resolve) => setTimeout(() => resolve('world'), 3000));
     dispatch(addToCart());
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/cart-items`, data)
@@ -109,10 +109,9 @@ const DetailProduct = () => {
         const sizeStore = [];
         res.product_variants.forEach((x) => {
           x.variant_attributes.forEach((y) => {
-            if (y.name === 'Dung lượng' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
+            if (y.name === 'Size' && !sizeStore.includes(y.value)) sizeStore.push(y.value);
           });
         });
-        const initValue = res.product_variants[0].variant_attributes;
         setListVariants(res.product_variants);
         setSizes(sizeStore);
         setProduct(res);
@@ -125,7 +124,7 @@ const DetailProduct = () => {
     <>
       <div className="bg-white">
         <div className="pb-16 pt-6 sm:pb-24">
-          <div className="mx-auto mt-8 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          <div className="mx-auto mt-4 max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="lg:grid lg:auto-rows-min lg:grid-cols-12 lg:gap-x-8">
               <div className="lg:col-span-5 lg:col-start-8">
                 <div className="flex justify-between">
@@ -135,7 +134,7 @@ const DetailProduct = () => {
               </div>
 
               {/* Image gallery */}
-              <div className="mt-8 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
+              <div className="mt-4 lg:col-span-7 lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:mt-0">
                 <h2 className="sr-only">Images</h2>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
@@ -153,7 +152,7 @@ const DetailProduct = () => {
                 </div>
               </div>
 
-              <div className="mt-8 lg:col-span-5">
+              <div className="mt-4 lg:col-span-5">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -162,9 +161,9 @@ const DetailProduct = () => {
                   className=""
                 >
                   {/* Size picker */}
-                  <div className="mt-8 mb-8">
+                  <div className="mt-4 mb-4">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-sm font-medium text-gray-900">Dung Lượng</h2>
+                      <h2 className="text-sm font-medium text-gray-900">Kích cỡ</h2>
                     </div>
 
                     <RadioGroup className="mt-2">
@@ -236,9 +235,7 @@ const DetailProduct = () => {
                         </div>
                       </RadioGroup>
                     </div>
-                  ) : (
-                    <div className="h-[60px]"></div>
-                  )}
+                  ) : null}
 
                   {/* Price Variant */}
                   {variant.size && variant.color ? (
@@ -254,7 +251,7 @@ const DetailProduct = () => {
 
                   <button
                     type="submit"
-                    className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="mt-4 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
                     Thêm Vào Giỏ Hàng
                   </button>
@@ -269,7 +266,7 @@ const DetailProduct = () => {
                   />
                 </div>
 
-                <div className="mt-8 border-t border-gray-200 pt-8">
+                <div className="mt-4 border-t border-gray-200 pt-8">
                   <h2 className="text-sm font-medium text-gray-900">Cam Kết &amp; Đảm Bảo</h2>
 
                   <div className="prose prose-sm mt-4 text-gray-500">

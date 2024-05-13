@@ -1,22 +1,25 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import addImage from '../../asset/image/image.png';
+import { getPresignedUrl, uploadIntoCloudinary } from './helper';
 function AddImage({ selectedImages, setSelectedImages }) {
   const [listImages, setListImages] = useState([]);
   const [check, setCheck] = useState(false);
-  const onDrop = useCallback((acceptedFiles) => {
-    setListImages(
-      acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      )
-    );
-    setSelectedImages(acceptedFiles);
+  const onDrop = useCallback(async (acceptedFiles) => {
+    const presignedUrl = await getPresignedUrl(acceptedFiles.length);
+    const uploadFiles = await uploadIntoCloudinary(presignedUrl, acceptedFiles);
+    const product_images = uploadFiles.map(file => {
+        return {
+            url: file.secure_url,
+            external_id: file.public_id
+        }
+    })
+    setListImages(product_images)
+    setSelectedImages(product_images);
     setCheck(true);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-  const image = listImages?.map((x, index) => <img className="w-[150px] h-[150px]" key={index} src={x.preview} />);
+  const image = listImages?.map((x, index) => <img className="w-[150px] h-[150px]" key={index} src={x.url} />);
   return (
     <div>
       {check ? (

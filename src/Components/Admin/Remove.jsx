@@ -1,7 +1,7 @@
 import Modal from '@mui/material/Modal';
 import { APIClient } from '../../helper/api_helper';
 import { useNavigate } from 'react-router-dom';
-export default function RemoveComponent({ open, setOpen, name, id, setCheckCall, notify }) {
+export default function RemoveComponent({ open, setOpen, name, id, count, setCheckCall, path, setCount, notify }) {
   const handleClose = () => {
     setOpen(false);
   };
@@ -15,7 +15,11 @@ export default function RemoveComponent({ open, setOpen, name, id, setCheckCall,
         alert('Xóa Thành Công');
         setOpen(false);
         setCheckCall(true);
-        navigate('/manager');
+        if (path && path === 'list') {
+          setCount(count + 1);
+        } else {
+            navigate('/manager/products');
+        }
       })
       .catch((e) => {
         notify('Xóa Thất Bại', 'error');

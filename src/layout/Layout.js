@@ -7,7 +7,6 @@ const Layout = () => {
   return (
     <BrowserRouter>
       <Header></Header>
-
       <Content></Content>
       <Footer></Footer>
     </BrowserRouter>

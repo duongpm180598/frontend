@@ -9,11 +9,9 @@ import addImage from '../../asset/image/image.png';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import AddImage from './AddImage';
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const formData = new FormData();
+import { getPresignedUrl, uploadIntoCloudinary } from './helper';
 
 function CreateProduct() {
   // data
@@ -51,12 +49,10 @@ function CreateProduct() {
     dispatch(fetchingCategoryAndAttribute());
   }, []);
 
-  const onDrop = (acceptedFiles) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(acceptedFiles[0]);
-    reader.onload = () => {
-      setProduct({ ...product, thumbnail: reader.result });
-    };
+  const onDrop = async (acceptedFiles) => {
+    const presignedUrl = await getPresignedUrl(1);
+    const uploadFiles = await uploadIntoCloudinary(presignedUrl, acceptedFiles);
+    setProduct((prev) => ({ ...prev, thumbnail: uploadFiles[0].secure_url }));
   };
 
   const handleChangeImageURL = () => {
@@ -91,22 +87,9 @@ function CreateProduct() {
   };
 
   const handleSubmit = () => {
-    const data = { ...product, description, product_variants: productVariantList };
-    console.log('producVariant ::', productVariantList);
-    console.log('data ::', data);
+    const data = { ...product, description, product_variants: productVariantList, product_images: selectedImages };
     new APIClient()
       .createWithToken(`${process.env.REACT_APP_API_URL}/products`, data)
-      .then((res) => {
-        selectedImages.forEach((x) => {
-          formData.append('images', x);
-        });
-        axios.post(`${process.env.REACT_APP_API_URL}/products/${res.id}/images`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-      })
       .then((res) => {
         notify('Thêm Thành Công', 'success');
       })
@@ -140,7 +123,7 @@ function CreateProduct() {
                 setProduct({ ...product, [e.target.name]: e.target.value });
               }}
               id="floating_email"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-600 dark:focus:outline-none dark:focus:ring-0 focus:border-gray-600 peer"
+              className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-600 focus:outline-none focus:ring-0 focus:border-gray-600 peer"
               placeholder=" "
               required
             />

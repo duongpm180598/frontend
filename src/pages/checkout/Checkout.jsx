@@ -73,6 +73,10 @@ export default function Checkout() {
   }, [shippingInfomation.provinceId, shippingInfomation.district, shippingInfomation.ward]);
 
   const handleCreateOrder = () => {
+    const { name, phone, fee, province, district, ward, line } = shippingInfomation;
+    if (!(name && phone, province, district, ward, line)) {
+      return notify('Bạn cần điền đầy đủ thông tin', 'error');
+    }
     const order_items = cart.map((x) => {
       return {
         variant_id: x.variant_id,
@@ -89,13 +93,13 @@ export default function Checkout() {
       },
       shipping_information: {
         carrier: 'GHN',
-        customer_name: shippingInfomation.name,
-        customer_phone: shippingInfomation.phone,
-        fee: shippingInfomation.fee,
-        province: shippingInfomation.province,
-        district: shippingInfomation.district,
-        ward: shippingInfomation.ward,
-        line: shippingInfomation.line,
+        customer_name: name,
+        customer_phone: phone,
+        fee: fee,
+        province: province,
+        district: district,
+        ward: ward,
+        line: line,
       },
     };
 
@@ -148,7 +152,7 @@ export default function Checkout() {
                 {/* Họ Tên */}
                 <div className="sm:col-span-2">
                   <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                    Họ Tên
+                    Họ Tên <span className="text-[#dc3545]">*</span>
                   </label>
                   <div className="mt-1">
                     <input
@@ -166,7 +170,7 @@ export default function Checkout() {
                 {/* Số Điện Thoại */}
                 <div className="sm:col-span-2">
                   <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                    Số Điện Thoại
+                    Số Điện Thoại <span className="text-[#dc3545]">*</span>
                   </label>
                   <div className="mt-1">
                     <input
@@ -185,7 +189,7 @@ export default function Checkout() {
                 {/* Tỉnh Thành Phố */}
                 <div>
                   <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-                    Tỉnh / Thành Phố
+                    Tỉnh / Thành Phố <span className="text-[#dc3545]">*</span>
                   </label>
                   <div className="mt-1">
                     <select
@@ -207,7 +211,7 @@ export default function Checkout() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option className="hidden" value={''}>
-                        Chọn Thành Phố
+                        Chọn Thành Phố <span className="text-[#dc3545]">*</span>
                       </option>
                       {provinces?.map((x, index) => (
                         <option key={index} value={x.province_id}>
@@ -221,7 +225,7 @@ export default function Checkout() {
                 {/* Quận Huyện */}
                 <div>
                   <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-                    Quận / Huyện
+                    Quận / Huyện <span className="text-[#dc3545]">*</span>
                   </label>
                   <div className="mt-1">
                     <select
@@ -241,7 +245,7 @@ export default function Checkout() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       <option value={''} className="hidden">
-                        Chọn Quận Huyện
+                        Chọn Quận Huyện <span className="text-[#dc3545]">*</span>
                       </option>
 
                       {districts?.map((x, index) => (
@@ -255,7 +259,7 @@ export default function Checkout() {
                 {/* Phường Xã */}
                 <div>
                   <label htmlFor="region" className="block text-sm font-medium text-gray-700">
-                    Phường / Xã
+                    Phường / Xã <span className="text-[#dc3545]">*</span>
                   </label>
                   <div className="mt-1">
                     <select
@@ -284,7 +288,7 @@ export default function Checkout() {
                 {/* Line */}
                 <div>
                   <label htmlFor="region" className="block text-sm font-medium text-gray-700">
-                    Số Nhà
+                    Số Nhà <span className="text-[#dc3545]">*</span>
                   </label>
                   <div className="mt-1">
                     <input
@@ -343,30 +347,36 @@ export default function Checkout() {
                 <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
                   <div className="flex items-center">
                     <input
+                      id="cash"
                       name="gateway"
                       type="radio"
                       className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      checked={payment.gateway === 'CASH'}
                       value="CASH"
                       onChange={(e) => {
                         setPayment({ ...payment, [e.target.name]: e.target.value });
                       }}
                     />
-                    <label className="ml-3 block text-sm font-medium text-gray-700 mr-5">
+                    <label htmlFor="cash" className="ml-3 block text-sm font-medium text-gray-700 mr-5">
                       Thanh Toán Khi Nhận Hàng
                     </label>
 
                     <input
+                      id="vnPay"
                       name="gateway"
                       type="radio"
                       className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
                       value="VNPAY"
+                      checked={payment.gateway === 'VNPAY'}
                       onChange={(e) => {
                         setPayment({ ...payment, [e.target.name]: e.target.value });
                       }}
                     />
-                    <label className="ml-3 block text-sm font-medium text-gray-700 mr-3">VNPAY</label>
+                    <label htmlFor="vnPay" className="ml-3 block text-sm font-medium text-gray-700 mr-3">
+                      VNPAY
+                    </label>
 
-                    <input
+                    {/* <input
                       name="gateway"
                       type="radio"
                       className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -375,7 +385,7 @@ export default function Checkout() {
                         setPayment({ ...payment, [e.target.name]: e.target.value });
                       }}
                     />
-                    <label className="ml-3 block text-sm font-medium text-gray-700">ZaloPAY</label>
+                    <label className="ml-3 block text-sm font-medium text-gray-700">ZaloPAY</label> */}
                   </div>
                 </div>
               </fieldset>

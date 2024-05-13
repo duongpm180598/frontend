@@ -1,7 +1,6 @@
 import React from 'react';
 import { Fragment, useState } from 'react';
-import { Dialog, Menu, Transition } from '@headlessui/react';
-import logo from '../../asset/image/logo.png';
+import { Dialog, Transition } from '@headlessui/react';
 import { userRole } from '../../Services/auth.service';
 import {
   FolderIcon,
@@ -11,7 +10,6 @@ import {
   ShoppingCartIcon,
   DocumentArrowDownIcon,
   ChartPieIcon,
-  ServerStackIcon,
 } from '@heroicons/react/24/outline';
 import { Bars3Icon } from '@heroicons/react/20/solid';
 import { NavLink, Outlet } from 'react-router-dom';
@@ -23,18 +21,11 @@ function ManageComponent() {
   const navigation =
     role === 'ADMIN'
       ? [
-          { name: 'Tạo Sản Phẩm', link: 'create-product', icon: FolderIcon },
-          { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
-          { name: 'Đơn Hàng', link: 'order', icon: ShoppingCartIcon },
-          { name: 'Nhập hàng', link: 'import', icon: DocumentArrowDownIcon },
+        { name: 'Đơn Hàng', link: 'order', icon: ShoppingCartIcon },
+        { name: 'Dánh sách sản phẩm', link: 'products', icon: FolderIcon },
+          //   { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
           { name: 'Thống kê sản phẩm', link: 'product-statistic', icon: ChartPieIcon },
           { name: 'Thống kê doanh thu', link: 'revenue-statistic', icon: ChartPieIcon },
-          { name: 'Thống kê nhập hàng', link: 'import-statistic', icon: ChartPieIcon },
-          {
-            name: 'Dashboard',
-            link: 'https://group9ptit.grafana.net/d/ca606605-3da1-4bd7-afe7-b04eb9bd3448/mis?orgId=1&refresh=30s',
-            icon: ServerStackIcon,
-          },
           { name: 'Trang Chủ', link: '../', icon: HomeIcon },
         ]
       : role === 'SELLER'
@@ -43,8 +34,9 @@ function ManageComponent() {
           { name: 'Trang Chủ', link: '../', icon: HomeIcon },
         ]
       : [
-          { name: 'Tạo Sản Phẩm', link: 'create-product', icon: FolderIcon },
-          { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
+          { name: 'Dánh sách sản phẩm', link: 'products', icon: FolderIcon },
+          //   { name: 'Tạo Sản Phẩm', link: 'create-product', icon: FolderIcon },
+          //   { name: 'Chỉnh Sửa Sản Phẩm', link: 'update', icon: ServerIcon },
           { name: 'Nhập hàng', link: 'import', icon: DocumentArrowDownIcon },
           { name: 'Trang Chủ', link: '../', icon: HomeIcon },
         ];

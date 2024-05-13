@@ -45,10 +45,10 @@ function Register() {
 
         {/* name */}
 
-        <div className="flex  flex-wrap border-b-2 mb-5 pb-[2px] relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-slate-600  after:transition-all after:ease-linear hover:after:w-full after:duration-500">
+        <div className="flex  flex-wrap mb-5 pb-[2px] relative">
           <span className="text-sm text-[#333] font-Popins leading-[1.5]">Tên Đầy Đủ</span>
           <div className="w-full flex justify-start items-center h-[55px] relative">
-            <AccountCircleIcon className="text-white absolute left-1" />
+            <AccountCircleIcon className="text-gray-900 absolute left-1" />
             <input
               {...register('fullname', {
                 required: 'Không để trống trường này  ',
@@ -62,7 +62,7 @@ function Register() {
                 },
               })}
               placeholder="Nhập tên"
-              className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark: focus:bg-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="pl-8 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 "
               type="text"
             />
           </div>
@@ -77,10 +77,10 @@ function Register() {
 
         {/* username */}
 
-        <div className="flex  flex-wrap border-b-2 mb-5 pb-[2px] relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-slate-600  after:transition-all after:ease-linear hover:after:w-full after:duration-500">
+        <div className="flex  flex-wrap mb-5 pb-[2px] relative">
           <span className="text-sm text-[#333] font-Popins leading-[1.5]">Email</span>
           <div className="w-full flex justify-start items-center h-[55px] relative">
-            <EmailIcon className="text-white absolute left-1" />
+            <EmailIcon className="text-gray-900 absolute left-1" />
             <input
               {...register('email', {
                 required: 'Không để trống trường này  ',
@@ -90,7 +90,7 @@ function Register() {
                 },
               })}
               placeholder="Nhập email"
-              className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark: focus:bg-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="pl-8 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 "
               type="text"
             />
           </div>
@@ -103,10 +103,10 @@ function Register() {
 
         {/* password */}
 
-        <div className="flex flex-wrap border-b-2 mb-5 relative after:absolute after:bottom-[-2px] after:left-0 after:w-0 after:h-[2px] after:bg-slate-600  after:transition-all after:ease-linear hover:after:w-full after:duration-500">
+        <div className="flex flex-wrap mb-5 relative">
           <span className="text-sm text-[#333] font-Popins leading-[1.5]">Mật khẩu</span>
           <div className="w-full flex justify-start items-center h-[55px] relative">
-            <LockIcon className="text-white absolute left-1"></LockIcon>
+            <LockIcon className="text-gray-900 absolute left-1"></LockIcon>
             <input
               {...register('password', {
                 required: 'Không để trống trường này',
@@ -115,15 +115,15 @@ function Register() {
                   message: 'Ít nhất 8 ký tự, với ít nhất 1 chữ cái, 1 số, 1 ký tự đặc biệt',
                 },
               })}
-              className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 dark: focus:bg-black block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="pl-8 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 "
               placeholder="Nhập mật khẩu"
               type={visibalePass ? 'text' : 'password'}
             />
             <div className="cursor-pointer absolute right-1" onClick={() => setVisibalePass(!visibalePass)}>
               {visibalePass ? (
-                <RemoveRedEyeOutlinedIcon className="text-white" />
+                <RemoveRedEyeOutlinedIcon className="text-gray-900" />
               ) : (
-                <VisibilityOffOutlinedIcon className="text-white" />
+                <VisibilityOffOutlinedIcon className="text-gray-900" />
               )}
             </div>
           </div>
@@ -136,7 +136,7 @@ function Register() {
           )}
         </div>
 
-        <div className="mt-10 cursor-pointer flex justify-center items-center rounded-[25px] bg-gradient-to-l from-gray-900 via-gray-400 to-gray-900 bg-200% hover:bg-right transition-all ease-in-out duration-700">
+        <div className="mt-10 cursor-pointer flex justify-center items-center rounded-[25px] bg-gray-900 transition-all ease-in-out duration-700">
           <button className="uppercase tracking-[2px] w-full p-4 text-white" type="submit">
             Đăng Ký
           </button>

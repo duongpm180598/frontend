@@ -29,15 +29,8 @@ export default function FilterHome({ params, setParams }) {
   }, []);
 
   return (
-    <div className="bg-gray-50">
-      <div className="mx-auto max-w-3xl  py-2 text-center  lg:max-w-7xl">
-        <div className="py-24">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900">Xin Chào </h1>
-          <p className="mx-auto mt-4 max-w-3xl text-base text-gray-500">
-            Chúc Quý Khách Có Khoảng Thời Gian Mua Sắm Vui Vẻ Cùng ECOM GROUP9
-          </p>
-        </div>
-
+    <div className="bg-gray-50 mt-3">
+      <div className="mx-auto max-w-3xl py-2 text-center  lg:max-w-7xl">
         <section aria-labelledby="filter-heading" className="border-t border-gray-200 py-6">
           <div className="grid md:grid-cols-12 lg:gap-x-8 lg:py-8 md:gap-x-6 ssm:gap-y-3 items-center">
             {/* filter name */}

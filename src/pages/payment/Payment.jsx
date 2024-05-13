@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { APIClient } from '../../helper/api_helper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { classNames } from '../../utils';
+// import { classNames } from '../../utils';
 import GHN_Logo from '../../asset/image/GHN_Logo.webp';
 import GHN_BG from '../../asset/image/GHN_BG.webp';
 import VNPAY_Logo from '../../asset/image/vnpay_logo.png';
 import VNPAY_BG from '../../asset/image/VNPAY_BG.jpeg';
-import ZALOPAY_Logo from '../../asset/image/Zalo_logo.png';
-import ZALOPAY_BG from '../../asset/image/zalo_gb.png';
+// import ZALOPAY_Logo from '../../asset/image/Zalo_logo.png';
+// import ZALOPAY_BG from '../../asset/image/zalo_gb.png';
 import { getGateway } from '../../redux/selector';
 export default function Payments() {
   const navigate = useNavigate();
@@ -50,21 +50,21 @@ export default function Payments() {
         imageUrl: VNPAY_Logo,
       },
     },
-    {
-      id: 3,
-      title: 'Ví Zalo PAY',
-      href: '#',
-      description:
-        'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
-      imageUrl: ZALOPAY_BG,
+    // {
+    //   id: 3,
+    //   title: 'Ví Zalo PAY',
+    //   href: '#',
+    //   description:
+    //     'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.',
+    //   imageUrl: ZALOPAY_BG,
 
-      date: 'Mar 16, 2020',
-      datetime: '2023-26-04',
-      author: {
-        name: 'ZALOPAY',
-        imageUrl: ZALOPAY_Logo,
-      },
-    },
+    //   date: 'Mar 16, 2020',
+    //   datetime: '2023-26-04',
+    //   author: {
+    //     name: 'ZALOPAY',
+    //     imageUrl: ZALOPAY_Logo,
+    //   },
+    // },
   ];
 
   const dispath = useDispatch();

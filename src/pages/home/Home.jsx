@@ -42,18 +42,7 @@ function Home() {
   useEffect(() => {});
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-14 lg:max-w-7xl lg:px-8">
-        {/* -------------- session -----------------*/}
-        <div className="relative bg-gray-900">
-          <div aria-hidden="true" className="overflow-hidden mx-auto w-full h-[50vh] rounded-md">
-            <img
-              src={require('../../asset/image/session.jpg')}
-              alt=""
-              className="h-full w-full object-cover object-center opacity-25 rounded"
-            />
-          </div>
-        </div>
-
+      <div className="mx-auto max-w-2xl p-4 sm:p-6 lg:max-w-7xl lg:px-8">
         <MostViewProducts />
 
         {/* -------------- filter -----------------*/}

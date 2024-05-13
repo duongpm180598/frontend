@@ -18,7 +18,7 @@ export default function Header() {
       ? [
           { name: 'Trang Chủ', link: '/' },
           { name: 'Giỏ Hàng', link: '/cart' },
-          { name: 'Quản Lý', link: '/manager' },
+          { name: 'Quản Lý', link: '/manager/order' },
         ]
       : [
           { name: 'Trang Chủ', link: '/' },
